@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">LoadMoreDemo</string>
+
+
+    <string-array name="countries">
+        <item>Italy</item>
+        <item>France</item>
+        <item>US</item>
+        <item>Spain</item>
+        <item>UK</item>
+    </string-array>
+</resources>

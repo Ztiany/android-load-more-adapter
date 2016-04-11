@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="basic_loading">加载中…</string>
+    <string name="basic_loading_no_more">已加载全部</string>
+    <string name="basic_load_error_click_to_load">加载失败,点击重试</string>
+    <string name="basic_network_error_click_to_try">没有可用的网络,,点击重试</string>
+    <string name="basic_click_to_load_more">点击加载更多</string>
+
+
+</resources>
