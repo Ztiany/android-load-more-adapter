@@ -34,6 +34,9 @@ class StateImpl implements IState {
 
     private StateViewFactory mStateViewFactory;
 
+    GridLayoutManager mGridLayoutManager;
+    GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
+
     StateImpl(RecyclerView.Adapter wrapperAdapter) {
         mWrapperAdapter = wrapperAdapter;
     }
@@ -92,6 +95,9 @@ class StateImpl implements IState {
             return;
         }
         mCurrentState = STATE_CONTENT;
+
+        ItemLineFiller.setFullSpanForGird( mGridLayoutManager ,mSpanSizeLookup);
+
         mWrapperAdapter.notifyDataSetChanged();
     }
 
@@ -136,11 +142,11 @@ class StateImpl implements IState {
     void keepFullSpan(View view, RecyclerView recyclerView) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            LoadMoreViewFuller.setFullSpanForGird(1, (GridLayoutManager) layoutManager);
+            ItemLineFiller.setFullSpanForGird( (GridLayoutManager) layoutManager,mSpanSizeLookup);
         } else if (layoutManager instanceof LinearLayoutManager) {
-            LoadMoreViewFuller.setFullSpanForLinear(view,true);
+            ItemLineFiller.setFullSpanForLinear(view,true);
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            LoadMoreViewFuller.setFullSpanForStaggered(view,true);
+            ItemLineFiller.setFullSpanForStaggered(view,true);
         }
     }
 }

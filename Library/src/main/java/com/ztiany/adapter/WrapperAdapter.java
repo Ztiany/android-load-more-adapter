@@ -28,6 +28,9 @@ public class WrapperAdapter extends Adapter {
     private boolean mIsStaggeredLayout;
     private boolean mIsLinearLayout;
 
+    private GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
+
+
     public WrapperAdapter(Adapter wrapped) {
         super();
         this.mWrappedAdapter = wrapped;
@@ -94,9 +97,9 @@ public class WrapperAdapter extends Adapter {
     private ViewHolder onCreateLoadMoreViewHolder(ViewGroup parent, int viewType) {
         View loadMoreView = mLoadMore.getLoadMoreView(parent);
         if (mIsStaggeredLayout) {
-            LoadMoreViewFuller.setFullSpanForStaggered(loadMoreView, false);
+            ItemLineFiller.setFullSpanForStaggered(loadMoreView, false);
         } else if (mIsLinearLayout) {
-            LoadMoreViewFuller.setFullSpanForLinear(loadMoreView, false);
+            ItemLineFiller.setFullSpanForLinear(loadMoreView, false);
         }
         return new ViewHolder(loadMoreView) {
         };
@@ -228,7 +231,11 @@ public class WrapperAdapter extends Adapter {
         if (recyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
             mIsStaggeredLayout = true;
         } else if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            LoadMoreViewFuller.setFullSpanForGird(getItemCount(), ((GridLayoutManager) recyclerView.getLayoutManager()));
+            GridLayoutManager layoutManager = (GridLayoutManager) recyclerView.getLayoutManager();
+            mSpanSizeLookup = layoutManager.getSpanSizeLookup();
+            mState.mSpanSizeLookup = mSpanSizeLookup;
+            mState.mGridLayoutManager = layoutManager;
+            ItemLineFiller.setFullSpanForGird(layoutManager, mSpanSizeLookup);
         } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             mIsLinearLayout = true;
         }

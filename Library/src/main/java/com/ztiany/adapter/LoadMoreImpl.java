@@ -182,9 +182,5 @@ class LoadMoreImpl implements ILoadMore {
                 ((ILoadMoreView) view).onPause();
             }
         }
-
-
     }
-
-
 }
