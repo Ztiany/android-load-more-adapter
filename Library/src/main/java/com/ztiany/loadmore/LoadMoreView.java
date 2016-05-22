@@ -49,12 +49,7 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     }
 
 
-    @Override
-    public void onPause() {
-        mProgressBar.setVisibility(GONE);
-        mMsgTv.setVisibility(VISIBLE);
-        mMsgTv.setText(getPauseMsg());
-    }
+
 
 
     @Override
@@ -76,6 +71,7 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
             mMsgTv.setText(getCompletedMsg());
         }
     }
+
 
     @Override
     public void onClickLoad() {

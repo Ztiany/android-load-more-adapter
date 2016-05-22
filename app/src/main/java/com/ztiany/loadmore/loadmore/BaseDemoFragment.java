@@ -18,12 +18,12 @@ import com.ztiany.adapter.WrapperAdapter;
 import com.ztiany.loadmore.BaseAdapter;
 import com.ztiany.loadmore.BaseLayoutFragment;
 import com.ztiany.loadmore.DensityUtils;
-import com.ztiany.loadmore.ILoadMore;
+import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.OnLoadMoreListener;
 import com.ztiany.loadmore.R;
-import com.ztiany.loadmore.StateViewFactory;
+import com.ztiany.adapter.StateViewFactory;
 import com.ztiany.loadmore.ViewHolder;
-import com.ztiany.state.IState;
+import com.ztiany.adapter.StateManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +50,6 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     private boolean mHasMore = true;
     private boolean mIsFail;
-    private boolean mIsPause = false;
 
     private int count = 20;
 
@@ -60,8 +59,8 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
     protected PtrClassicFrameLayout mPtrClassicFrameLayout;
 
     private List<String> mData;
-    protected ILoadMore mLoaderManager;
-    private IState mStateManager;
+    protected LoadMoreManager mLoaderManager;
+    private StateManager mStateManager;
 
 
     @OnClick(value = {R.id.frag_show_option})
@@ -70,11 +69,9 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         PopupMenu pop = new PopupMenu(getContext(), v);
         Menu menu = pop.getMenu();
 
-        String pauseString = mIsPause ? "no puase" : "pause";
 
         menu.add(Menu.NONE, 1, 0, "next time fail");
         menu.add(Menu.NONE, 2, 1, "next time no more");
-        menu.add(Menu.NONE, 3, 2, pauseString);
         menu.add(Menu.NONE, 4, 3, "next time normal");
         menu.add(Menu.NONE, 5, 4, "Content");
         menu.add(Menu.NONE, 6, 5, "Loading");
@@ -95,11 +92,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                         mHasMore = false;
                         break;
                     }
-                    case 3: {
-                        mIsPause = !mIsPause;
-                        mLoaderManager.pause(mIsPause);
-                        break;
-                    }
+
                     case 4: {
                         mIsFail = false;
                         mHasMore = true;
@@ -129,7 +122,6 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         pop.setGravity(Gravity.CENTER);
         pop.show();
     }
-
 
 
     @Override
@@ -190,7 +182,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     }
 
-    protected void onCreateLoaderManager(ILoadMore loaderManager) {
+    protected void onCreateLoaderManager(LoadMoreManager loaderManager) {
 
     }
 
@@ -220,6 +212,13 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
     private void setOnLoadMoreListener() {
 
         mLoaderManager.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public boolean canLoadMore() {
+
+                return true;
+
+            }
+
             @Override
             public void onLoadMore() {
 
@@ -260,7 +259,6 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                                 "新来的Item" + count++,
                                 "新来的Item" + count++
                         ));
-
                         mLoaderManager.loadCompleted(true);
                     }
                 }, 1000);

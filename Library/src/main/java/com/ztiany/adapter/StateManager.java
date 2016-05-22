@@ -1,6 +1,4 @@
-package com.ztiany.state;
-
-import com.ztiany.loadmore.StateViewFactory;
+package com.ztiany.adapter;
 
 /**
  * author Ztiany                                                                        <br/>
@@ -9,7 +7,7 @@ import com.ztiany.loadmore.StateViewFactory;
  * description                                                                             <br/>
  * version
  */
-public interface IState {
+public interface StateManager {
 
     void content();
 

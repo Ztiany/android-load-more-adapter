@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
 
-import com.ztiany.loadmore.ILoadMore;
+import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.LoadMode;
 
 import java.util.Random;
@@ -38,7 +38,7 @@ public class StaggeredGridRecyclerViewFragment extends BaseDemoFragment {
 
 
     @Override
-    protected void onCreateLoaderManager(ILoadMore loaderManager) {
+    protected void onCreateLoaderManager(LoadMoreManager loaderManager) {
         loaderManager.setLoadMode(LoadMode.CLICK_LOAD);
 
     }

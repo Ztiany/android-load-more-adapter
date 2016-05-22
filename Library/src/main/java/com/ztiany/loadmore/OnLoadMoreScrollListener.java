@@ -1,4 +1,4 @@
-package com.ztiany.adapter;
+package com.ztiany.loadmore;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,22 +8,29 @@ import android.view.View;
  */
 public abstract class OnLoadMoreScrollListener extends RecyclerView.OnScrollListener {
 
+
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+
     }
+
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        int visibleItemCount = layoutManager.getChildCount();
 
-        boolean triggerCondition = visibleItemCount > 0
-                && newState == RecyclerView.SCROLL_STATE_IDLE
-                && canTriggerLoadMore(recyclerView);
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            int visibleItemCount = layoutManager.getChildCount();
 
-        if (triggerCondition) {
-            onBottom(recyclerView);
-        }
+            boolean triggerCondition = visibleItemCount > 0
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                    && canTriggerLoadMore(recyclerView);
+
+            if (triggerCondition) {
+                onBottom(recyclerView);
+            }
+
     }
 
     public boolean canTriggerLoadMore(RecyclerView recyclerView) {
@@ -35,4 +42,6 @@ public abstract class OnLoadMoreScrollListener extends RecyclerView.OnScrollList
     }
 
     public abstract void onBottom(RecyclerView recyclerView);
+
+
 }

@@ -16,7 +16,6 @@ public interface ILoadMoreView {
 
     void onLoading();
 
-    void onPause();
 
     void onFail();
 

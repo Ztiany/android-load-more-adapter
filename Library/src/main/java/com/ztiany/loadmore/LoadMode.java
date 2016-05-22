@@ -1,5 +1,7 @@
 package com.ztiany.loadmore;
 
+import android.support.annotation.IntDef;
+
 /**
  * author Ztiany                                                                        <br/>
  * email 1169654504@qq.com & ztiany3@gmail.com           <br/>
@@ -7,9 +9,10 @@ package com.ztiany.loadmore;
  * description                                                                             <br/>
  * version
  */
-public class LoadMode {
+@IntDef(value = {LoadMode.CLICK_LOAD, LoadMode.AUTO_LOAD})
+public @interface LoadMode {
 
-    public static final int CLICK_LOAD = 19901005;
-    public static final int AUTO_LOAD = 19910707;
+    int CLICK_LOAD = 19901005;
+    int AUTO_LOAD = 19910707;
 
 }

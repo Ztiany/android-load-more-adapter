@@ -7,22 +7,20 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ztiany.loadmore.StateViewFactory;
-import com.ztiany.state.IState;
-
 /**
  * Author Ztiany                   <br/>
  * Email ztiany3@gmail.com      <br/>
  * Date 2016-04-11 21:06      <br/>
  * Description：
  */
-class StateImpl implements IState {
+class StateImpl implements StateManager {
 
-    private static final String TAG = StateImpl.class.getSimpleName();
     private static final int STATE_CONTENT = 30001;
     private static final int STATE_LOADING = 30002;
     private static final int STATE_FAIL = 30003;
     private static final int STATE_EMPTY = 30004;
+
+
     private int mCurrentState = STATE_CONTENT;
 
     private final static int VIEW_FAIL = Integer.MAX_VALUE - 3;
@@ -66,11 +64,10 @@ class StateImpl implements IState {
             return new RecyclerView.ViewHolder(view) {
             };
         }
-
-        return null;
+        throw new IllegalStateException("call StateImpl onCreateViewHolder type illegal ,type = " + type);
     }
 
-    boolean intercept() {
+    boolean needProcess() {
         return mCurrentState != STATE_CONTENT && mStateViewFactory != null;
     }
 
@@ -95,9 +92,6 @@ class StateImpl implements IState {
             return;
         }
         mCurrentState = STATE_CONTENT;
-
-        ItemLineFiller.setFullSpanForGird( mGridLayoutManager ,mSpanSizeLookup);
-
         mWrapperAdapter.notifyDataSetChanged();
     }
 
@@ -142,11 +136,18 @@ class StateImpl implements IState {
     void keepFullSpan(View view, RecyclerView recyclerView) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            ItemLineFiller.setFullSpanForGird( (GridLayoutManager) layoutManager,mSpanSizeLookup);
+            KeepFullSpanUtils.setFullSpanForGird((GridLayoutManager) layoutManager, mSpanSizeLookup);
         } else if (layoutManager instanceof LinearLayoutManager) {
-            ItemLineFiller.setFullSpanForLinear(view,true);
+            KeepFullSpanUtils.setFullSpanForLinear(view, true);
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            ItemLineFiller.setFullSpanForStaggered(view,true);
+            KeepFullSpanUtils.setFullSpanForStaggered(view, true);
         }
     }
+
+    public boolean isStateViewType(int itemViewType) {
+        return VIEW_EMPTY == itemViewType
+                || VIEW_FAIL == itemViewType
+                || VIEW_LOADING == itemViewType;
+    }
+
 }

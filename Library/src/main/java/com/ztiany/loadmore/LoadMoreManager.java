@@ -7,7 +7,7 @@ package com.ztiany.loadmore;
  * description                                                                             <br/>
  * version
  */
-public interface ILoadMore {
+public interface LoadMoreManager {
 
     /**
      * 设置加载更多回调
@@ -30,12 +30,6 @@ public interface ILoadMore {
      */
     void loadCompleted(boolean hasMore);
 
-    /**
-     * 暂停加载
-     *
-     * @param pause
-     */
-    void pause(boolean pause);
 
     /**
      * 是否正在加载
@@ -51,7 +45,7 @@ public interface ILoadMore {
      *
      * @param loadMore 刷新模式
      */
-    void setLoadMode(@Mode int loadMore);
+    void setLoadMode(@LoadMode int loadMore);
 
 
     void setLoadMoreViewFactory(LoadMoreViewFactory factory);

@@ -1,4 +1,4 @@
-package com.ztiany.loadmore;
+package com.ztiany.adapter;
 
 import android.view.View;
 import android.view.ViewGroup;
