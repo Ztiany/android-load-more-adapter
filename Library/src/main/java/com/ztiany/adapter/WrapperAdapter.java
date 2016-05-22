@@ -7,8 +7,9 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ztiany.loadmore.LastVisibleItemPosition;
 import com.ztiany.loadmore.LoadMoreManager;
-import com.ztiany.loadmore.OnLoadMoreScrollListener;
+import com.ztiany.loadmore.OnRecyclerViewScrollBottomListener;
 
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
@@ -24,7 +25,8 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     private LoadMoreImpl mLoadMore;
     private StateImpl mState;
 
-    private OnLoadMoreScrollListener mScrollListener;
+    private OnRecyclerViewScrollBottomListener mScrollListener;
+
 
     @LayoutType
     private int mLayoutType;
@@ -34,15 +36,23 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
         super(wrapped);
         mLoadMore = new LoadMoreImpl();
         mState = new StateImpl(getWrappedAdapter());
-        mScrollListener = new OnLoadMoreScrollListener() {
+        mScrollListener = new OnRecyclerViewScrollBottomListener() {
             @Override
-            public void onBottom(RecyclerView recyclerView) {
+            public void onBottom() {
                 mLoadMore.tryCallLoadMore();
             }
         };
     }
 
 
+    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
+        mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
+    }
+
+    public void setLastVisibleItemPosition(LastVisibleItemPosition lastVisibleItemPosition) {
+        mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
+
+    }
 
     public LoadMoreManager getLoadMoreManager() {
         return mLoadMore;
@@ -200,7 +210,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
             mState.mSpanSizeLookup = spanSizeLookup;
             mState.mGridLayoutManager = layoutManager;
             KeepFullSpanUtils.setFullSpanForGird(layoutManager, spanSizeLookup);
-
 
         } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             mLayoutType = LayoutType.LINEAR;
