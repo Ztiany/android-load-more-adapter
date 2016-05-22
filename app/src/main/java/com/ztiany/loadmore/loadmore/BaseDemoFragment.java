@@ -168,6 +168,15 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
+                        mData.clear();
+                        for (int i = 0; i < 20; i++) {
+                            mData.add("我是Item " + i);
+                        }
+                        mRecyclerAdapter.notifyDataSetChanged();
+
+
+
                         frame.refreshComplete();
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
@@ -307,9 +316,6 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     private void initData() {
         mData = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            mData.add("我是Item " + i);
-        }
     }
 
 

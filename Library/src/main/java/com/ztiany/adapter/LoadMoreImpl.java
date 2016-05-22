@@ -72,10 +72,47 @@ class LoadMoreImpl implements LoadMoreManager {
             }
         }
         mLoadMoreView.setOnClickListener(new ClickListener());
+
         if (mLoadMode == LoadMode.CLICK_LOAD) {
-            LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+
+            switch (mCurrentStatus) {
+                case STATUS_PRE:
+                case STATUS_LOADING:
+                case STATUS_NONE: {
+                    LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+                    break;
+                }
+                case STATUS_FAIL: {
+                    LoadMoreViewCaller.callFail(mLoadMoreView);
+                    break;
+                }
+                case STATUS_COMPLETE: {
+                    LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+                    break;
+                }
+            }
         } else {
-            LoadMoreViewCaller.callLoading(mLoadMoreView);
+
+            switch (mCurrentStatus) {
+                case STATUS_PRE:
+                case STATUS_NONE: {
+                    LoadMoreViewCaller.callLoading(mLoadMoreView);
+                    break;
+                }
+                case STATUS_LOADING: {
+                    LoadMoreViewCaller.callLoading(mLoadMoreView);
+                    break;
+                }
+                case STATUS_FAIL: {
+                    LoadMoreViewCaller.callFail(mLoadMoreView);
+                    break;
+                }
+                case STATUS_COMPLETE: {
+                    LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+                    break;
+                }
+
+            }
         }
         return mLoadMoreView;
     }
@@ -185,7 +222,5 @@ class LoadMoreImpl implements LoadMoreManager {
                 ((ILoadMoreView) view).onFail();
             }
         }
-
-
     }
 }

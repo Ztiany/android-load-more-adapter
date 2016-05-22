@@ -17,14 +17,13 @@ import com.ztiany.R;
  */
 public class LoadMoreView extends FrameLayout implements ILoadMoreView {
 
+    private static final String TAG = LoadMoreView.class.getSimpleName();
 
-    private static String mNoMoreMsg = "没有更多了";
-    private static String mFailMsg = "加载失败，点击重试";
-    private static String mPauseMsg = "没有网络，点击设置";
-    private static String mClickLoadMsg = "点击加载更多";
-    private static String mLoadCompleted = "加载完成";
+    private static final String mNoMoreMsg = "没有更多了";
+    private static final String mFailMsg = "加载失败，点击重试";
+    private static final String mClickLoadMsg = "点击加载更多";
+    private static final String mLoadCompleted = "加载完成";
 
-    public static final int DELAY_TIME = 0;
 
     private ProgressBar mProgressBar;
     private TextView mMsgTv;
@@ -89,9 +88,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         return mNoMoreMsg;
     }
 
-    private String getPauseMsg() {
-        return mPauseMsg;
-    }
 
 
     public String getClickLoadMsg() {
