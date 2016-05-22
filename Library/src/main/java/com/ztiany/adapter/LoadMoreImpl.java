@@ -77,9 +77,12 @@ class LoadMoreImpl implements LoadMoreManager {
 
             switch (mCurrentStatus) {
                 case STATUS_PRE:
-                case STATUS_LOADING:
                 case STATUS_NONE: {
                     LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+                    break;
+                }
+                case STATUS_LOADING:{
+                    LoadMoreViewCaller.callLoading(mLoadMoreView);
                     break;
                 }
                 case STATUS_FAIL: {
