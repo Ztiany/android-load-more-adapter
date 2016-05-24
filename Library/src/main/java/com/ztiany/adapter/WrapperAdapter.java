@@ -7,7 +7,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ztiany.loadmore.LastVisibleItemPosition;
 import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.OnRecyclerViewScrollBottomListener;
 
@@ -49,8 +48,11 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
         mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
     }
 
-    public void setLastVisibleItemPosition(LastVisibleItemPosition lastVisibleItemPosition) {
+    public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
+
         mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
+
+        mState.setItemFullSpanProvider(lastVisibleItemPosition);
 
     }
 

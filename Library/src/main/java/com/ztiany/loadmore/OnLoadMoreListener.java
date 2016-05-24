@@ -1,10 +1,10 @@
 package com.ztiany.loadmore;
 
-public abstract class OnLoadMoreListener {
+public interface OnLoadMoreListener {
 
-    public abstract void onLoadMore();
+   void onLoadMore();
 
-    public abstract boolean canLoadMore();
+   boolean canLoadMore();
 
 
 }

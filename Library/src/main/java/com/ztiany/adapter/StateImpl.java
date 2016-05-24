@@ -7,6 +7,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ztiany.loadmore.ItemFullSpanProvider;
+
 /**
  * Author Ztiany                   <br/>
  * Email ztiany3@gmail.com      <br/>
@@ -20,6 +22,7 @@ class StateImpl implements StateManager {
     private static final int STATE_FAIL = 30003;
     private static final int STATE_EMPTY = 30004;
 
+    private ItemFullSpanProvider mItemFullSpanProvider;
 
     private int mCurrentState = STATE_CONTENT;
 
@@ -95,6 +98,11 @@ class StateImpl implements StateManager {
         mWrapperAdapter.notifyDataSetChanged();
     }
 
+
+    public void setItemFullSpanProvider(ItemFullSpanProvider itemFullSpanProvider) {
+        mItemFullSpanProvider = itemFullSpanProvider;
+    }
+
     @Override
     public void fail() {
         if (mCurrentState == STATE_FAIL) {
@@ -141,6 +149,12 @@ class StateImpl implements StateManager {
             KeepFullSpanUtils.setFullSpanForLinear(view, true);
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             KeepFullSpanUtils.setFullSpanForStaggered(view, true);
+        }else {
+            if (mItemFullSpanProvider != null) {
+                mItemFullSpanProvider.setItemFullSpan(view, recyclerView);
+            }else {
+                throw new NullPointerException("you need set com.ztiany.loadmore.ItemFullSpanProvider when you use custom layoutManager");
+            }
         }
     }
 

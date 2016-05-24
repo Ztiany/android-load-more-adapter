@@ -21,7 +21,7 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
     private static final int GRID = 2;
     private static final int STAGGERED_GRID = 3;
 
-    private LastVisibleItemPosition mLastVisibleItemPositionGetter;
+    private LastVisibleItemPositionProvider mLastVisibleItemPositionGetter;
 
 
     private static final String TAG = OnRecyclerViewScrollBottomListener.class.getSimpleName();
@@ -86,7 +86,7 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
                 break;
             default: {
                 if (mLastVisibleItemPositionGetter == null) {
-                    throw new IllegalStateException("you should set com.ztiany.loadmore.LastVisibleItemPosition when you use custom layoutManager");
+                    throw new IllegalStateException("you should set com.ztiany.loadmore.LastVisibleItemPositionProvider when you use custom layoutManager");
                 }
                 lastVisibleItemPosition = mLastVisibleItemPositionGetter.getLastVisibleItemPosition(layoutManager);
                 break;
@@ -105,7 +105,7 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
 
     }
 
-    public void setLastVisibleItemPositionGetter(LastVisibleItemPosition lastVisibleItemPositionGetter) {
+    public void setLastVisibleItemPositionGetter(LastVisibleItemPositionProvider lastVisibleItemPositionGetter) {
         mLastVisibleItemPositionGetter = lastVisibleItemPositionGetter;
     }
 
