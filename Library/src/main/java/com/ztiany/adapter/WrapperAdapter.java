@@ -7,6 +7,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ztiany.loadmore.ItemFullSpanProvider;
 import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.OnRecyclerViewScrollBottomListener;
 
@@ -23,6 +24,8 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     protected static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;//loading Footer
     private LoadMoreImpl mLoadMore;
     private StateImpl mState;
+
+    private ItemFullSpanProvider itemFullSpanProvider;
 
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
@@ -49,7 +52,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     }
 
     public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
-
+        itemFullSpanProvider = lastVisibleItemPosition;
         mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
 
         mState.setItemFullSpanProvider(lastVisibleItemPosition);
@@ -91,6 +94,12 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
 
             KeepFullSpanUtils.setFullSpanForLinear(loadMoreView, false);
 
+        } else if (mLayoutType == LayoutType.OTHER) {
+            if (itemFullSpanProvider != null) {
+                itemFullSpanProvider.setItemFullSpan(loadMoreView, (RecyclerView) parent, false);
+            } else {
+                throw new NullPointerException("you need set com.ztiany.loadmore.ItemFullSpanProvider when you use custom layoutManager");
+            }
         }
         return new ViewHolder(loadMoreView) {
         };
@@ -215,6 +224,8 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
 
         } else if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             mLayoutType = LayoutType.LINEAR;
+        } else {
+            mLayoutType = LayoutType.OTHER;
         }
     }
 

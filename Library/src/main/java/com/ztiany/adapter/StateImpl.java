@@ -151,7 +151,7 @@ class StateImpl implements StateManager {
             KeepFullSpanUtils.setFullSpanForStaggered(view, true);
         }else {
             if (mItemFullSpanProvider != null) {
-                mItemFullSpanProvider.setItemFullSpan(view, recyclerView);
+                mItemFullSpanProvider.setItemFullSpan(view, recyclerView,true);
             }else {
                 throw new NullPointerException("you need set com.ztiany.loadmore.ItemFullSpanProvider when you use custom layoutManager");
             }

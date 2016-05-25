@@ -11,5 +11,12 @@ import android.view.View;
  */
 public interface ItemFullSpanProvider {
 
-    void setItemFullSpan(View itemView, RecyclerView rv);
+
+    /**
+     *
+     * @param itemView RecyclerView itemView
+     * @param rv RecyclerView
+     * @param contentViewOrLoadMoreView true mean ContentView ,false mean LoadMoreView
+     */
+    void setItemFullSpan(View itemView, RecyclerView rv , boolean contentViewOrLoadMoreView);
 }
