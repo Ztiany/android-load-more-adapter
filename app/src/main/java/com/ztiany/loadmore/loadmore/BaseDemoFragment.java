@@ -50,6 +50,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     private boolean mHasMore = true;
     private boolean mIsFail;
+    private boolean mEnable=true;
 
     private int count = 20;
 
@@ -61,6 +62,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
     private List<String> mData;
     protected LoadMoreManager mLoaderManager;
     private StateManager mStateManager;
+    private WrapperAdapter mWrapperAdapter;
 
 
     @OnClick(value = {R.id.frag_show_option})
@@ -77,6 +79,8 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         menu.add(Menu.NONE, 6, 5, "Loading");
         menu.add(Menu.NONE, 7, 6, "Fail");
         menu.add(Menu.NONE, 8, 7, "Empty");
+        menu.add(Menu.NONE, 9, 8, mEnable?"disableLoadMore":"enableLoadMore");
+        mEnable= !mEnable;
 
         pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -115,6 +119,10 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                         mStateManager.empty();
                         break;
                     }
+                    case 9:{
+                        mWrapperAdapter.enableLoadMore(mEnable);
+                        break;
+                    }
                 }
                 return true;
             }
@@ -146,13 +154,13 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                 super.getItemOffsets(outRect, view, parent, state);
             }
         });
-        WrapperAdapter wrapperAdapter = new WrapperAdapter(mRecyclerAdapter);
-        mRecyclerView.setAdapter(wrapperAdapter);
+        mWrapperAdapter = new WrapperAdapter(mRecyclerAdapter);
+        mRecyclerView.setAdapter(mWrapperAdapter);
 
 
-        mLoaderManager = wrapperAdapter.getLoadMoreManager();
+        mLoaderManager = mWrapperAdapter.getLoadMoreManager();
         onCreateLoaderManager(mLoaderManager);
-        mStateManager = wrapperAdapter.getStateManager();
+        mStateManager = mWrapperAdapter.getStateManager();
 
         setOnLoadMoreListener();
         setStateView();

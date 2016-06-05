@@ -24,7 +24,10 @@ class LoadMoreImpl implements LoadMoreManager {
     private boolean mHasMore = true;//是否还有更多
     private OnLoadMoreListener mOnLoadMoreListener;//加载更多监听
     private LoadMoreViewFactory mLoadMoreViewFactory;
-
+    private WrapperAdapter mWrapperAdapter;
+    LoadMoreImpl(WrapperAdapter wrapperAdapter) {
+        mWrapperAdapter = wrapperAdapter;
+    }
 
     private final static int STATUS_NONE = 0;
     private final static int STATUS_LOADING = 1;
@@ -154,6 +157,11 @@ class LoadMoreImpl implements LoadMoreManager {
     @Override
     public void setLoadMoreViewFactory(LoadMoreViewFactory factory) {
         mLoadMoreViewFactory = factory;
+    }
+
+    @Override
+    public void setEnableLoadMore(boolean enableLoadMore) {
+        mWrapperAdapter.enableLoadMore(enableLoadMore);
     }
 
 

@@ -33,15 +33,22 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     @LayoutType
     private int mLayoutType;
 
+    private boolean mEnableLoadMore = true;
+
 
     public WrapperAdapter(Adapter wrapped) {
         super(wrapped);
-        mLoadMore = new LoadMoreImpl();
+        mLoadMore = new LoadMoreImpl(this);
         mState = new StateImpl(getWrappedAdapter());
         mScrollListener = new OnRecyclerViewScrollBottomListener() {
             @Override
             public void onBottom() {
-                mLoadMore.tryCallLoadMore();
+                if (mEnableLoadMore) {
+                    mLoadMore.tryCallLoadMore();
+                }else {
+                    //
+                }
+
             }
         };
     }
@@ -67,6 +74,11 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
         return mState;
     }
 
+
+    void enableLoadMore(boolean enableLoadMore) {
+        mEnableLoadMore = enableLoadMore;
+        getWrappedAdapter().notifyDataSetChanged();
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -131,7 +143,11 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
             return mState.getCount();
         }
         int count = super.getItemCount();
-        return count == 0 ? count : count + 1;
+        if (mEnableLoadMore) {
+            return count == 0 ? count : count + 1;
+        } else {
+            return count;
+        }
     }
 
 
@@ -142,21 +158,24 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
             return mState.getType(position);
         }
 
-        if (isLastPosition(position)) {
+        if (mEnableLoadMore && position == super.getItemCount()) {
+
             return LOAD_MORE_FOOTER;
+
+        } else {
+            return super.getItemViewType(position);
         }
 
-        return super.getItemViewType(position);
     }
 
-    private boolean isLastPosition(int position) {
-        return position == super.getItemCount();
+    private boolean isWrapperType(int position) {
+        return getItemViewType(position) == LOAD_MORE_FOOTER;
     }
 
 
     @Override
     public long getItemId(int position) {
-        if (!isLastPosition(position)) {
+        if (!isWrapperType(position)) {
             return super.getItemId(position);
         }
         return position;
