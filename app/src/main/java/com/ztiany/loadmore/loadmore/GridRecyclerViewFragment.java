@@ -15,8 +15,6 @@ public class GridRecyclerViewFragment extends BaseDemoFragment {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        GridLayoutManager linearLayoutManager = new GridLayoutManager(getContext(), 2);
-
-        return linearLayoutManager;
+        return new GridLayoutManager(getContext(), 2);
     }
 }

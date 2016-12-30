@@ -14,8 +14,7 @@ public class LinearRecyclerViewFragment extends BaseDemoFragment {
 
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        return linearLayoutManager;
+        return new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
     }
 
 }

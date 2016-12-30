@@ -11,6 +11,8 @@ import com.ztiany.loadmore.ItemFullSpanProvider;
 import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.OnRecyclerViewScrollBottomListener;
 
+import java.util.List;
+
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
@@ -19,14 +21,12 @@ import static android.support.v7.widget.RecyclerView.ViewHolder;
  */
 public class WrapperAdapter extends RecyclerViewAdapterWrapper {
 
-    private static final String TAG = WrapperAdapter.class.getSimpleName();
 
-    protected static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;//loading Footer
+    private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;//loading Footer
     private LoadMoreImpl mLoadMore;
     private StateImpl mState;
 
     private ItemFullSpanProvider itemFullSpanProvider;
-
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
 
@@ -45,19 +45,17 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
             public void onBottom() {
                 if (mEnableLoadMore) {
                     mLoadMore.tryCallLoadMore();
-                }else {
-                    //
                 }
-
             }
         };
     }
 
-
+    @SuppressWarnings("unused")
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
     }
 
+    @SuppressWarnings("unused")
     public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
         itemFullSpanProvider = lastVisibleItemPosition;
         mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
@@ -75,7 +73,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     }
 
 
-    void enableLoadMore(boolean enableLoadMore) {
+    public void enableLoadMore(boolean enableLoadMore) {
         mEnableLoadMore = enableLoadMore;
         getWrappedAdapter().notifyDataSetChanged();
     }
@@ -95,7 +93,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     }
 
 
-    private ViewHolder onCreateLoadMoreViewHolder(ViewGroup parent, int viewType) {
+    private ViewHolder onCreateLoadMoreViewHolder(ViewGroup parent, @SuppressWarnings("unused") int viewType) {
         View loadMoreView = mLoadMore.getLoadMoreView(parent);
 
         if (mLayoutType == LayoutType.STAGGERED) {
@@ -132,6 +130,21 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        if (mState.needProcess()) {
+            mState.onBindViewHolder(holder, position);
+            return;
+        }
+        if (getItemViewType(position) == LOAD_MORE_FOOTER) {
+            onBindLoadMoreViewHolder(holder, position);
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
+
+    @SuppressWarnings("unused")
     protected void onBindLoadMoreViewHolder(ViewHolder holder, int position) {
         //Do Nothing
     }

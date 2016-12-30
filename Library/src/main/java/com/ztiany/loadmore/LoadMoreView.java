@@ -17,12 +17,10 @@ import com.ztiany.R;
  */
 public class LoadMoreView extends FrameLayout implements ILoadMoreView {
 
-    private static final String TAG = LoadMoreView.class.getSimpleName();
-
-    private static final String mNoMoreMsg = "没有更多了";
-    private static final String mFailMsg = "加载失败，点击重试";
-    private static final String mClickLoadMsg = "点击加载更多";
-    private static final String mLoadCompleted = "加载完成";
+    private String mNoMoreMsg = "";
+    private String mFailMsg = "";
+    private String mClickLoadMsg = "";
+    private String mLoadCompleted = "";
 
 
     private ProgressBar mProgressBar;
@@ -38,6 +36,13 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
                 .inflate(R.layout.list_footer, this, true);
         mMsgTv = (TextView) findViewById(R.id.item_msg_tv);
         mProgressBar = (ProgressBar) findViewById(R.id.item_pb);
+
+        mNoMoreMsg = getContext().getString(R.string.adapter_no_more_message);
+        mFailMsg = getContext().getString(R.string.adapter_load_more_fail);
+        mClickLoadMsg = getContext().getString(R.string.adapter_click_load_more);
+        mLoadCompleted = getContext().getString(R.string.adapter__load_completed);
+
+
     }
 
 
@@ -46,9 +51,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         mProgressBar.setVisibility(VISIBLE);
         mMsgTv.setVisibility(GONE);
     }
-
-
-
 
 
     @Override
@@ -87,7 +89,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     public String getNoMoreMsg() {
         return mNoMoreMsg;
     }
-
 
 
     public String getClickLoadMsg() {

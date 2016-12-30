@@ -12,10 +12,8 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
  * Description：RecyclerView多布局通用滑动监听器
  */
 public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
-    /**
-     * layoutManager的类型（枚举）
-     */
-    protected int mLayoutManagerType;
+
+    private int mLayoutManagerType;
 
     private static final int LINEAR = 1;
     private static final int GRID = 2;
@@ -23,14 +21,9 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
 
     private LastVisibleItemPositionProvider mLastVisibleItemPositionGetter;
 
-
-    private static final String TAG = OnRecyclerViewScrollBottomListener.class.getSimpleName();
-
-
     private int mLoadingTriggerThreshold;
 
-
-    public int getLoadingTriggerThreshold() {
+    private int getLoadingTriggerThreshold() {
         return mLoadingTriggerThreshold;
     }
 
@@ -49,7 +42,6 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         super.onScrolled(recyclerView, dx, dy);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
 
-
         if (mLayoutManagerType == 0) {
             if (layoutManager instanceof GridLayoutManager) {
                 mLayoutManagerType = GRID;
@@ -57,8 +49,6 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
                 mLayoutManagerType = LINEAR;
             } else if (layoutManager instanceof StaggeredGridLayoutManager) {
                 mLayoutManagerType = STAGGERED_GRID;
-            } else {
-                //do nothing
             }
         }
 
@@ -93,10 +83,8 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
             }
         }
 
-
         int visibleItemCount = layoutManager.getChildCount();
         int totalItemCount = layoutManager.getItemCount();
-
 
         if ((visibleItemCount > 0 && (lastVisibleItemPosition) >= totalItemCount - 1 - mLoadingTriggerThreshold)) {
             onBottom();

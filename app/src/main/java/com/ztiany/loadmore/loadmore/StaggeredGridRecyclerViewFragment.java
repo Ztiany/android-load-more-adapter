@@ -20,14 +20,9 @@ public class StaggeredGridRecyclerViewFragment extends BaseDemoFragment {
     private Random mRandom = new Random();
 
 
-
-
-
     @Override
     protected RecyclerView.LayoutManager getLayoutManager() {
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-
-        return staggeredGridLayoutManager;
+        return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
     }
 
 

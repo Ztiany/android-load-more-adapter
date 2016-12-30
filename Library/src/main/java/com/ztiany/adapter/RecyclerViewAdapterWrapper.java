@@ -4,14 +4,16 @@ package com.ztiany.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 /**
  * see https://github.com/rockerhieu/rv-adapter
  */
-public class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
+class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
 
     private final RecyclerView.Adapter wrapped;
 
-    public RecyclerViewAdapterWrapper(RecyclerView.Adapter wrapped) {
+    RecyclerViewAdapterWrapper(RecyclerView.Adapter wrapped) {
         super();
         this.wrapped = wrapped;
         this.wrapped.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -43,8 +45,15 @@ public class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         wrapped.onBindViewHolder(holder, position);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+        wrapped.onBindViewHolder(holder, position, payloads);
     }
 
     @Override
@@ -68,21 +77,25 @@ public class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         wrapped.onViewRecycled(holder);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
         return wrapped.onFailedToRecycleView(holder);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         wrapped.onViewAttachedToWindow(holder);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         wrapped.onViewDetachedFromWindow(holder);
     }
@@ -107,7 +120,7 @@ public class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
         wrapped.onDetachedFromRecyclerView(recyclerView);
     }
 
-    public RecyclerView.Adapter getWrappedAdapter() {
+    RecyclerView.Adapter getWrappedAdapter() {
         return wrapped;
     }
 } 

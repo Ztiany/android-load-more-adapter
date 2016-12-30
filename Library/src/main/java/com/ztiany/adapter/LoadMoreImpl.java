@@ -19,7 +19,6 @@ import com.ztiany.loadmore.OnLoadMoreListener;
  */
 class LoadMoreImpl implements LoadMoreManager {
 
-    private static final String TAG = LoadMoreImpl.class.getSimpleName();
     private View mLoadMoreView;
     private boolean mHasMore = true;//是否还有更多
     private OnLoadMoreListener mOnLoadMoreListener;//加载更多监听

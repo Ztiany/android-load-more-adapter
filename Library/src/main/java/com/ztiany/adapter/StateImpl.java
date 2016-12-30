@@ -78,7 +78,7 @@ class StateImpl implements StateManager {
         return 1;
     }
 
-    int getType(int position) {
+    int getType(@SuppressWarnings("unused") int position) {
         if (mCurrentState == STATE_LOADING) {
             return VIEW_LOADING;
         } else if (mCurrentState == STATE_EMPTY) {
@@ -99,7 +99,7 @@ class StateImpl implements StateManager {
     }
 
 
-    public void setItemFullSpanProvider(ItemFullSpanProvider itemFullSpanProvider) {
+    void setItemFullSpanProvider(ItemFullSpanProvider itemFullSpanProvider) {
         mItemFullSpanProvider = itemFullSpanProvider;
     }
 
@@ -136,12 +136,13 @@ class StateImpl implements StateManager {
         mStateViewFactory = stateViewFactory;
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    @SuppressWarnings("unused")
+    void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
     }
 
 
-    void keepFullSpan(View view, RecyclerView recyclerView) {
+    private void keepFullSpan(View view, RecyclerView recyclerView) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             KeepFullSpanUtils.setFullSpanForGird((GridLayoutManager) layoutManager, mSpanSizeLookup);
@@ -158,7 +159,7 @@ class StateImpl implements StateManager {
         }
     }
 
-    public boolean isStateViewType(int itemViewType) {
+    boolean isStateViewType(int itemViewType) {
         return VIEW_EMPTY == itemViewType
                 || VIEW_FAIL == itemViewType
                 || VIEW_LOADING == itemViewType;

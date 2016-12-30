@@ -14,7 +14,7 @@ import android.support.annotation.IntDef;
         LayoutType.STAGGERED,
         LayoutType.OTHER
 })
-public @interface LayoutType {
+@interface LayoutType {
     int LINEAR = 10001;
     int GRID = 10002;
     int STAGGERED = 10003;

@@ -56,7 +56,7 @@ class KeepFullSpanUtils {
     }
 
 
-    public static void setFullSpanForLinear(View loadMoreView, boolean heightMatchParent) {
+    static void setFullSpanForLinear(View loadMoreView, boolean heightMatchParent) {
         ViewGroup.LayoutParams lp = loadMoreView.getLayoutParams();
         if (lp == null) {
             lp = new ViewGroup.LayoutParams(

@@ -11,7 +11,6 @@ import android.view.View;
  */
 public interface ItemFullSpanProvider {
 
-
     /**
      *
      * @param itemView RecyclerView itemView

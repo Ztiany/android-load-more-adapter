@@ -16,7 +16,6 @@ public interface LoadMoreManager {
      */
     void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
 
-
     /**
      * 加载失败
      *
@@ -30,7 +29,6 @@ public interface LoadMoreManager {
      */
     void loadCompleted(boolean hasMore);
 
-
     /**
      * 是否正在加载
      *
@@ -38,15 +36,12 @@ public interface LoadMoreManager {
      */
     boolean isLoadingMore();
 
-
-
     /**
      * 设置自动加载
      *
      * @param loadMore 刷新模式
      */
     void setLoadMode(@LoadMode int loadMore);
-
 
     void setLoadMoreViewFactory(LoadMoreViewFactory factory);
 
