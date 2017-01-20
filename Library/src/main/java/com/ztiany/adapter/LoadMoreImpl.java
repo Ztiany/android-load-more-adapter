@@ -10,13 +10,6 @@ import com.ztiany.loadmore.LoadMoreView;
 import com.ztiany.loadmore.LoadMoreViewFactory;
 import com.ztiany.loadmore.OnLoadMoreListener;
 
-/**
- * author Ztiany                                                                        <br/>
- * email 1169654504@qq.com & ztiany3@gmail.com           <br/>
- * date 2016-04-11 12:44                                                         <br/>
- * description                                                                             <br/>
- * version
- */
 class LoadMoreImpl implements LoadMoreManager {
 
     private View mLoadMoreView;

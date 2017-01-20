@@ -9,12 +9,6 @@ import android.view.ViewGroup;
 
 import com.ztiany.loadmore.ItemFullSpanProvider;
 
-/**
- * Author Ztiany                   <br/>
- * Email ztiany3@gmail.com      <br/>
- * Date 2016-04-11 21:06      <br/>
- * Description：
- */
 class StateImpl implements StateManager {
 
     private static final int STATE_CONTENT = 30001;

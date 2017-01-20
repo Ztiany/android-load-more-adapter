@@ -6,7 +6,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.ztiany.R;
+import com.ztiany.wrapperadapter.R;
+
 
 /**
  * author Ztiany                                                                        <br/>

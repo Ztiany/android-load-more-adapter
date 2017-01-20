@@ -5,12 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Author Ztiany                   <br/>
- * Email ztiany3@gmail.com      <br/>
- * Date 2016-04-11 21:08      <br/>
- * Description：
- */
+
 class KeepFullSpanUtils {
 
     static void setFullSpanForStaggered(View loadMoreView, boolean matchParent) {

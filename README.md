@@ -1,6 +1,7 @@
 # WrapperAdapter
 
 用于包装RecyclerView的Adapter，实现以下功能：
+
 - 自动加载更多、点击加载更多
 - 可配置 load more View
 - 显示内容视图
@@ -51,7 +52,7 @@
 
 # Gradle
 
-        compile 'com.ztiany.android:WrapperAdapter:1.0.0'
+        compile 'com.ztiany.android:WrapperAdapter:1.0.2'
 
 # 效果
 

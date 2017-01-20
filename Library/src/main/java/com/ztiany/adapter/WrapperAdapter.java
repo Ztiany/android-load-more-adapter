@@ -16,9 +16,7 @@ import java.util.List;
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
-/**
- * @author rockerhieu on 7/6/15.
- */
+
 public class WrapperAdapter extends RecyclerViewAdapterWrapper {
 
 

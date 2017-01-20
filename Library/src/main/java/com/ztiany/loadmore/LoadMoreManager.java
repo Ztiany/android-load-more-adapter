@@ -32,7 +32,7 @@ public interface LoadMoreManager {
     /**
      * 是否正在加载
      *
-     * @return
+     * @return true 表示加载更多
      */
     boolean isLoadingMore();
 
