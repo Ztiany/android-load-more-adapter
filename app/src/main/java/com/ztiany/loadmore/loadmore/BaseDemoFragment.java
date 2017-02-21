@@ -120,7 +120,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                         break;
                     }
                     case 9:{
-                        mWrapperAdapter.enableLoadMore(mEnable);
+                        mLoaderManager.setLoadMoreEnable(mEnable);
                         break;
                     }
                 }

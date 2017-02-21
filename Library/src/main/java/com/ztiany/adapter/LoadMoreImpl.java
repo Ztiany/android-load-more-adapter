@@ -119,14 +119,11 @@ class LoadMoreImpl implements LoadMoreManager {
         mLoadMoreView = new LoadMoreView(parent.getContext());
     }
 
-
     @Override
     public void loadFail() {
         mCurrentStatus = STATUS_FAIL;
         LoadMoreViewCaller.callFail(mLoadMoreView);
-
     }
-
 
     @Override
     public void loadCompleted(final boolean hasMore) {
@@ -134,7 +131,6 @@ class LoadMoreImpl implements LoadMoreManager {
         mCurrentStatus = STATUS_COMPLETE;
         LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
     }
-
 
     @Override
     public boolean isLoadingMore() {
@@ -152,7 +148,7 @@ class LoadMoreImpl implements LoadMoreManager {
     }
 
     @Override
-    public void setEnableLoadMore(boolean enableLoadMore) {
+    public void setLoadMoreEnable(boolean enableLoadMore) {
         mWrapperAdapter.enableLoadMore(enableLoadMore);
     }
 

@@ -45,6 +45,6 @@ public interface LoadMoreManager {
 
     void setLoadMoreViewFactory(LoadMoreViewFactory factory);
 
-    void setEnableLoadMore(boolean enableLoadMore);
+    void setLoadMoreEnable(boolean enableLoadMore);
 
 }

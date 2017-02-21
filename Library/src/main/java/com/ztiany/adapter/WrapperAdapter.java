@@ -33,7 +33,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     @LayoutType
     private int mLayoutType;
 
-
     public WrapperAdapter(Adapter wrapped) {
         super(wrapped);
 
@@ -70,13 +69,11 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
         return mState;
     }
 
-    public void enableLoadMore(boolean enableLoadMore) {
+    void enableLoadMore(boolean enableLoadMore) {
         mEnableLoadMore = enableLoadMore;
         if (enableLoadMore) {
-            if (mState.mGridLayoutManager != null && mState.mSpanSizeLookup != null) {
-                KeepFullSpanUtils.setFullSpanForGird(mState.mGridLayoutManager, mState.mSpanSizeLookup);
-            }
-        }else {
+            KeepFullSpanUtils.setFullSpanForGird(mState.mGridLayoutManager, mState.mSpanSizeLookup);
+        } else {
             mState.clearSpanSizeLookupIfNeed();
         }
         getWrappedAdapter().notifyDataSetChanged();
@@ -246,7 +243,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper {
     }
 
     private void initOnAttachedToRecyclerView(RecyclerView recyclerView) {
-
         recyclerView.removeOnScrollListener(mScrollListener);
         recyclerView.addOnScrollListener(mScrollListener);
 
