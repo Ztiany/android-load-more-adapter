@@ -17,7 +17,6 @@ class StateImpl implements StateManager {
     private static final int STATE_EMPTY = 30004;
 
     private ItemFullSpanProvider mItemFullSpanProvider;
-
     private int mCurrentState = STATE_CONTENT;
 
     private final static int VIEW_FAIL = Integer.MAX_VALUE - 3;
@@ -25,8 +24,6 @@ class StateImpl implements StateManager {
     private final static int VIEW_EMPTY = Integer.MAX_VALUE - 5;
 
     private RecyclerView.Adapter mWrapperAdapter;
-
-
     private StateViewFactory mStateViewFactory;
 
     GridLayoutManager mGridLayoutManager;
@@ -136,6 +133,12 @@ class StateImpl implements StateManager {
     }
 
 
+    void clearSpanSizeLookupIfNeed() {
+        if (mGridLayoutManager != null && mSpanSizeLookup != null) {
+            mGridLayoutManager.setSpanSizeLookup(mSpanSizeLookup);
+        }
+    }
+
     private void keepFullSpan(View view, RecyclerView recyclerView) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
@@ -144,10 +147,10 @@ class StateImpl implements StateManager {
             KeepFullSpanUtils.setFullSpanForLinear(view, true);
         } else if (layoutManager instanceof StaggeredGridLayoutManager) {
             KeepFullSpanUtils.setFullSpanForStaggered(view, true);
-        }else {
+        } else {
             if (mItemFullSpanProvider != null) {
-                mItemFullSpanProvider.setItemFullSpan(view, recyclerView,true);
-            }else {
+                mItemFullSpanProvider.setItemFullSpan(view, recyclerView, true);
+            } else {
                 throw new NullPointerException("you need set com.ztiany.loadmore.ItemFullSpanProvider when you use custom layoutManager");
             }
         }

@@ -39,6 +39,7 @@ class KeepFullSpanUtils {
 
     static void setFullSpanForGird(final GridLayoutManager gridLayoutManager, final GridLayoutManager.SpanSizeLookup spanSizeLookup) {
         final int spanCount = gridLayoutManager.getSpanCount();
+
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
