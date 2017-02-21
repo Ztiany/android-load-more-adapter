@@ -5,7 +5,6 @@ import android.view.ViewGroup;
 
 import com.ztiany.loadmore.ILoadMoreView;
 import com.ztiany.loadmore.LoadMode;
-import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.LoadMoreView;
 import com.ztiany.loadmore.LoadMoreViewFactory;
 import com.ztiany.loadmore.OnLoadMoreListener;
@@ -13,42 +12,29 @@ import com.ztiany.loadmore.OnLoadMoreListener;
 class LoadMoreImpl implements LoadMoreManager {
 
     private View mLoadMoreView;
-    private boolean mHasMore = true;//是否还有更多
-    private OnLoadMoreListener mOnLoadMoreListener;//加载更多监听
+    private boolean mHasMore = true;
+    private OnLoadMoreListener mOnLoadMoreListener;
     private LoadMoreViewFactory mLoadMoreViewFactory;
-    private WrapperAdapter mWrapperAdapter;
-    LoadMoreImpl(WrapperAdapter wrapperAdapter) {
-        mWrapperAdapter = wrapperAdapter;
-    }
 
     private final static int STATUS_NONE = 0;
     private final static int STATUS_LOADING = 1;
     private final static int STATUS_FAIL = 2;
     private final static int STATUS_COMPLETE = 3;
-    private final static int STATUS_PRE = 5;//如果是点击加载，需要一个准备状态
-
+    private final static int STATUS_PRE = 5;
     private int mCurrentStatus = STATUS_NONE;
-
-
-    private
     @LoadMode
-    int mLoadMode = LoadMode.AUTO_LOAD;//是否自动加载更多
-
+    private int mLoadMode = LoadMode.AUTO_LOAD;//是否自动加载更多
 
     void tryCallLoadMore() {
-
         if (mOnLoadMoreListener == null || !mOnLoadMoreListener.canLoadMore()) {
             return;
         }
         if (mCurrentStatus == STATUS_LOADING) {
             return;
         }
-
         if (isAutoLoad()) {
-
             mCurrentStatus = STATUS_PRE;
             callLoadMore();
-
         } else {
             if (mCurrentStatus != STATUS_FAIL) {
                 mCurrentStatus = STATUS_PRE;
@@ -58,8 +44,62 @@ class LoadMoreImpl implements LoadMoreManager {
     }
 
     View getLoadMoreView(ViewGroup parent) {
+        initLoadMoreView(parent);
+        if (mLoadMode == LoadMode.CLICK_LOAD) {
+            processClickLoadMore();
+        } else {
+            processAutoLoadMore();
+        }
+        return mLoadMoreView;
+    }
+
+    private void processAutoLoadMore() {
+        switch (mCurrentStatus) {
+            case STATUS_PRE:
+            case STATUS_NONE: {
+                LoadMoreViewCaller.callLoading(mLoadMoreView);
+                break;
+            }
+            case STATUS_LOADING: {
+                LoadMoreViewCaller.callLoading(mLoadMoreView);
+                break;
+            }
+            case STATUS_FAIL: {
+                LoadMoreViewCaller.callFail(mLoadMoreView);
+                break;
+            }
+            case STATUS_COMPLETE: {
+                LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+                break;
+            }
+        }
+    }
+
+    private void processClickLoadMore() {
+        switch (mCurrentStatus) {
+            case STATUS_PRE:
+            case STATUS_NONE: {
+                LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+                break;
+            }
+            case STATUS_LOADING: {
+                LoadMoreViewCaller.callLoading(mLoadMoreView);
+                break;
+            }
+            case STATUS_FAIL: {
+                LoadMoreViewCaller.callFail(mLoadMoreView);
+                break;
+            }
+            case STATUS_COMPLETE: {
+                LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+                break;
+            }
+        }
+    }
+
+    private void initLoadMoreView(ViewGroup parent) {
         if (mLoadMoreViewFactory == null) {
-            createDefaultLoadMoreView(parent);
+            mLoadMoreView = new LoadMoreView(parent.getContext());
         } else {
             mLoadMoreView = mLoadMoreViewFactory.onCreateLoadMoreView(parent);
             if (mLoadMoreView == null) {
@@ -67,56 +107,6 @@ class LoadMoreImpl implements LoadMoreManager {
             }
         }
         mLoadMoreView.setOnClickListener(new ClickListener());
-
-        if (mLoadMode == LoadMode.CLICK_LOAD) {
-
-            switch (mCurrentStatus) {
-                case STATUS_PRE:
-                case STATUS_NONE: {
-                    LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
-                    break;
-                }
-                case STATUS_LOADING:{
-                    LoadMoreViewCaller.callLoading(mLoadMoreView);
-                    break;
-                }
-                case STATUS_FAIL: {
-                    LoadMoreViewCaller.callFail(mLoadMoreView);
-                    break;
-                }
-                case STATUS_COMPLETE: {
-                    LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
-                    break;
-                }
-            }
-        } else {
-
-            switch (mCurrentStatus) {
-                case STATUS_PRE:
-                case STATUS_NONE: {
-                    LoadMoreViewCaller.callLoading(mLoadMoreView);
-                    break;
-                }
-                case STATUS_LOADING: {
-                    LoadMoreViewCaller.callLoading(mLoadMoreView);
-                    break;
-                }
-                case STATUS_FAIL: {
-                    LoadMoreViewCaller.callFail(mLoadMoreView);
-                    break;
-                }
-                case STATUS_COMPLETE: {
-                    LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
-                    break;
-                }
-
-            }
-        }
-        return mLoadMoreView;
-    }
-
-    private void createDefaultLoadMoreView(ViewGroup parent) {
-        mLoadMoreView = new LoadMoreView(parent.getContext());
     }
 
     @Override
@@ -147,16 +137,9 @@ class LoadMoreImpl implements LoadMoreManager {
         mLoadMoreViewFactory = factory;
     }
 
-    @Override
-    public void setLoadMoreEnable(boolean enableLoadMore) {
-        mWrapperAdapter.enableLoadMore(enableLoadMore);
-    }
-
-
     private boolean isAutoLoad() {
         return mLoadMode == LoadMode.AUTO_LOAD;
     }
-
 
     private class ClickListener implements View.OnClickListener {
         @Override
@@ -174,28 +157,23 @@ class LoadMoreImpl implements LoadMoreManager {
         }
     }
 
-
     @Override
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         mOnLoadMoreListener = onLoadMoreListener;
     }
 
-
     private void callLoadMore() {
         if (mCurrentStatus != STATUS_LOADING && mOnLoadMoreListener != null && mHasMore) {
-
             LoadMoreViewCaller.callLoading(mLoadMoreView);
             mCurrentStatus = STATUS_LOADING;
             mOnLoadMoreListener.onLoadMore();
         }
     }
 
-
     /**
      * Method Caller
      */
     private static class LoadMoreViewCaller {
-
 
         static void callLoading(View view) {
             if (view != null && view instanceof ILoadMoreView) {
@@ -214,7 +192,6 @@ class LoadMoreImpl implements LoadMoreManager {
                 ((ILoadMoreView) view).onClickLoad();
             }
         }
-
 
         static void callFail(View view) {
             if (view != null && view instanceof ILoadMoreView) {

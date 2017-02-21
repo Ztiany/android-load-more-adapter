@@ -1,7 +1,7 @@
 package com.ztiany.adapter;
 
 
-public interface StateManager {
+interface StateManager {
 
     void content();
 

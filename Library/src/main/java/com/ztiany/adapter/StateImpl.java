@@ -1,13 +1,7 @@
 package com.ztiany.adapter;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.View;
 import android.view.ViewGroup;
-
-import com.ztiany.loadmore.ItemFullSpanProvider;
 
 class StateImpl implements StateManager {
 
@@ -16,50 +10,44 @@ class StateImpl implements StateManager {
     private static final int STATE_FAIL = 30003;
     private static final int STATE_EMPTY = 30004;
 
-    private ItemFullSpanProvider mItemFullSpanProvider;
     private int mCurrentState = STATE_CONTENT;
 
     private final static int VIEW_FAIL = Integer.MAX_VALUE - 3;
     private final static int VIEW_LOADING = Integer.MAX_VALUE - 4;
     private final static int VIEW_EMPTY = Integer.MAX_VALUE - 5;
 
-    private RecyclerView.Adapter mWrapperAdapter;
     private StateViewFactory mStateViewFactory;
+    private RecyclerView.Adapter mWrappedAdapter;
+    private WrapperAdapter mWrapperAdapter;
 
-    GridLayoutManager mGridLayoutManager;
-    GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
-
-    StateImpl(RecyclerView.Adapter wrapperAdapter) {
+    StateImpl(WrapperAdapter wrapperAdapter, RecyclerView.Adapter wrappedAdapter) {
+        mWrappedAdapter = wrappedAdapter;
         mWrapperAdapter = wrapperAdapter;
     }
 
 
     RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int type) {
-
+        RecyclerView.ViewHolder viewHolder = null;
         if (type == VIEW_EMPTY) {
-            View view = mStateViewFactory.onCreateEmptyView(viewGroup);
-            keepFullSpan(view, (RecyclerView) viewGroup);
-            return new RecyclerView.ViewHolder(view) {
+            viewHolder = new RecyclerView.ViewHolder(mStateViewFactory.onCreateEmptyView(viewGroup)) {
             };
         }
-
         if (type == VIEW_FAIL) {
-            View view = mStateViewFactory.onCreateFailView(viewGroup);
-            keepFullSpan(view, (RecyclerView) viewGroup);
-
-            return new RecyclerView.ViewHolder(view) {
+            viewHolder = new RecyclerView.ViewHolder(mStateViewFactory.onCreateFailView(viewGroup)) {
             };
         }
-
         if (type == VIEW_LOADING) {
-            View view = mStateViewFactory.onCreateLoadingView(viewGroup);
-            keepFullSpan(view, (RecyclerView) viewGroup);
-
-            return new RecyclerView.ViewHolder(view) {
+            viewHolder = new RecyclerView.ViewHolder(mStateViewFactory.onCreateLoadingView(viewGroup)) {
             };
         }
+
+        if (viewHolder != null) {
+            return viewHolder;
+        }
+
         throw new IllegalStateException("call StateImpl onCreateViewHolder type illegal ,type = " + type);
     }
+
 
     boolean needProcess() {
         return mCurrentState != STATE_CONTENT && mStateViewFactory != null;
@@ -86,12 +74,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_CONTENT;
-        mWrapperAdapter.notifyDataSetChanged();
-    }
-
-
-    void setItemFullSpanProvider(ItemFullSpanProvider itemFullSpanProvider) {
-        mItemFullSpanProvider = itemFullSpanProvider;
+        mWrappedAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -100,7 +83,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_FAIL;
-        mWrapperAdapter.notifyDataSetChanged();
+        mWrappedAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -109,8 +92,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_EMPTY;
-        mWrapperAdapter.notifyDataSetChanged();
-
+        mWrappedAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -119,7 +101,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_LOADING;
-        mWrapperAdapter.notifyDataSetChanged();
+        mWrappedAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -127,36 +109,19 @@ class StateImpl implements StateManager {
         mStateViewFactory = stateViewFactory;
     }
 
-    @SuppressWarnings("unused")
-    void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressWarnings("unused") int position) {
+
+        KeepFullSpanUtils.keepFullSpan(
+                holder.itemView,
+                mWrapperAdapter.mRecyclerView,
+                true,
+                mWrapperAdapter.mSpanSizeLookup,
+                mWrapperAdapter.mItemFullSpanProvider
+        );
 
     }
 
-
-    void clearSpanSizeLookupIfNeed() {
-        if (mGridLayoutManager != null && mSpanSizeLookup != null) {
-            mGridLayoutManager.setSpanSizeLookup(mSpanSizeLookup);
-        }
-    }
-
-    private void keepFullSpan(View view, RecyclerView recyclerView) {
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            KeepFullSpanUtils.setFullSpanForGird((GridLayoutManager) layoutManager, mSpanSizeLookup);
-        } else if (layoutManager instanceof LinearLayoutManager) {
-            KeepFullSpanUtils.setFullSpanForLinear(view, true);
-        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-            KeepFullSpanUtils.setFullSpanForStaggered(view, true);
-        } else {
-            if (mItemFullSpanProvider != null) {
-                mItemFullSpanProvider.setItemFullSpan(view, recyclerView, true);
-            } else {
-                throw new NullPointerException("you need set com.ztiany.loadmore.ItemFullSpanProvider when you use custom layoutManager");
-            }
-        }
-    }
-
-    boolean isStateViewType(int itemViewType) {
+    boolean isNotContentStateViewType(int itemViewType) {
         return VIEW_EMPTY == itemViewType
                 || VIEW_FAIL == itemViewType
                 || VIEW_LOADING == itemViewType;

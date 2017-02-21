@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,16 +13,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ztiany.adapter.StateViewFactory;
 import com.ztiany.adapter.WrapperAdapter;
 import com.ztiany.loadmore.BaseAdapter;
 import com.ztiany.loadmore.BaseLayoutFragment;
 import com.ztiany.loadmore.DensityUtils;
-import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.OnLoadMoreListener;
 import com.ztiany.loadmore.R;
-import com.ztiany.adapter.StateViewFactory;
 import com.ztiany.loadmore.ViewHolder;
-import com.ztiany.adapter.StateManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,13 +42,9 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     private BaseAdapter<String, ViewHolder<String>> mRecyclerAdapter;
-    private static final String TAG = BaseDemoFragment.class.getSimpleName();
-
-
     private boolean mHasMore = true;
     private boolean mIsFail;
-    private boolean mEnable=true;
-
+    private boolean mEnable = true;
     private int count = 20;
 
     @Bind(R.id.fragment_recycler_rv)
@@ -60,18 +53,13 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
     protected PtrClassicFrameLayout mPtrClassicFrameLayout;
 
     private List<String> mData;
-    protected LoadMoreManager mLoaderManager;
-    private StateManager mStateManager;
-    private WrapperAdapter mWrapperAdapter;
-
+    protected WrapperAdapter mWrapperAdapter;
 
     @OnClick(value = {R.id.frag_show_option})
     public void onButtonClick(View v) {
 
         PopupMenu pop = new PopupMenu(getContext(), v);
         Menu menu = pop.getMenu();
-
-
         menu.add(Menu.NONE, 1, 0, "next time fail");
         menu.add(Menu.NONE, 2, 1, "next time no more");
         menu.add(Menu.NONE, 4, 3, "next time normal");
@@ -79,14 +67,13 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         menu.add(Menu.NONE, 6, 5, "Loading");
         menu.add(Menu.NONE, 7, 6, "Fail");
         menu.add(Menu.NONE, 8, 7, "Empty");
-        menu.add(Menu.NONE, 9, 8, mEnable?"disableLoadMore":"enableLoadMore");
-        mEnable= !mEnable;
+        menu.add(Menu.NONE, 9, 8, mEnable ? "disableLoadMore" : "enableLoadMore");
+        mEnable = !mEnable;
 
         pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int itemId = item.getItemId();
-                Log.d(TAG, "itemId:" + itemId);
                 switch (itemId) {
                     case 1: {
                         mIsFail = true;
@@ -100,27 +87,27 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                     case 4: {
                         mIsFail = false;
                         mHasMore = true;
-                        mLoaderManager.loadCompleted(true);
+                        mWrapperAdapter.loadCompleted(true);
                         break;
                     }
                     case 5: {
-                        mStateManager.content();
+                        mWrapperAdapter.content();
                         break;
                     }
                     case 6: {
-                        mStateManager.loading();
+                        mWrapperAdapter.loading();
                         break;
                     }
                     case 7: {
-                        mStateManager.fail();
+                        mWrapperAdapter.fail();
                         break;
                     }
                     case 8: {
-                        mStateManager.empty();
+                        mWrapperAdapter.empty();
                         break;
                     }
-                    case 9:{
-                        mLoaderManager.setLoadMoreEnable(mEnable);
+                    case 9: {
+
                         break;
                     }
                 }
@@ -149,26 +136,19 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int px = DensityUtils.dip2px(getContext(), 10);
-                outRect.bottom = px;
+                outRect.bottom = DensityUtils.dip2px(getContext(), 10);
                 super.getItemOffsets(outRect, view, parent, state);
             }
         });
-        mWrapperAdapter = new WrapperAdapter(mRecyclerAdapter);
-        mRecyclerView.setAdapter(mWrapperAdapter);
-
-
-        mLoaderManager = mWrapperAdapter.getLoadMoreManager();
-        onCreateLoaderManager(mLoaderManager);
-        mStateManager = mWrapperAdapter.getStateManager();
-
+        mWrapperAdapter = WrapperAdapter.setup(mRecyclerAdapter, mRecyclerView);
+//        mRecyclerView.setAdapter(mWrapperAdapter);
         setOnLoadMoreListener();
         setStateView();
 
         mPtrClassicFrameLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                if (mLoaderManager.isLoadingMore()) {
+                if (mWrapperAdapter.isLoadingMore()) {
                     frame.refreshComplete();
                     return;
                 }
@@ -182,7 +162,6 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                             mData.add("我是Item " + i);
                         }
                         mRecyclerAdapter.notifyDataSetChanged();
-
 
 
                         frame.refreshComplete();
@@ -199,12 +178,9 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     }
 
-    protected void onCreateLoaderManager(LoadMoreManager loaderManager) {
-
-    }
 
     protected void setStateView() {
-        mStateManager.setStateViewFactory(new StateViewFactory() {
+        mWrapperAdapter.setStateViewFactory(new StateViewFactory() {
             @Override
             public View onCreateEmptyView(ViewGroup parent) {
                 return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_empty, parent, false);
@@ -228,7 +204,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
 
     private void setOnLoadMoreListener() {
 
-        mLoaderManager.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public boolean canLoadMore() {
 
@@ -244,12 +220,12 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                     @Override
                     public void run() {
                         if (mIsFail) {
-                            mLoaderManager.loadFail();
+                            mWrapperAdapter.loadFail();
                             return;
                         }
 
                         if (!mHasMore) {
-                            mLoaderManager.loadCompleted(false);
+                            mWrapperAdapter.loadCompleted(false);
                             return;
                         }
 
@@ -276,7 +252,7 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                                 "新来的Item" + count++,
                                 "新来的Item" + count++
                         ));
-                        mLoaderManager.loadCompleted(true);
+                        mWrapperAdapter.loadCompleted(true);
                     }
                 }, 1000);
             }
@@ -304,13 +280,10 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
                             @Override
                             public void onClick(View v) {
                                 Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                                ;
                             }
                         });
                         onBindData(mTextView, data);
                     }
-
-
                 };
             }
 
@@ -321,11 +294,9 @@ public abstract class BaseDemoFragment extends BaseLayoutFragment {
         };
     }
 
-
     private void initData() {
         mData = new ArrayList<>();
     }
-
 
     protected void onBindData(TextView textView, String data) {
         textView.setText(data);

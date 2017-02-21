@@ -1,10 +1,10 @@
 package com.ztiany.loadmore.loadmore;
 
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.TextView;
 
-import com.ztiany.loadmore.LoadMoreManager;
 import com.ztiany.loadmore.LoadMode;
 
 import java.util.Random;
@@ -31,10 +31,9 @@ public class StaggeredGridRecyclerViewFragment extends BaseDemoFragment {
         super.onBindData(textView, data + mRandom.nextInt()+mRandom.nextDouble());
     }
 
-
     @Override
-    protected void onCreateLoaderManager(LoadMoreManager loaderManager) {
-        loaderManager.setLoadMode(LoadMode.CLICK_LOAD);
-
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
     }
 }

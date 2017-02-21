@@ -33,6 +33,7 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     }
 
     private void init() {
+
         LayoutInflater.from(getContext())
                 .inflate(R.layout.wrapper_adapter_list_footer, this, true);
         mMsgTv = (TextView) findViewById(R.id.wrapper_adapter_id_item_msg_tv);
@@ -42,8 +43,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         mFailMsg = getContext().getString(R.string.adapter_load_more_fail);
         mClickLoadMsg = getContext().getString(R.string.adapter_click_load_more);
         mLoadCompleted = getContext().getString(R.string.adapter_load_completed);
-
-
     }
 
 

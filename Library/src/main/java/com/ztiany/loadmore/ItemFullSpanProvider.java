@@ -12,4 +12,5 @@ public interface ItemFullSpanProvider {
      * @param contentViewOrLoadMoreView true mean ContentView ,false mean LoadMoreView
      */
     void setItemFullSpan(View itemView, RecyclerView rv , boolean contentViewOrLoadMoreView);
+
 }
