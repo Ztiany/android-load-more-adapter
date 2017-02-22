@@ -6,10 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ztiany.loadmore.loadmore.GridRecyclerViewFragment;
-import com.ztiany.loadmore.loadmore.LinearRecyclerViewFragment;
-import com.ztiany.loadmore.loadmore.StaggeredGridRecyclerViewFragment;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -18,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            setupFragment(LinearRecyclerViewFragment.class);
+            setupFragment(BaseDemoFragment.newInstance(1, true, false));
         }
 
 
@@ -36,23 +32,32 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_grid:
-                setupFragment(GridRecyclerViewFragment.class);
+                setupFragment(BaseDemoFragment.newInstance(2, true, false));
                 break;
             case R.id.menu_staggered:
-                setupFragment(StaggeredGridRecyclerViewFragment.class);
+                setupFragment(BaseDemoFragment.newInstance(3, true, true));
                 break;
             case R.id.menu_linear:
-                setupFragment(LinearRecyclerViewFragment.class);
+                setupFragment(BaseDemoFragment.newInstance(1, true, false));
+                break;
+            case R.id.menu_grid_no_load_more:
+                setupFragment(BaseDemoFragment.newInstance(2, false, false));
+                break;
+            case R.id.menu_staggered_no_load_more:
+                setupFragment(BaseDemoFragment.newInstance(3, false, true));
+                break;
+            case R.id.menu_linear_no_load_more:
+                setupFragment(BaseDemoFragment.newInstance(1, false, false));
                 break;
         }
 
         return true;
     }
 
-    private void setupFragment(Class clazz) {
+    private void setupFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.act_frag_container, Fragment.instantiate(this, clazz.getName()))
+                .replace(R.id.act_frag_container, fragment)
                 .commit();
     }
 }

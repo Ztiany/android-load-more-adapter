@@ -23,7 +23,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     private String mClickLoadMsg = "";
     private String mLoadCompleted = "";
 
-
     private ProgressBar mProgressBar;
     private TextView mMsgTv;
 
@@ -85,11 +84,9 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         return mLoadCompleted;
     }
 
-
     public String getNoMoreMsg() {
         return mNoMoreMsg;
     }
-
 
     public String getClickLoadMsg() {
         return mClickLoadMsg;

@@ -14,7 +14,6 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
 
     private int mLayoutManagerType;
-
     private static final int LINEAR = 1;
     private static final int GRID = 2;
     private static final int STAGGERED_GRID = 3;
@@ -35,7 +34,6 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
      * 最后一个的位置
      */
     private int[] mLastPositions;
-
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -85,11 +83,9 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
 
         int visibleItemCount = layoutManager.getChildCount();
         int totalItemCount = layoutManager.getItemCount();
-
         if ((visibleItemCount > 0 && (lastVisibleItemPosition) >= totalItemCount - 1 - mLoadingTriggerThreshold)) {
             onBottom();
         }
-
 
     }
 
@@ -97,12 +93,10 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         mLastVisibleItemPositionGetter = lastVisibleItemPositionGetter;
     }
 
-
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
     }
-
 
     public abstract void onBottom();
 
@@ -115,6 +109,5 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         }
         return max;
     }
-
 
 }

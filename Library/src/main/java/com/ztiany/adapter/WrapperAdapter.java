@@ -1,7 +1,9 @@
 package com.ztiany.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,26 +18,28 @@ import java.util.List;
 import static android.support.v7.widget.RecyclerView.Adapter;
 import static android.support.v7.widget.RecyclerView.ViewHolder;
 
-
+/**
+ * if you use if you use {@link GridLayoutManager}, do not replace {@link GridLayoutManager } when you  {@link #wrap(Adapter)} a Adapter. if   must recall  {@link #wrap(Adapter)}
+ */
 public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMoreManager, StateManager {
 
-    private static final String TAG = WrapperAdapter.class.getSimpleName();
     private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;//loading Footer
     private LoadMoreImpl mLoadMore;
     private StateImpl mState;
     private OnRecyclerViewScrollBottomListener mScrollListener;
     private boolean mEnableLoadMore = true;
+    private ItemFullSpanProvider mItemFullSpanProvider;
 
-    RecyclerView mRecyclerView;
-    GridLayoutManager.SpanSizeLookup mSpanSizeLookup;
-    ItemFullSpanProvider mItemFullSpanProvider;
+    private RecyclerView mRecyclerView;
+    private KeepFullSpanHelper mKeepFullSpanHelper;
 
+    public static WrapperAdapter wrap(RecyclerView.Adapter adapter) {
+        return wrap(adapter, true);
+    }
 
-    public static WrapperAdapter setup(RecyclerView.Adapter adapter, RecyclerView recyclerView) {
+    public static WrapperAdapter wrap(RecyclerView.Adapter adapter, boolean enableLoadMore) {
         WrapperAdapter wrapperAdapter = new WrapperAdapter(adapter);
-        wrapperAdapter.mRecyclerView = recyclerView;
-        wrapperAdapter.initOnAttachedToRecyclerView();
-        recyclerView.setAdapter(wrapperAdapter);
+        wrapperAdapter.mEnableLoadMore = enableLoadMore;
         return wrapperAdapter;
     }
 
@@ -52,7 +56,22 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
                 }
             }
         };
+        mKeepFullSpanHelper = new KeepFullSpanHelper();
     }
+
+    private void initOnAttachedToRecyclerView() {
+        mRecyclerView.removeOnScrollListener(mScrollListener);
+        mRecyclerView.addOnScrollListener(mScrollListener);
+
+        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+
+        if (layoutManager instanceof GridLayoutManager && mEnableLoadMore) {
+            GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            mKeepFullSpanHelper.mOriginSpanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+            mKeepFullSpanHelper.setFullSpanForGird(gridLayoutManager);
+        }
+    }
+
 
     @SuppressWarnings("unused")
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
@@ -72,10 +91,44 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
         }
         if (viewType == LOAD_MORE_FOOTER) {
             View loadMoreView = mLoadMore.getLoadMoreView(parent);
+            if (mEnableLoadMore) {
+                keepFullSpan(loadMoreView, false);
+            }
             return new ViewHolder(loadMoreView) {
             };
         } else {
             return super.onCreateViewHolder(parent, viewType);
+        }
+    }
+
+    void keepFullSpan(View itemView, boolean fullHeight) {
+
+        if (mRecyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
+
+            mKeepFullSpanHelper.setFullSpanForStaggered(itemView, fullHeight);
+
+        } else if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
+            // no op
+        } else if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            // no op
+        } else {
+            if (mItemFullSpanProvider != null) {
+                mItemFullSpanProvider.setItemFullSpan(itemView, mRecyclerView, fullHeight);
+            } else {
+                throw new NullPointerException("you need provide  ItemFullSpanProvider when you use custom layoutManager");
+            }
+        }
+    }
+
+    void keepFullSpanForStateViewWhenUseGridLayoutManager() {
+        if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
+            mKeepFullSpanHelper.setFullSpanForGird((GridLayoutManager) mRecyclerView.getLayoutManager());
+        }
+    }
+
+    void cleanFullSpanForGridLayoutManagerIfNeed() {
+        if (!mEnableLoadMore) {
+            mKeepFullSpanHelper.cleanFullSpanIfNeed(mRecyclerView);
         }
     }
 
@@ -87,15 +140,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
             mState.onBindViewHolder(holder, position);
             return;
         }
-        if (getItemViewType(position) == LOAD_MORE_FOOTER) {
-
-            KeepFullSpanUtils.keepFullSpan(
-                    holder.itemView,
-                    mRecyclerView,
-                    false,
-                    mSpanSizeLookup,
-                    mItemFullSpanProvider);
-        } else {
+        if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position);
         }
     }
@@ -107,19 +152,10 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
             mState.onBindViewHolder(holder, position);
             return;
         }
-        if (getItemViewType(position) == LOAD_MORE_FOOTER) {
-
-            KeepFullSpanUtils.keepFullSpan(
-                    holder.itemView,
-                    mRecyclerView,
-                    false,
-                    mSpanSizeLookup,
-                    mItemFullSpanProvider);
-        } else {
+        if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position, payloads);
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -192,20 +228,18 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
         super.onViewDetachedFromWindow(holder);
     }
 
-    private void initOnAttachedToRecyclerView() {
-
-        mRecyclerView.removeOnScrollListener(mScrollListener);
-        mRecyclerView.addOnScrollListener(mScrollListener);
-        if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            GridLayoutManager layoutManager = (GridLayoutManager) mRecyclerView.getLayoutManager();
-            mSpanSizeLookup = layoutManager.getSpanSizeLookup();
-        }
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+        initOnAttachedToRecyclerView();
     }
 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         recyclerView.removeOnScrollListener(mScrollListener);
+        mKeepFullSpanHelper.cleanFullSpanIfNeed(recyclerView);
     }
 
     private boolean isLoadMoreOrStateViewHolder(ViewHolder viewHolder) {
@@ -275,5 +309,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
     public void setLoadMoreViewFactory(LoadMoreViewFactory factory) {
         mLoadMore.setLoadMoreViewFactory(factory);
     }
+
 
 }

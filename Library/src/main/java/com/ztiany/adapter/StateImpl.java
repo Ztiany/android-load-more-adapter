@@ -42,6 +42,7 @@ class StateImpl implements StateManager {
         }
 
         if (viewHolder != null) {
+            mWrapperAdapter.keepFullSpan(viewHolder.itemView, true);
             return viewHolder;
         }
 
@@ -74,6 +75,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_CONTENT;
+        mWrapperAdapter.cleanFullSpanForGridLayoutManagerIfNeed();
         mWrappedAdapter.notifyDataSetChanged();
     }
 
@@ -83,6 +85,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_FAIL;
+        keepStateViewFullIfNeed();
         mWrappedAdapter.notifyDataSetChanged();
     }
 
@@ -92,6 +95,7 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_EMPTY;
+        keepStateViewFullIfNeed();
         mWrappedAdapter.notifyDataSetChanged();
     }
 
@@ -101,7 +105,13 @@ class StateImpl implements StateManager {
             return;
         }
         mCurrentState = STATE_LOADING;
+        keepStateViewFullIfNeed();
         mWrappedAdapter.notifyDataSetChanged();
+    }
+
+    private void keepStateViewFullIfNeed() {
+        //for grid layout manager, no need item view
+        mWrapperAdapter.keepFullSpanForStateViewWhenUseGridLayoutManager();
     }
 
     @Override
@@ -109,16 +119,9 @@ class StateImpl implements StateManager {
         mStateViewFactory = stateViewFactory;
     }
 
-    void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressWarnings("unused") int position) {
-
-        KeepFullSpanUtils.keepFullSpan(
-                holder.itemView,
-                mWrapperAdapter.mRecyclerView,
-                true,
-                mWrapperAdapter.mSpanSizeLookup,
-                mWrapperAdapter.mItemFullSpanProvider
-        );
-
+    @SuppressWarnings("unused")
+    void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        // no op
     }
 
     boolean isNotContentStateViewType(int itemViewType) {

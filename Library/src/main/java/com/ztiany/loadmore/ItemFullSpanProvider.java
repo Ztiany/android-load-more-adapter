@@ -7,10 +7,9 @@ import android.view.View;
 public interface ItemFullSpanProvider {
 
     /**
-     * @param itemView RecyclerView itemView
+     * @param itemView state or load more  itemView
      * @param rv RecyclerView
-     * @param contentViewOrLoadMoreView true mean ContentView ,false mean LoadMoreView
      */
-    void setItemFullSpan(View itemView, RecyclerView rv , boolean contentViewOrLoadMoreView);
+    void setItemFullSpan(View itemView, RecyclerView rv , boolean fullHeight);
 
 }

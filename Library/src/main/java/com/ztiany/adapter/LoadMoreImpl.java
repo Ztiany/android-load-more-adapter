@@ -1,5 +1,6 @@
 package com.ztiany.adapter;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,6 +23,7 @@ class LoadMoreImpl implements LoadMoreManager {
     private final static int STATUS_COMPLETE = 3;
     private final static int STATUS_PRE = 5;
     private int mCurrentStatus = STATUS_NONE;
+
     @LoadMode
     private int mLoadMode = LoadMode.AUTO_LOAD;//是否自动加载更多
 
@@ -100,6 +102,7 @@ class LoadMoreImpl implements LoadMoreManager {
     private void initLoadMoreView(ViewGroup parent) {
         if (mLoadMoreViewFactory == null) {
             mLoadMoreView = new LoadMoreView(parent.getContext());
+            mLoadMoreView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             mLoadMoreView = mLoadMoreViewFactory.onCreateLoadMoreView(parent);
             if (mLoadMoreView == null) {
