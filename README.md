@@ -17,42 +17,16 @@
 
 ```java
 
-      WrapperAdapter wrapperAdapter = new WrapperAdapter(mRecyclerAdapter);
-      mRecyclerView.setAdapter(wrapperAdapter);
-      mLoaderManager = wrapperAdapter.getLoadMoreManager();//获取loadMore控制
-      mStateManager = wrapperAdapter.getStateManager();//获取内容控制
-
-        public interface StateManager {
-
-            void content();
-
-            void fail();
-
-            void empty();
-
-            void loading();
-
-            void setStateViewFactory(StateViewFactory stateViewFactory);
-        }
-
-        public interface ILoadMoreView {
-
-            void onLoading();
-
-            void onFail();
-
-            void onCompleted(boolean hasMore);
-
-            void onClickLoad();
-        }
-
+         mWrapperAdapter = WrapperAdapter.wrap(mAdapter, ture);
+         mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
+         mRecyclerView.setAdapter(mWrapperAdapter);
 
 ```
 
 
 # Gradle
 
-        compile 'com.ztiany.android:WrapperAdapter:1.0.4'
+        compile 'com.ztiany.android:WrapperAdapter:2.0.1'
 
 # 效果
 
