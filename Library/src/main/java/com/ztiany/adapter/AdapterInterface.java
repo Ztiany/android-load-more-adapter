@@ -1,8 +1,15 @@
 package com.ztiany.adapter;
 
-import com.ztiany.loadmore.ItemFullSpanProvider;
-import com.ztiany.loadmore.LastVisibleItemPositionProvider;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
-public interface AdapterInterface extends LastVisibleItemPositionProvider,ItemFullSpanProvider{
+public interface AdapterInterface {
 
+    int getLastVisibleItemPosition(RecyclerView recyclerView);
+
+    /**
+     * @param itemView load more  itemView
+     * @param rv       RecyclerView
+     */
+    void setItemFullSpan(View itemView, RecyclerView rv);
 }

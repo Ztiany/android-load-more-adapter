@@ -8,7 +8,6 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ztiany.adapter.StateViewFactory;
+import com.ztiany.adapter.LoadMode;
+import com.ztiany.adapter.OnLoadMoreListener;
 import com.ztiany.adapter.WrapperAdapter;
 
 import java.util.ArrayList;
@@ -47,19 +47,16 @@ public class BaseDemoFragment extends BaseLayoutFragment {
 
 
     private static final String LAYOUT_TYPE = "layout_type";
-    private static final String ENABLE_LOAD_MORE = "enableLoadMore";
     private static final String CLICK_LOAD_MORE = "isClickLoadMore";
 
-    public static BaseDemoFragment newInstance(int layoutType, boolean enableLoadMore, boolean isClickLoadMore) {
+    public static BaseDemoFragment newInstance(int layoutType, boolean isClickLoadMore) {
         Bundle args = new Bundle();
         args.putInt(LAYOUT_TYPE, layoutType);
-        args.putBoolean(ENABLE_LOAD_MORE, enableLoadMore);
         args.putBoolean(CLICK_LOAD_MORE, isClickLoadMore);
         BaseDemoFragment fragment = new BaseDemoFragment();
         fragment.setArguments(args);
         return fragment;
     }
-
 
     private RecyclerView.LayoutManager createLayoutManager() {
         int type = getArguments().getInt(LAYOUT_TYPE);
@@ -67,8 +64,8 @@ public class BaseDemoFragment extends BaseLayoutFragment {
             return new LinearLayoutManager(getContext());
         } else if (type == 2) {
             return new GridLayoutManager(getContext(), 3);
-        }else {
-            return new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL);
+        } else {
+            return new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         }
 
     }
@@ -80,10 +77,6 @@ public class BaseDemoFragment extends BaseLayoutFragment {
         menu.add(Menu.NONE, 1, 0, "next time fail");
         menu.add(Menu.NONE, 2, 1, "next time no more");
         menu.add(Menu.NONE, 4, 3, "next time normal");
-        menu.add(Menu.NONE, 5, 4, "Content");
-        menu.add(Menu.NONE, 6, 5, "Loading");
-        menu.add(Menu.NONE, 7, 6, "Fail");
-        menu.add(Menu.NONE, 8, 7, "Empty");
         pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -102,22 +95,6 @@ public class BaseDemoFragment extends BaseLayoutFragment {
                         mIsFail = false;
                         mHasMore = true;
                         mWrapperAdapter.loadCompleted(true);
-                        break;
-                    }
-                    case 5: {
-                        mWrapperAdapter.content();
-                        break;
-                    }
-                    case 6: {
-                        mWrapperAdapter.loading();
-                        break;
-                    }
-                    case 7: {
-                        mWrapperAdapter.fail();
-                        break;
-                    }
-                    case 8: {
-                        mWrapperAdapter.empty();
                         break;
                     }
                 }
@@ -151,14 +128,13 @@ public class BaseDemoFragment extends BaseLayoutFragment {
             }
         });
 
-        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter, getArguments().getBoolean(ENABLE_LOAD_MORE));
+        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter);
         mRecyclerView.setAdapter(mWrapperAdapter);
         if (getArguments().getBoolean(CLICK_LOAD_MORE)) {
             mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
         }
 
         setOnLoadMoreListener();
-        setStateView();
 
         mPtrClassicFrameLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
@@ -187,32 +163,7 @@ public class BaseDemoFragment extends BaseLayoutFragment {
                 return super.checkCanDoRefresh(frame, mRecyclerView, header);
             }
         });
-
     }
-
-
-    protected void setStateView() {
-
-        mWrapperAdapter.setStateViewFactory(new StateViewFactory() {
-            @Override
-            public View onCreateEmptyView(ViewGroup parent) {
-                return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_empty, parent, false);
-            }
-
-            @Override
-            public View onCreateLoadingView(ViewGroup parent) {
-                return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_loading, parent, false);
-
-            }
-
-            @Override
-            public View onCreateFailView(ViewGroup parent) {
-                return LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_error, parent, false);
-
-            }
-        });
-    }
-
 
     private void setOnLoadMoreListener() {
 

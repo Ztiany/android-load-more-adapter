@@ -28,31 +28,20 @@ class KeepFullSpanHelper {
     }
 
 
-    void setFullSpanForStaggered(View loadMoreView, boolean matchParent) {
-
+    void setFullSpanForStaggered(View loadMoreView) {
         ViewGroup.LayoutParams layoutParams = loadMoreView.getLayoutParams();
         if (layoutParams == null || !(layoutParams instanceof StaggeredGridLayoutManager.LayoutParams)) {
             layoutParams = new StaggeredGridLayoutManager.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, matchParent ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT);
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
             loadMoreView.setLayoutParams(layoutParams);
 
         } else {
-
             StaggeredGridLayoutManager.LayoutParams slp = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
-
-            if (matchParent) {
-                if (!slp.isFullSpan() || slp.height != ViewGroup.LayoutParams.MATCH_PARENT) {
-                    slp.setFullSpan(true);
-                    slp.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    loadMoreView.setLayoutParams(layoutParams);
-                }
-            } else {
-                if (!slp.isFullSpan() || slp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-                    slp.setFullSpan(true);
-                    slp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    loadMoreView.setLayoutParams(layoutParams);
-                }
+            if (!slp.isFullSpan() || slp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                slp.setFullSpan(true);
+                slp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                loadMoreView.setLayoutParams(layoutParams);
             }
         }
     }

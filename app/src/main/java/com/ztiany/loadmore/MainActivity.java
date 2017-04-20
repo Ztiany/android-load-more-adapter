@@ -14,10 +14,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            setupFragment(BaseDemoFragment.newInstance(1, true, false));
+            setupFragment(BaseDemoFragment.newInstance(1, true));
         }
-
-
     }
 
     @Override
@@ -32,22 +30,13 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.menu_grid:
-                setupFragment(BaseDemoFragment.newInstance(2, true, false));
+                setupFragment(BaseDemoFragment.newInstance(2, false));
                 break;
             case R.id.menu_staggered:
-                setupFragment(BaseDemoFragment.newInstance(3, true, true));
+                setupFragment(BaseDemoFragment.newInstance(3, true));
                 break;
             case R.id.menu_linear:
-                setupFragment(BaseDemoFragment.newInstance(1, true, false));
-                break;
-            case R.id.menu_grid_no_load_more:
-                setupFragment(BaseDemoFragment.newInstance(2, false, false));
-                break;
-            case R.id.menu_staggered_no_load_more:
-                setupFragment(BaseDemoFragment.newInstance(3, false, true));
-                break;
-            case R.id.menu_linear_no_load_more:
-                setupFragment(BaseDemoFragment.newInstance(1, false, false));
+                setupFragment(BaseDemoFragment.newInstance(1, false));
                 break;
         }
 

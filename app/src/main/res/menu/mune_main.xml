@@ -13,16 +13,5 @@
         android:id="@+id/menu_linear"
         android:title="linear"/>
 
-    <item
-        android:id="@+id/menu_staggered_no_load_more"
-        android:title="staggered  no load more"/>
-
-    <item
-        android:id="@+id/menu_grid_no_load_more"
-        android:title="grid  no load more"/>
-
-    <item
-        android:id="@+id/menu_linear_no_load_more"
-        android:title="linear  no load more "/>
 
 </menu>

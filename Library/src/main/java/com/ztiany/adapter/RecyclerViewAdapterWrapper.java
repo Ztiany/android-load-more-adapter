@@ -1,14 +1,10 @@
 package com.ztiany.adapter;
 
-
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-/**
- * see https://github.com/rockerhieu/rv-adapter
- */
 class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
 
     private final RecyclerView.Adapter wrapped;

@@ -4,12 +4,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ztiany.loadmore.ILoadMoreView;
-import com.ztiany.loadmore.LoadMode;
-import com.ztiany.loadmore.LoadMoreView;
-import com.ztiany.loadmore.LoadMoreViewFactory;
-import com.ztiany.loadmore.OnLoadMoreListener;
-
 class LoadMoreImpl implements LoadMoreManager {
 
     private View mLoadMoreView;

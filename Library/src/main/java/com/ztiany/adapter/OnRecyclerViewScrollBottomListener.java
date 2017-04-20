@@ -1,34 +1,22 @@
-package com.ztiany.loadmore;
+package com.ztiany.adapter;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-/**
- * Author 湛添友      <br/>
- * Email ztiany3@gmail.com      <br/>
- * Date 2015-08-24 23:13      <br/>
- * Description：RecyclerView多布局通用滑动监听器
- */
-public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
+abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
 
     private int mLayoutManagerType;
+
     private static final int LINEAR = 1;
     private static final int GRID = 2;
     private static final int STAGGERED_GRID = 3;
 
-    private LastVisibleItemPositionProvider mLastVisibleItemPositionGetter;
+    private AdapterInterface mLastVisibleItemPositionGetter;
 
     private int mLoadingTriggerThreshold;
-
-    private int getLoadingTriggerThreshold() {
-        return mLoadingTriggerThreshold;
-    }
-
-    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
-        mLoadingTriggerThreshold = loadingTriggerThreshold;
-    }
+    private RecyclerView mRecyclerView;
 
     /**
      * 最后一个的位置
@@ -37,7 +25,11 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
 
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if (mRecyclerView != recyclerView) {
+            mRecyclerView = recyclerView;
+        }
         super.onScrolled(recyclerView, dx, dy);
+
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
 
         if (mLayoutManagerType == 0) {
@@ -74,9 +66,9 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
                 break;
             default: {
                 if (mLastVisibleItemPositionGetter == null) {
-                    throw new IllegalStateException("you should set com.ztiany.loadmore.LastVisibleItemPositionProvider when you use custom layoutManager");
+                    throw new IllegalStateException("you need provide AdapterInterface when you use custom layoutManager");
                 }
-                lastVisibleItemPosition = mLastVisibleItemPositionGetter.getLastVisibleItemPosition(layoutManager);
+                lastVisibleItemPosition = mLastVisibleItemPositionGetter.getLastVisibleItemPosition(mRecyclerView);
                 break;
             }
         }
@@ -86,15 +78,17 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         if ((visibleItemCount > 0 && (lastVisibleItemPosition) >= totalItemCount - 1 - mLoadingTriggerThreshold)) {
             onBottom();
         }
-
     }
 
-    public void setLastVisibleItemPositionGetter(LastVisibleItemPositionProvider lastVisibleItemPositionGetter) {
-        mLastVisibleItemPositionGetter = lastVisibleItemPositionGetter;
+    void setLastVisibleItemPositionGetter(AdapterInterface adapterInterface) {
+        mLastVisibleItemPositionGetter = adapterInterface;
     }
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        if (mRecyclerView != recyclerView) {
+            mRecyclerView = recyclerView;
+        }
         super.onScrollStateChanged(recyclerView, newState);
     }
 
@@ -109,5 +103,14 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         }
         return max;
     }
+
+    private int getLoadingTriggerThreshold() {
+        return mLoadingTriggerThreshold;
+    }
+
+    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
+        mLoadingTriggerThreshold = loadingTriggerThreshold;
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.ztiany.loadmore;
+package com.ztiany.adapter;
 
 public interface OnLoadMoreListener {
 

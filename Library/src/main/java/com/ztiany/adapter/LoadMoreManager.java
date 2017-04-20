@@ -1,9 +1,5 @@
 package com.ztiany.adapter;
 
-import com.ztiany.loadmore.LoadMode;
-import com.ztiany.loadmore.LoadMoreViewFactory;
-import com.ztiany.loadmore.OnLoadMoreListener;
-
 /**
  * author Ztiany                                                                        <br/>
  * email 1169654504@qq.com & ztiany3@gmail.com           <br/>
