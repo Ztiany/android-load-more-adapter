@@ -120,7 +120,7 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
         wrapped.onDetachedFromRecyclerView(recyclerView);
     }
 
-    RecyclerView.Adapter getWrappedAdapter() {
+    public RecyclerView.Adapter getWrappedAdapter() {
         return wrapped;
     }
 } 

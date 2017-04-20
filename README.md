@@ -26,7 +26,7 @@
 
 # Gradle
 
-        compile 'com.ztiany.android:WrapperAdapter:2.0.1'
+        compile 'com.ztiany.android:WrapperAdapter:2.0.2'
 
 # 效果
 
