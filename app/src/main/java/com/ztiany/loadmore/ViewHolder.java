@@ -21,7 +21,6 @@ public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
 
     protected abstract void findViews();
 
-
     public abstract void bindData(T data);
 
     protected Context getContext() {

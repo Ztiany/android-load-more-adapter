@@ -7,14 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            setupFragment(BaseDemoFragment.newInstance(1, true));
+            setupFragment(DemoFragment.newInstance(1, false, false));
         }
     }
 
@@ -26,20 +25,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         switch (item.getItemId()) {
             case R.id.menu_grid:
-                setupFragment(BaseDemoFragment.newInstance(2, false));
+                setupFragment(DemoFragment.newInstance(2, false, true));
                 break;
             case R.id.menu_staggered:
-                setupFragment(BaseDemoFragment.newInstance(3, true));
+                setupFragment(DemoFragment.newInstance(3, true, false));
                 break;
             case R.id.menu_linear:
-                setupFragment(BaseDemoFragment.newInstance(1, false));
+                setupFragment(DemoFragment.newInstance(1, false, false));
+                break;
+            case R.id.menu_linear_auto_hide:
+                setupFragment(DemoFragment.newInstance(1, true, true));
                 break;
         }
-
         return true;
     }
 

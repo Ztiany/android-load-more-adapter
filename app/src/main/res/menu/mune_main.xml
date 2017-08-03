@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools">
 
     <item
         android:id="@+id/menu_staggered"
-        android:title="staggered"/>
+        android:title="staggered click load"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/menu_grid"
-        android:title="grid"/>
+        android:title="grid"
+        tools:ignore="HardcodedText"/>
 
     <item
         android:id="@+id/menu_linear"
         android:title="linear"/>
 
+    <item
+        android:id="@+id/menu_linear_auto_hide"
+        android:title="linear auto hide"/>
 
 </menu>

@@ -42,9 +42,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
             }
         }
 
-        /*
-      最后一个可见的item的位置
-     */
+        /* 最后一个可见的item的位置*/
         int lastVisibleItemPosition;
         switch (mLayoutManagerType) {
             case LINEAR:
@@ -111,6 +109,5 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         mLoadingTriggerThreshold = loadingTriggerThreshold;
     }
-
 
 }

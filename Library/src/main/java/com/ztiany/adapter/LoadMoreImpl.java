@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-class LoadMoreImpl implements LoadMoreManager {
+class LoadMoreImpl implements ILoadMore {
 
     private View mLoadMoreView;
     private boolean mHasMore = true;
@@ -16,6 +16,9 @@ class LoadMoreImpl implements LoadMoreManager {
     private final static int STATUS_FAIL = 2;
     private final static int STATUS_COMPLETE = 3;
     private final static int STATUS_PRE = 5;
+
+    private boolean mAutoHiddenWhenNoMore;
+
     private int mCurrentStatus = STATUS_NONE;
 
     @LoadMode
@@ -110,6 +113,7 @@ class LoadMoreImpl implements LoadMoreManager {
     public void loadFail() {
         mCurrentStatus = STATUS_FAIL;
         LoadMoreViewCaller.callFail(mLoadMoreView);
+        processAutoHiddenWhenNoMore();
     }
 
     @Override
@@ -117,6 +121,7 @@ class LoadMoreImpl implements LoadMoreManager {
         mHasMore = hasMore;
         mCurrentStatus = STATUS_COMPLETE;
         LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+        processAutoHiddenWhenNoMore();
     }
 
     @Override
@@ -164,6 +169,25 @@ class LoadMoreImpl implements LoadMoreManager {
             LoadMoreViewCaller.callLoading(mLoadMoreView);
             mCurrentStatus = STATUS_LOADING;
             mOnLoadMoreListener.onLoadMore();
+        }
+    }
+
+    @Override
+    public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
+        mAutoHiddenWhenNoMore = autoHiddenWhenNoMore;
+        processAutoHiddenWhenNoMore();
+    }
+
+    private void processAutoHiddenWhenNoMore() {
+        if (!mAutoHiddenWhenNoMore) {
+            return;
+        }
+        if (mLoadMoreView != null) {
+            if (mCurrentStatus == STATUS_COMPLETE) {
+                mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : View.INVISIBLE);
+            } else {
+                mLoadMoreView.setVisibility(View.VISIBLE);
+            }
         }
     }
 

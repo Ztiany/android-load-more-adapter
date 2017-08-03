@@ -15,7 +15,7 @@
               mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
               mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
          
-             mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+              mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                      @Override
                      public boolean canLoadMore() {
                          return true;
@@ -26,11 +26,11 @@
                                 doLoadMore();
                      }
                      
-         mRecyclerView.setAdapter(mWrapperAdapter);
+               mRecyclerView.setAdapter(mWrapperAdapter);
 ```
 
 
 # Gradle
 
-        compile 'com.ztiany.android:WrapperAdapter:3.0.0'
+        compile 'com.ztiany.android:WrapperAdapter:3.0.1'
  

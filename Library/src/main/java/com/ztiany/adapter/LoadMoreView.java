@@ -32,9 +32,7 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     }
 
     private void init() {
-
-        LayoutInflater.from(getContext())
-                .inflate(R.layout.wrapper_adapter_list_footer, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.wrapper_adapter_list_footer, this, true);
         mMsgTv = (TextView) findViewById(R.id.wrapper_adapter_id_item_msg_tv);
         mProgressBar = (ProgressBar) findViewById(R.id.wrapper_adapter_id_item_pb);
 
@@ -44,13 +42,11 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         mLoadCompleted = getContext().getString(R.string.adapter_load_completed);
     }
 
-
     @Override
     public void onLoading() {
         mProgressBar.setVisibility(VISIBLE);
         mMsgTv.setVisibility(GONE);
     }
-
 
     @Override
     public void onFail() {
@@ -71,7 +67,6 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
             mMsgTv.setText(getCompletedMsg());
         }
     }
-
 
     @Override
     public void onClickLoad() {
