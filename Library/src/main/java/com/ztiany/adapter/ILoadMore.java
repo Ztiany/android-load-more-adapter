@@ -1,6 +1,6 @@
 package com.ztiany.adapter;
 
-interface ILoadMore {
+public interface ILoadMore {
 
     void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
 
