@@ -33,7 +33,7 @@ publish {
     userOrg = 'ztiany'
     groupId = 'com.ztiany.android'
     artifactId = 'WrapperAdapter'
-    publishVersion = '3.0.2'
+    publishVersion = '3.0.3'
     desc = 'Wrapper adapter for recyclerView '
     website = 'https://github.com/Ztiany/WrapperAdapter'
 }

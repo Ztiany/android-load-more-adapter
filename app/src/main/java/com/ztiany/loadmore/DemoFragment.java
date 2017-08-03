@@ -150,11 +150,12 @@ public class DemoFragment extends BaseLayoutFragment {
                     @Override
                     public void run() {
                         mData.clear();
-                        for (int i = 0; i < 20; i++) {
+                        for (int i = 0; i < 10; i++) {
                             mData.add("我是Item " + i);
                         }
                         mRecyclerAdapter.notifyDataSetChanged();
                         frame.refreshComplete();
+                        mWrapperAdapter.loadCompleted(false);
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);

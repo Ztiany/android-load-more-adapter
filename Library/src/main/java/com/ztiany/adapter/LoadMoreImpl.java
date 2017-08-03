@@ -107,6 +107,7 @@ class LoadMoreImpl implements ILoadMore {
             }
         }
         mLoadMoreView.setOnClickListener(new ClickListener());
+        processAutoHiddenWhenNoMore();
     }
 
     @Override
