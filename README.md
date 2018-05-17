@@ -28,6 +28,3 @@
 
         compile 'com.ztiany.android:WrapperAdapter:2.0.2'
 
-# 效果
-
-![](adapter.gif)
