@@ -14,7 +14,7 @@
 ```java
               mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
               mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
-              mRecyclerView.setAdapter(mWrapperAdapter);
+              
               mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                      @Override
                      public boolean canLoadMore() {
