@@ -1,10 +1,10 @@
 # WrapperAdapter
 
-用于包装RecyclerView的Adapter，实现LoadMore功能：
+用于包装 RecyclerView.Adapter 的 Adapter，实现加载更多功能：
 
 - 自动加载更多、点击加载更多
 - 可配置 load more View
-- 兼容自定义的LayoutManager
+- 兼容自定义的 LayoutManager
 
 # 使用方式
 
@@ -14,7 +14,7 @@
 ```java
               mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
               mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
-         
+              mRecyclerView.setAdapter(mWrapperAdapter);
               mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
                      @Override
                      public boolean canLoadMore() {
@@ -23,14 +23,15 @@
          
                      @Override
                      public void onLoadMore() {
-                                doLoadMore();
+                          ...
                      }
                      
-               mRecyclerView.setAdapter(mWrapperAdapter);
+              mRecyclerView.setAdapter(mWrapperAdapter);
 ```
 
 
 # Gradle
 
+```
         compile 'com.ztiany.android:WrapperAdapter:3.0.1'
- 
+```
