@@ -1,14 +1,13 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -25,15 +24,15 @@ android {
     }
 }
 dependencies {
-    provided 'com.android.support:appcompat-v7:25.3.1'
-    provided 'com.android.support:recyclerview-v7:25.3.1'
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
 }
 
 publish {
     userOrg = 'ztiany'
     groupId = 'com.ztiany.android'
     artifactId = 'WrapperAdapter'
-    publishVersion = '3.0.3'
+    publishVersion = '3.0.4'
     desc = 'Wrapper adapter for recyclerView '
     website = 'https://github.com/Ztiany/WrapperAdapter'
 }

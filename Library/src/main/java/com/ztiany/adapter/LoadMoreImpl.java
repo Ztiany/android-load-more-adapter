@@ -152,7 +152,7 @@ class LoadMoreImpl implements ILoadMore {
                 if ((mCurrentStatus == STATUS_FAIL)) {//自动加载更多只有错误才能点击
                     callLoadMore();
                 }
-            } else if (mLoadMode == LoadMode.CLICK_LOAD) {//点击加载更多只有暂停和准备状态才能点击和
+            } else if (mLoadMode == LoadMode.CLICK_LOAD) {//点击加载更多只有暂停和准备状态才能点击
                 if (mCurrentStatus == STATUS_PRE || mCurrentStatus == STATUS_FAIL) {
                     callLoadMore();
                 }
@@ -180,13 +180,16 @@ class LoadMoreImpl implements ILoadMore {
     }
 
     private void processAutoHiddenWhenNoMore() {
-        if (!mAutoHiddenWhenNoMore) {
-            return;
-        }
-        if (mLoadMoreView != null) {
-            if (mCurrentStatus == STATUS_COMPLETE) {
-                mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : View.INVISIBLE);
-            } else {
+        if (mAutoHiddenWhenNoMore) {
+            if (mLoadMoreView != null) {
+                if (mCurrentStatus == STATUS_COMPLETE) {
+                    mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : View.INVISIBLE);
+                } else {
+                    mLoadMoreView.setVisibility(View.VISIBLE);
+                }
+            }
+        }else {
+            if (mLoadMoreView != null) {
                 mLoadMoreView.setVisibility(View.VISIBLE);
             }
         }

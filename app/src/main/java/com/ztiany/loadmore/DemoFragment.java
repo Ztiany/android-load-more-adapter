@@ -2,6 +2,7 @@ package com.ztiany.loadmore;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -23,12 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.OnClick;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
-
 
 public class DemoFragment extends BaseLayoutFragment {
 
@@ -37,13 +35,10 @@ public class DemoFragment extends BaseLayoutFragment {
     private boolean mIsFail;
     private int count = 20;
 
-    @Bind(R.id.fragment_recycler_rv)
-    protected RecyclerView mRecyclerView;
-    @Bind(R.id.fragment_recycler_ptr)
-    protected PtrClassicFrameLayout mPtrClassicFrameLayout;
-
     private List<String> mData;
     protected WrapperAdapter mWrapperAdapter;
+    protected RecyclerView mRecyclerView;
+    protected PtrClassicFrameLayout mPtrClassicFrameLayout;
 
     private static final String LAYOUT_TYPE = "layout_type";
     private static final String CLICK_LOAD_MORE = "isClickLoadMore";
@@ -70,7 +65,6 @@ public class DemoFragment extends BaseLayoutFragment {
         }
     }
 
-    @OnClick(value = {R.id.frag_show_option})
     public void onButtonClick(View v) {
         PopupMenu pop = new PopupMenu(getContext(), v);
         Menu menu = pop.getMenu();
@@ -108,6 +102,19 @@ public class DemoFragment extends BaseLayoutFragment {
     @Override
     protected int provideLayoutRes() {
         return R.layout.fragment_recycler_load;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.frag_show_option).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonClick(v);
+            }
+        });
+        mRecyclerView = view.findViewById(R.id.fragment_recycler_rv);
+        mPtrClassicFrameLayout = view.findViewById(R.id.fragment_recycler_ptr);
     }
 
     @Override
@@ -150,12 +157,12 @@ public class DemoFragment extends BaseLayoutFragment {
                     @Override
                     public void run() {
                         mData.clear();
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 20; i++) {
                             mData.add("我是Item " + i);
                         }
                         mRecyclerAdapter.notifyDataSetChanged();
                         frame.refreshComplete();
-                        mWrapperAdapter.loadCompleted(false);
+                        mWrapperAdapter.loadCompleted(true);
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
@@ -223,7 +230,6 @@ public class DemoFragment extends BaseLayoutFragment {
     }
 
     private void initAdapter() {
-
         mRecyclerAdapter = new BaseAdapter<String, ViewHolder<String>>(getContext(), mData) {
             @Override
             public ViewHolder<String> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -259,4 +265,5 @@ public class DemoFragment extends BaseLayoutFragment {
     protected void onBindData(TextView textView, String data) {
         textView.setText(data);
     }
+
 }
