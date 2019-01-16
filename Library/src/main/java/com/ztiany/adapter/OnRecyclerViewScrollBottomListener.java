@@ -1,5 +1,6 @@
 package com.ztiany.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +25,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
     private int[] mLastPositions;
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         if (mRecyclerView != recyclerView) {
             mRecyclerView = recyclerView;
         }
@@ -46,16 +47,13 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         int lastVisibleItemPosition;
         switch (mLayoutManagerType) {
             case LINEAR:
-                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager)
-                        .findLastVisibleItemPosition();
+                lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case GRID:
-                lastVisibleItemPosition = ((GridLayoutManager) layoutManager)
-                        .findLastVisibleItemPosition();
+                lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
                 break;
             case STAGGERED_GRID:
-                StaggeredGridLayoutManager staggeredGridLayoutManager
-                        = (StaggeredGridLayoutManager) layoutManager;
+                StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
                 if (mLastPositions == null) {
                     mLastPositions = new int[staggeredGridLayoutManager.getSpanCount()];
                 }
@@ -83,7 +81,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
     }
 
     @Override
-    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
         if (mRecyclerView != recyclerView) {
             mRecyclerView = recyclerView;
         }
@@ -106,7 +104,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         return mLoadingTriggerThreshold;
     }
 
-    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
+    void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         mLoadingTriggerThreshold = loadingTriggerThreshold;
     }
 

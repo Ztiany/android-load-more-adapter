@@ -1,5 +1,6 @@
 package com.ztiany.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -35,20 +36,21 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
         });
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return wrapped.onCreateViewHolder(parent, viewType);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         wrapped.onBindViewHolder(holder, position);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
         wrapped.onBindViewHolder(holder, position, payloads);
     }
 
@@ -74,49 +76,50 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         wrapped.onViewRecycled(holder);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
+    public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
         return wrapped.onFailedToRecycleView(holder);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
         wrapped.onViewAttachedToWindow(holder);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
         wrapped.onViewDetachedFromWindow(holder);
     }
 
     @Override
-    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         wrapped.registerAdapterDataObserver(observer);
     }
 
     @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void unregisterAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         wrapped.unregisterAdapterDataObserver(observer);
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         wrapped.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         wrapped.onDetachedFromRecyclerView(recyclerView);
     }
 
     public RecyclerView.Adapter getWrappedAdapter() {
         return wrapped;
     }
+
 } 

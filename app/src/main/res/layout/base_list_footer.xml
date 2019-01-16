@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="80dp"
-              android:background="?attr/selectableItemBackground"
-              android:gravity="center"
-              android:orientation="horizontal"
-              android:padding="15dip">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="15dip">
 
     <ProgressBar
         android:id="@id/basic_item_pb"
@@ -21,6 +22,5 @@
         android:text="@string/basic_load_error_click_to_load"
         android:textSize="16sp"
         android:visibility="gone"/>
-
 
 </LinearLayout>

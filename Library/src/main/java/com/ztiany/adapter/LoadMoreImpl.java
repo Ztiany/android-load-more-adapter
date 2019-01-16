@@ -201,27 +201,28 @@ class LoadMoreImpl implements ILoadMore {
     private static class LoadMoreViewCaller {
 
         static void callLoading(View view) {
-            if (view != null && view instanceof ILoadMoreView) {
+            if (view instanceof ILoadMoreView) {
                 ((ILoadMoreView) view).onLoading();
             }
         }
 
         static void callCompleted(View view, boolean hasMore) {
-            if (view != null && view instanceof ILoadMoreView) {
+            if (view instanceof ILoadMoreView) {
                 ((ILoadMoreView) view).onCompleted(hasMore);
             }
         }
 
         static void callShowClickLoad(View view) {
-            if (view != null && view instanceof ILoadMoreView) {
+            if (view instanceof ILoadMoreView) {
                 ((ILoadMoreView) view).onClickLoad();
             }
         }
 
         static void callFail(View view) {
-            if (view != null && view instanceof ILoadMoreView) {
+            if (view instanceof ILoadMoreView) {
                 ((ILoadMoreView) view).onFail();
             }
         }
     }
+
 }

@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <Button
         android:id="@+id/frag_show_option"
         android:layout_width="match_parent"
@@ -13,18 +12,16 @@
         android:text="showOption"
         android:textAllCaps="false"/>
 
-
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/fragment_recycler_ptr"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_recycler_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
 </LinearLayout>

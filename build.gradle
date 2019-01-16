@@ -3,13 +3,16 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
+        maven { url 'https://jitpack.io' }
+        maven { url uri('repo') }
         google()
         maven {
             url 'https://novoda.bintray.com/snapshots'
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.novoda:bintray-release:0.9'
     }
 }

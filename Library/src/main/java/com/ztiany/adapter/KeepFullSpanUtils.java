@@ -14,7 +14,6 @@ class KeepFullSpanUtils {
     SpanSizeLookup mOriginSpanSizeLookup;
 
     KeepFullSpanUtils() {
-
     }
 
     void cleanFullSpanIfNeed(RecyclerView recyclerView) {
@@ -29,7 +28,7 @@ class KeepFullSpanUtils {
 
     void setFullSpanForStaggered(View loadMoreView) {
         ViewGroup.LayoutParams layoutParams = loadMoreView.getLayoutParams();
-        if (layoutParams == null || !(layoutParams instanceof StaggeredGridLayoutManager.LayoutParams)) {
+        if (!(layoutParams instanceof StaggeredGridLayoutManager.LayoutParams)) {
             layoutParams = new StaggeredGridLayoutManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);

@@ -9,7 +9,7 @@
 # 使用方式
 
 
-## 创建WrapperAdapter与控制器
+## 创建 WrapperAdapter 与控制器
 
 ```java
               mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
@@ -33,5 +33,5 @@
 # Gradle
 
 ```
-        compile 'com.ztiany.android:WrapperAdapter:3.0.1'
+        implementation 'com.ztiany.android:WrapperAdapter:3.0.5'
 ```

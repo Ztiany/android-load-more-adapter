@@ -1,5 +1,6 @@
 package com.ztiany.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,8 +67,9 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == LOAD_MORE_FOOTER) {
             View loadMoreView = mLoadMoreManager.getLoadMoreView(parent);
             keepFullSpan(loadMoreView);
@@ -100,7 +102,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position);
         }
@@ -108,7 +110,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List payloads) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
         if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position, payloads);
         }
@@ -143,7 +145,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewRecycled(ViewHolder holder) {
+    public void onViewRecycled(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
             return;
         }
@@ -152,13 +154,13 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean onFailedToRecycleView(ViewHolder holder) {
+    public boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
         return !(isLoadMoreOrStateViewHolder(holder)) && super.onFailedToRecycleView(holder);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewAttachedToWindow(ViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
             return;
         }
@@ -167,7 +169,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onViewDetachedFromWindow(ViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
             return;
         }
@@ -175,14 +177,14 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         mRecyclerView = recyclerView;
         initOnAttachedToRecyclerView();
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         recyclerView.removeOnScrollListener(mScrollListener);
         mKeepFullSpanUtils.cleanFullSpanIfNeed(recyclerView);

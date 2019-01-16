@@ -1,7 +1,7 @@
 <resources>
 
     <string name="adapter_no_more_message">No more</string>
-    <string name="adapter_load_more_fail">Failure load, click retry</string>
+    <string name="adapter_load_more_fail">Failure to load, click retry</string>
     <string name="adapter_click_load_more">Click to load more</string>
     <string name="adapter_load_completed">Load completed"</string>
 
