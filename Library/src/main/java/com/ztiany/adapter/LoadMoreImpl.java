@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 class LoadMoreImpl implements ILoadMore {
 
     private View mLoadMoreView;
-    private boolean mHasMore = true;
+    private boolean mHasMore = false;
     private OnLoadMoreListener mOnLoadMoreListener;
     private LoadMoreViewFactory mLoadMoreViewFactory;
 

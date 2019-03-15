@@ -33,5 +33,5 @@
 # Gradle
 
 ```
-        implementation 'com.ztiany.android:WrapperAdapter:3.0.5'
+        implementation 'com.ztiany.android:WrapperAdapter:3.0.6'
 ```
