@@ -1,4 +1,4 @@
-# WrapperAdapter
+# WrapperAdapter [![](https://jitpack.io/v/Ztiany/WrapperAdapter.svg)](https://jitpack.io/#Ztiany/WrapperAdapter)
 
 用于包装 RecyclerView.Adapter 的 Adapter，实现加载更多功能：
 
@@ -33,5 +33,7 @@
 # Gradle
 
 ```
-        implementation 'com.ztiany.android:WrapperAdapter:3.0.6'
+maven { url 'https://jitpack.io' }
+
+implementation 'com.github.Ztiany:WrapperAdapter:3.0.6'
 ```
