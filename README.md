@@ -35,5 +35,13 @@
 ```
 maven { url 'https://jitpack.io' }
 
-implementation 'com.github.Ztiany:WrapperAdapter:3.0.6'
+implementation 'com.github.Ztiany:WrapperAdapter:3.0.7'
+```
+
+androidx
+
+```
+maven { url 'https://jitpack.io' }
+
+implementation 'com.github.Ztiany:WrapperAdapter:4.0.1'
 ```
