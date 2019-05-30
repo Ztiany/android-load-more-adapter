@@ -1,7 +1,7 @@
 package com.ztiany.loadmore.adapter;
 
-import android.support.annotation.IntDef;
 
+import androidx.annotation.IntDef;
 
 @IntDef(value = {LoadMode.CLICK_LOAD, LoadMode.AUTO_LOAD})
 public @interface LoadMode {

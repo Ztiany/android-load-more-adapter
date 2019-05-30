@@ -23,7 +23,7 @@ android {
     }
 }
 dependencies {
-    compileOnly 'com.android.support:recyclerview-v7:28.0.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
 }
 
 group='com.github.Ztiany'

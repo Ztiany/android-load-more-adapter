@@ -1,7 +1,8 @@
 package com.ztiany.loadmore.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public interface AdapterInterface {
 

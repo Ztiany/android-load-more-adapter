@@ -1,17 +1,17 @@
 package com.ztiany.loadmore.adapter;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import static android.support.v7.widget.RecyclerView.Adapter;
-import static android.support.v7.widget.RecyclerView.ViewHolder;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 
 public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadMore {
 
@@ -30,7 +30,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         return new WrapperAdapter(adapter);
     }
 
-    private WrapperAdapter(Adapter wrapped) {
+    private WrapperAdapter(RecyclerView.Adapter wrapped) {
         super(wrapped);
         mLoadMoreManager = new LoadMoreImpl();
         mScrollListener = new OnRecyclerViewScrollBottomListener() {
@@ -110,7 +110,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     @Override
     @SuppressWarnings("unchecked")
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List payloads) {
         if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position, payloads);
         }

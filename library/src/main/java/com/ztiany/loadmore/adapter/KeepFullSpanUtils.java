@@ -1,17 +1,17 @@
 package com.ztiany.loadmore.adapter;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.GridLayoutManager.SpanSizeLookup;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 
 class KeepFullSpanUtils {
 
     private InnerSpanSizeLookup mInnerSpanSizeLookup;
-    SpanSizeLookup mOriginSpanSizeLookup;
+    GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
 
     KeepFullSpanUtils() {
     }
@@ -19,7 +19,7 @@ class KeepFullSpanUtils {
     void cleanFullSpanIfNeed(RecyclerView recyclerView) {
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
-            SpanSizeLookup spanSizeLookup = ((GridLayoutManager) layoutManager).getSpanSizeLookup();
+            GridLayoutManager.SpanSizeLookup spanSizeLookup = ((GridLayoutManager) layoutManager).getSpanSizeLookup();
             if (spanSizeLookup == mInnerSpanSizeLookup) {
                 ((GridLayoutManager) layoutManager).setSpanSizeLookup(mOriginSpanSizeLookup);
             }
@@ -45,7 +45,7 @@ class KeepFullSpanUtils {
     }
 
     void setFullSpanForGird(GridLayoutManager gridLayoutManager) {
-        SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+        GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
         if (mOriginSpanSizeLookup == spanSizeLookup) {//first in
             if (mInnerSpanSizeLookup == null) {
                 mInnerSpanSizeLookup = new InnerSpanSizeLookup(mOriginSpanSizeLookup, gridLayoutManager);
@@ -62,11 +62,11 @@ class KeepFullSpanUtils {
 
     private static class InnerSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 
-        private SpanSizeLookup mOriginSpanSizeLookup;
+        private GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
         private GridLayoutManager mGridLayoutManager;
         private final int mSpanCount;
 
-        InnerSpanSizeLookup(SpanSizeLookup originSpanSizeLookup, GridLayoutManager gridLayoutManager) {
+        InnerSpanSizeLookup(GridLayoutManager.SpanSizeLookup originSpanSizeLookup, GridLayoutManager gridLayoutManager) {
             mOriginSpanSizeLookup = originSpanSizeLookup;
             mGridLayoutManager = gridLayoutManager;
             mSpanCount = mGridLayoutManager.getSpanCount();

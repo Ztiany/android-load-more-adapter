@@ -1,9 +1,10 @@
 package com.ztiany.loadmore;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
@@ -14,7 +15,7 @@ import android.view.View;
  */
 public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
 
-    public ViewHolder(View itemView) {
+    ViewHolder(View itemView) {
         super(itemView);
         findViews();
     }
@@ -27,9 +28,10 @@ public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
         return itemView.getContext();
     }
 
-    public <T extends View> T findView(@IdRes int viewId) {
+    <V extends View> V findView(@IdRes int viewId) {
         @SuppressWarnings("unchecked")//需要什么类型，就返回什么类型
-                T view = (T) itemView.findViewById(viewId);
+                V view = itemView.findViewById(viewId);
         return view;
     }
+
 }
