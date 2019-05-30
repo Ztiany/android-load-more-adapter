@@ -2,7 +2,9 @@ package com.ztiany.loadmore;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -16,17 +18,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ztiany.adapter.LoadMode;
-import com.ztiany.adapter.OnLoadMoreListener;
-import com.ztiany.adapter.WrapperAdapter;
+import com.ztiany.loadmore.adapter.LoadMode;
+import com.ztiany.loadmore.adapter.OnLoadMoreListener;
+import com.ztiany.loadmore.adapter.WrapperAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class DemoFragment extends BaseLayoutFragment {
 
@@ -38,7 +37,7 @@ public class DemoFragment extends BaseLayoutFragment {
     private List<String> mData;
     protected WrapperAdapter mWrapperAdapter;
     protected RecyclerView mRecyclerView;
-    protected PtrClassicFrameLayout mPtrClassicFrameLayout;
+    protected SwipeRefreshLayout mRefreshLayout;
 
     private static final String LAYOUT_TYPE = "layout_type";
     private static final String CLICK_LOAD_MORE = "isClickLoadMore";
@@ -114,7 +113,7 @@ public class DemoFragment extends BaseLayoutFragment {
             }
         });
         mRecyclerView = view.findViewById(R.id.fragment_recycler_rv);
-        mPtrClassicFrameLayout = view.findViewById(R.id.fragment_recycler_ptr);
+        mRefreshLayout = view.findViewById(R.id.fragment_recycler_ptr);
     }
 
     @Override
@@ -145,15 +144,15 @@ public class DemoFragment extends BaseLayoutFragment {
 
         setOnLoadMoreListener();
 
-        mPtrClassicFrameLayout.setPtrHandler(new PtrDefaultHandler() {
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefreshBegin(final PtrFrameLayout frame) {
+            public void onRefresh() {
                 if (mWrapperAdapter.isLoadingMore()) {
-                    frame.refreshComplete();
+                    mRefreshLayout.setRefreshing(false);
                     return;
                 }
 
-                frame.postDelayed(new Runnable() {
+                mRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         mData.clear();
@@ -161,16 +160,11 @@ public class DemoFragment extends BaseLayoutFragment {
                             mData.add("我是Item " + i);
                         }
                         mRecyclerAdapter.notifyDataSetChanged();
-                        frame.refreshComplete();
+                        mRefreshLayout.setRefreshing(false);
                         mWrapperAdapter.loadCompleted(true);
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
-            }
-
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return super.checkCanDoRefresh(frame, mRecyclerView, header);
             }
         });
     }
@@ -186,7 +180,7 @@ public class DemoFragment extends BaseLayoutFragment {
             @Override
             public void onLoadMore() {
 
-                mPtrClassicFrameLayout.postDelayed(new Runnable() {
+                mRefreshLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
 
@@ -231,8 +225,9 @@ public class DemoFragment extends BaseLayoutFragment {
 
     private void initAdapter() {
         mRecyclerAdapter = new BaseAdapter<String, ViewHolder<String>>(getContext(), mData) {
+            @NonNull
             @Override
-            public ViewHolder<String> onCreateViewHolder(ViewGroup parent, int viewType) {
+            public ViewHolder<String> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View inflate = mLayoutInflater.inflate(R.layout.item, parent, false);
                 return new ViewHolder<String>(inflate) {
                     private TextView mTextView;
@@ -256,7 +251,7 @@ public class DemoFragment extends BaseLayoutFragment {
             }
 
             @Override
-            public void onBindViewHolder(ViewHolder<String> viewHolder, final int position) {
+            public void onBindViewHolder(@NonNull ViewHolder<String> viewHolder, final int position) {
                 viewHolder.bindData(mData.get(position));
             }
         };

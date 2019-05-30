@@ -1,4 +1,4 @@
-package com.ztiany.adapter;
+package com.ztiany.loadmore.adapter;
 
 public interface ILoadMore {
 

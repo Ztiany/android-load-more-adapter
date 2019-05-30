@@ -24,7 +24,6 @@ public class DensityUtils {
 
     private static final float DOT_FIVE = 0.5f;
 
-
     /**
      * dip to px
      *
@@ -117,7 +116,6 @@ public class DensityUtils {
     private static synchronized void initDisplayMetrics(Context context) {
         sDisplayMetrics = context.getResources().getDisplayMetrics();
     }
-
 
 
     /**

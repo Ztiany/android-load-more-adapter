@@ -2,6 +2,7 @@ package com.ztiany.loadmore;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,7 +20,7 @@ public abstract class BaseLayoutFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         int layoutId = provideLayoutRes();
         if (layoutId > 0) {
             return inflater.inflate(provideLayoutRes(), container, false);

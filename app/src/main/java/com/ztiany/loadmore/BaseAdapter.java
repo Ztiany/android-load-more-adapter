@@ -1,6 +1,7 @@
 package com.ztiany.loadmore;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,13 +17,11 @@ import java.util.List;
  */
 public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    protected List<T> mData;
-    protected Context mContext;
-    protected LayoutInflater mLayoutInflater;
+    List<T> mData;
+    LayoutInflater mLayoutInflater;
 
-    public BaseAdapter(Context context, List<T> data) {
+    BaseAdapter(Context context, List<T> data) {
         this.mData = data;
-        this.mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
@@ -34,11 +33,8 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
         return mData;
     }
 
-
     /**
      * 添加一条数据，这里需要注意的是，如果使用type来实现多个条目。在notify的时候，可能需要写此方法
-     *
-     * @param t
      */
     @UiThread
     public void addItem(T t) {
@@ -58,11 +54,9 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
 
     /**
      * 添加数据集合，这里需要注意的是，如果使用type来实现多个条目。在notify的时候，可能需要写此方法
-     *
-     * @param data
      */
     @UiThread
-    public void addAll(List<T> data) {
+    void addAll(List<T> data) {
         if (data == null || data.isEmpty()) {
             return;
         }
@@ -126,17 +120,16 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
         return getDataSize() == 0;
     }
 
-    public int getDataSize() {
+    private int getDataSize() {
         return mData == null ? 0 : mData.size();
     }
 
 
+    @NonNull
     @Override
-    public abstract VH onCreateViewHolder(ViewGroup parent, int viewType);
+    public abstract VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public abstract void onBindViewHolder(VH viewHolder, int position);
-
+    public abstract void onBindViewHolder(@NonNull VH viewHolder, int position);
 
 }
-
