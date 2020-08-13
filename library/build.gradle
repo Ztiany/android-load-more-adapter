@@ -26,4 +26,4 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
 }
 
-group='com.github.Ztiany'
+group='com.github.ztiany'
