@@ -10,4 +10,5 @@ public interface ILoadMoreView {
     void onCompleted(boolean hasMore);
 
     void onClickLoad();
+
 }

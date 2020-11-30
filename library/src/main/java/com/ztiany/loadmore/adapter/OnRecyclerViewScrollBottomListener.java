@@ -72,8 +72,9 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
 
         int visibleItemCount = layoutManager.getChildCount();
         int totalItemCount = layoutManager.getItemCount();
+
         if ((visibleItemCount > 0 && (lastVisibleItemPosition) >= totalItemCount - 1 - mLoadingTriggerThreshold)) {
-            onBottom();
+            onBottom(dy < 0 ? Direction.DOWN : Direction.UP);
         }
     }
 
@@ -89,7 +90,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         super.onScrollStateChanged(recyclerView, newState);
     }
 
-    public abstract void onBottom();
+    public abstract void onBottom(@Direction int direction);
 
     private int findMax(int[] lastPositions) {
         int max = lastPositions[0];

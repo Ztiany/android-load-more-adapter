@@ -44,17 +44,19 @@ public class DemoFragment extends BaseLayoutFragment {
     private static final String CLICK_LOAD_MORE = "isClickLoadMore";
     private static final String AUTO_HIDDEN_MORE = "auto_hidden_more";
 
-    public static DemoFragment newInstance(int layoutType, boolean isClickLoadMore, boolean autoHidden) {
+    public static DemoFragment newInstance(int layoutType, boolean isClickLoadMore, int visibilityWhenNoMore) {
         Bundle args = new Bundle();
         args.putInt(LAYOUT_TYPE, layoutType);
         args.putBoolean(CLICK_LOAD_MORE, isClickLoadMore);
-        args.putBoolean(AUTO_HIDDEN_MORE, autoHidden);
+        args.putInt(AUTO_HIDDEN_MORE, visibilityWhenNoMore);
         DemoFragment fragment = new DemoFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     private RecyclerView.LayoutManager createLayoutManager() {
+        Bundle arguments = getArguments();
+        assert arguments != null;
         int type = getArguments().getInt(LAYOUT_TYPE);
         if (type == 1) {
             return new LinearLayoutManager(getContext());
@@ -66,7 +68,7 @@ public class DemoFragment extends BaseLayoutFragment {
     }
 
     public void onButtonClick(View v) {
-        PopupMenu pop = new PopupMenu(getContext(), v);
+        PopupMenu pop = new PopupMenu(requireContext(), v);
         Menu menu = pop.getMenu();
         menu.add(Menu.NONE, 1, 0, "next time fail");
         menu.add(Menu.NONE, 2, 1, "next time no more");
@@ -105,7 +107,7 @@ public class DemoFragment extends BaseLayoutFragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.frag_show_option).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,7 +129,12 @@ public class DemoFragment extends BaseLayoutFragment {
         mRecyclerView.setLayoutManager(createLayoutManager());
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            public void getItemOffsets(
+                    @NonNull Rect outRect, @NonNull
+                    View view,
+                    @NonNull RecyclerView parent,
+                    @NonNull RecyclerView.State state
+            ) {
                 outRect.bottom = DensityUtils.dip2px(getContext(), 10);
                 super.getItemOffsets(outRect, view, parent, state);
             }
@@ -136,12 +143,14 @@ public class DemoFragment extends BaseLayoutFragment {
         mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter);
         mRecyclerView.setAdapter(mWrapperAdapter);
 
-        if (getArguments().getBoolean(CLICK_LOAD_MORE)) {
+        Bundle arguments = getArguments();
+        assert arguments != null;
+
+        if (arguments.getBoolean(CLICK_LOAD_MORE)) {
             mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
         }
-        if (getArguments().getBoolean(AUTO_HIDDEN_MORE)) {
-            mWrapperAdapter.setAutoHiddenWhenNoMore(true);
-        }
+
+        mWrapperAdapter.setVisibilityWhenNoMore(getArguments().getInt(AUTO_HIDDEN_MORE, View.VISIBLE));
 
         setOnLoadMoreListener();
 
@@ -189,6 +198,7 @@ public class DemoFragment extends BaseLayoutFragment {
                             mWrapperAdapter.loadFail();
                             return;
                         }
+
                         if (!mHasMore) {
                             mWrapperAdapter.loadCompleted(false);
                             return;
@@ -218,7 +228,7 @@ public class DemoFragment extends BaseLayoutFragment {
                                 "新来的Item" + count++));
                         mWrapperAdapter.loadCompleted(true);
                     }
-                }, 1000);
+                }, 100);
             }
         });
 

@@ -15,4 +15,10 @@ public interface ILoadMore {
     void setLoadMoreViewFactory(LoadMoreViewFactory factory);
 
     void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore);
+
+    /**
+     * @param visibility {@link android.view.View#VISIBLE},{@link android.view.View#INVISIBLE},{@link android.view.View#GONE}.
+     */
+    void setVisibilityWhenNoMore(int visibility);
+
 }

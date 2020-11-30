@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-
-class KeepFullSpanUtils {
+final class KeepFullSpanUtils {
 
     private InnerSpanSizeLookup mInnerSpanSizeLookup;
+
     GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
 
     KeepFullSpanUtils() {
@@ -80,4 +80,5 @@ class KeepFullSpanUtils {
             return mOriginSpanSizeLookup.getSpanSize(position);
         }
     }
+
 }

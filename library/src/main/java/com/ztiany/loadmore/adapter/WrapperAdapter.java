@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadMore {
 
-    private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;//loading Footer
+    private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;
 
     private LoadMoreImpl mLoadMoreManager;
+
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
     private AdapterInterface mAdapterInterface;
@@ -35,8 +36,8 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         mLoadMoreManager = new LoadMoreImpl();
         mScrollListener = new OnRecyclerViewScrollBottomListener() {
             @Override
-            public void onBottom() {
-                mLoadMoreManager.tryCallLoadMore();
+            public void onBottom(@Direction int direction) {
+                mLoadMoreManager.tryCallLoadMore(direction);
             }
         };
         mKeepFullSpanUtils = new KeepFullSpanUtils();
@@ -56,12 +57,10 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         }
     }
 
-    @SuppressWarnings("unused")
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
     }
 
-    @SuppressWarnings("unused")
     public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
         mAdapterInterface = lastVisibleItemPosition;
         mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
@@ -80,13 +79,9 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         }
     }
 
-    @SuppressWarnings("all")
     private void keepFullSpan(View itemView) {
-
         if (mRecyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-
             mKeepFullSpanUtils.setFullSpanForStaggered(itemView);
-
         } else if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
             // no op
         } else if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -100,7 +95,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (getItemViewType(position) != LOAD_MORE_FOOTER) {
@@ -109,7 +103,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List payloads) {
         if (getItemViewType(position) != LOAD_MORE_FOOTER) {
             super.onBindViewHolder(holder, position, payloads);
@@ -143,7 +136,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         return position;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
@@ -153,12 +145,10 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
         return !(isLoadMoreOrStateViewHolder(holder)) && super.onFailedToRecycleView(holder);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
@@ -167,7 +157,6 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         super.onViewAttachedToWindow(holder);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
@@ -231,6 +220,11 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     @Override
     public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
         mLoadMoreManager.setAutoHiddenWhenNoMore(autoHiddenWhenNoMore);
+    }
+
+    @Override
+    public void setVisibilityWhenNoMore(int visibility) {
+        mLoadMoreManager.setVisibilityWhenNoMore(visibility);
     }
 
 }

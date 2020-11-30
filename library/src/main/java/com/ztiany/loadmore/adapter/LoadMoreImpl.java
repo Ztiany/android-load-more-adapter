@@ -9,7 +9,9 @@ class LoadMoreImpl implements ILoadMore {
 
     private View mLoadMoreView;
     private boolean mHasMore = false;
+
     private OnLoadMoreListener mOnLoadMoreListener;
+
     private LoadMoreViewFactory mLoadMoreViewFactory;
 
     private final static int STATUS_NONE = 0;
@@ -18,14 +20,17 @@ class LoadMoreImpl implements ILoadMore {
     private final static int STATUS_COMPLETE = 3;
     private final static int STATUS_PRE = 5;
 
-    private boolean mAutoHiddenWhenNoMore;
+    private int mVisibilityWhenNoMore = View.VISIBLE;
 
     private int mCurrentStatus = STATUS_NONE;
 
-    @LoadMode
-    private int mLoadMode = LoadMode.AUTO_LOAD;//是否自动加载更多
+    private long mPreviousTimeCallingLoadMore;
 
-    void tryCallLoadMore() {
+    private static final long MIN_INTERVAL_WHEN_AUTO_MODE = 1000;
+
+    @LoadMode private int mLoadMode = LoadMode.AUTO_LOAD;
+
+    void tryCallLoadMore(int direction) {
         if (mOnLoadMoreListener == null || !mOnLoadMoreListener.canLoadMore()) {
             return;
         }
@@ -34,7 +39,9 @@ class LoadMoreImpl implements ILoadMore {
         }
         if (isAutoLoad()) {
             mCurrentStatus = STATUS_PRE;
-            callLoadMore();
+            if (checkIfNeedCallLoadMoreWhenAutoMode(direction)) {
+                callLoadMore();
+            }
         } else {
             if (mCurrentStatus != STATUS_FAIL) {
                 mCurrentStatus = STATUS_PRE;
@@ -43,23 +50,30 @@ class LoadMoreImpl implements ILoadMore {
         }
     }
 
+    private boolean checkIfNeedCallLoadMoreWhenAutoMode(int direction) {
+        if (direction != Direction.UP) {
+            return false;
+        }
+
+        long now = System.currentTimeMillis();
+
+        return now - mPreviousTimeCallingLoadMore >= MIN_INTERVAL_WHEN_AUTO_MODE;
+    }
+
     View getLoadMoreView(ViewGroup parent) {
         initLoadMoreView(parent);
         if (mLoadMode == LoadMode.CLICK_LOAD) {
-            processClickLoadMore();
+            initClickLoadMoreViewStatus();
         } else {
-            processAutoLoadMore();
+            initAutoLoadMoreViewStatus();
         }
         return mLoadMoreView;
     }
 
-    private void processAutoLoadMore() {
+    private void initAutoLoadMoreViewStatus() {
         switch (mCurrentStatus) {
             case STATUS_PRE:
-            case STATUS_NONE: {
-                LoadMoreViewCaller.callLoading(mLoadMoreView);
-                break;
-            }
+            case STATUS_NONE:
             case STATUS_LOADING: {
                 LoadMoreViewCaller.callLoading(mLoadMoreView);
                 break;
@@ -75,7 +89,7 @@ class LoadMoreImpl implements ILoadMore {
         }
     }
 
-    private void processClickLoadMore() {
+    private void initClickLoadMoreViewStatus() {
         switch (mCurrentStatus) {
             case STATUS_PRE:
             case STATUS_NONE: {
@@ -146,14 +160,16 @@ class LoadMoreImpl implements ILoadMore {
     }
 
     private class ClickListener implements View.OnClickListener {
+
         @Override
         public void onClick(View v) {
 
             if (mLoadMode == LoadMode.AUTO_LOAD) {
-                if ((mCurrentStatus == STATUS_FAIL)) {//自动加载更多只有错误才能点击
+                //自动加载更多只有错误才能点击
+                if ((mCurrentStatus == STATUS_FAIL)) {
                     callLoadMore();
                 }
-            } else if (mLoadMode == LoadMode.CLICK_LOAD) {//点击加载更多只有暂停和准备状态才能点击
+            } /*点击加载更多模式，只有暂停和准备状态才能点击*/ else if (mLoadMode == LoadMode.CLICK_LOAD) {
                 if (mCurrentStatus == STATUS_PRE || mCurrentStatus == STATUS_FAIL) {
                     callLoadMore();
                 }
@@ -171,26 +187,27 @@ class LoadMoreImpl implements ILoadMore {
             LoadMoreViewCaller.callLoading(mLoadMoreView);
             mCurrentStatus = STATUS_LOADING;
             mOnLoadMoreListener.onLoadMore();
+            mPreviousTimeCallingLoadMore = System.currentTimeMillis();
         }
     }
 
     @Override
     public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
-        mAutoHiddenWhenNoMore = autoHiddenWhenNoMore;
+        mVisibilityWhenNoMore = autoHiddenWhenNoMore ? View.INVISIBLE : View.VISIBLE;
+        processAutoHiddenWhenNoMore();
+    }
+
+    @Override
+    public void setVisibilityWhenNoMore(int visibility) {
+        mVisibilityWhenNoMore = visibility;
         processAutoHiddenWhenNoMore();
     }
 
     private void processAutoHiddenWhenNoMore() {
-        if (mAutoHiddenWhenNoMore) {
-            if (mLoadMoreView != null) {
-                if (mCurrentStatus == STATUS_COMPLETE) {
-                    mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : View.INVISIBLE);
-                } else {
-                    mLoadMoreView.setVisibility(View.VISIBLE);
-                }
-            }
-        }else {
-            if (mLoadMoreView != null) {
+        if (mLoadMoreView != null) {
+            if (mCurrentStatus == STATUS_COMPLETE) {
+                mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : mVisibilityWhenNoMore);
+            } else {
                 mLoadMoreView.setVisibility(View.VISIBLE);
             }
         }

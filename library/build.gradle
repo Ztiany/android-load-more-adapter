@@ -6,6 +6,7 @@ android {
 
     defaultConfig {
         minSdkVersion 15
+        //noinspection OldTargetApi
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -22,8 +23,9 @@ android {
         abortOnError false
     }
 }
+
 dependencies {
-    compileOnly 'androidx.recyclerview:recyclerview:1.0.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
 group='com.github.ztiany'

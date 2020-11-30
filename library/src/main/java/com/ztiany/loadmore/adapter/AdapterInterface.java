@@ -13,4 +13,5 @@ public interface AdapterInterface {
      * @param rv       RecyclerView
      */
     void setItemFullSpan(View itemView, RecyclerView rv);
+
 }
