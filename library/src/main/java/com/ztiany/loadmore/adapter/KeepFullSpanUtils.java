@@ -33,7 +33,6 @@ final class KeepFullSpanUtils {
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
             loadMoreView.setLayoutParams(layoutParams);
-
         } else {
             StaggeredGridLayoutManager.LayoutParams slp = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
             if (!slp.isFullSpan() || slp.height == ViewGroup.LayoutParams.MATCH_PARENT) {

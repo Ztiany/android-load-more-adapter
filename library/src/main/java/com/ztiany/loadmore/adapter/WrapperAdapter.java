@@ -1,5 +1,6 @@
 package com.ztiany.loadmore.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadMore {
 
+    private static final String TAG = "WrapperAdapter";
+
     private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;
 
     private LoadMoreImpl mLoadMoreManager;
@@ -28,25 +31,33 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     private KeepFullSpanUtils mKeepFullSpanUtils;
 
     public static WrapperAdapter wrap(RecyclerView.Adapter adapter) {
-        return new WrapperAdapter(adapter);
+        return new WrapperAdapter(adapter, false);
     }
 
-    private WrapperAdapter(RecyclerView.Adapter wrapped) {
+    public static WrapperAdapter wrap(RecyclerView.Adapter adapter, boolean useScrollListener) {
+        return new WrapperAdapter(adapter, useScrollListener);
+    }
+
+    private WrapperAdapter(RecyclerView.Adapter wrapped, boolean useScrollListener) {
         super(wrapped);
-        mLoadMoreManager = new LoadMoreImpl();
-        mScrollListener = new OnRecyclerViewScrollBottomListener() {
-            @Override
-            public void onBottom(@Direction int direction) {
-                mLoadMoreManager.tryCallLoadMore(direction);
-            }
-        };
+        mLoadMoreManager = new LoadMoreImpl(useScrollListener);
         mKeepFullSpanUtils = new KeepFullSpanUtils();
+
+        if (useScrollListener) {
+            mScrollListener = new OnRecyclerViewScrollBottomListener() {
+                @Override
+                public void onBottom(@Direction int direction) {
+                    Log.d(TAG, "onBottom call LoadMore.");
+                    mLoadMoreManager.tryCallLoadMore(direction);
+                }
+            };
+        }
     }
 
     private void initOnAttachedToRecyclerView() {
-
-        mRecyclerView.removeOnScrollListener(mScrollListener);
-        mRecyclerView.addOnScrollListener(mScrollListener);
+        if (mScrollListener != null) {
+            mRecyclerView.addOnScrollListener(mScrollListener);
+        }
 
         RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
 
@@ -58,12 +69,18 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     }
 
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
-        mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
+        if (mScrollListener != null) {
+            mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);
+        } else {
+            Log.d(TAG, "you are not using ScrollListener, this call has no effect.");
+        }
     }
 
     public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
         mAdapterInterface = lastVisibleItemPosition;
-        mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
+        if (mScrollListener != null) {
+            mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
+        }
     }
 
     @NonNull
@@ -112,7 +129,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     @Override
     public int getItemCount() {
         int count = super.getItemCount();
-        return count == 0 ? count : count + 1;
+        return count == 0 ? 0 : count + 1;
     }
 
     @Override
@@ -152,6 +169,10 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         if (isLoadMoreOrStateViewHolder(holder)) {
+            if (mScrollListener == null) {
+                Log.d(TAG, "onLoadMoreViewAttachedToWindow call LoadMore.");
+                mLoadMoreManager.tryCallLoadMore(Direction.UP);
+            }
             return;
         }
         super.onViewAttachedToWindow(holder);

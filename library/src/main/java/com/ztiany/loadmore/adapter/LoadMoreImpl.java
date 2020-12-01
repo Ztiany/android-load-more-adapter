@@ -25,10 +25,13 @@ class LoadMoreImpl implements ILoadMore {
     private int mCurrentStatus = STATUS_NONE;
 
     private long mPreviousTimeCallingLoadMore;
-
-    private static final long MIN_INTERVAL_WHEN_AUTO_MODE = 1000;
+    private final boolean timeLimited;
 
     @LoadMode private int mLoadMode = LoadMode.AUTO_LOAD;
+
+    public LoadMoreImpl(boolean useScrollListener) {
+        timeLimited = useScrollListener;
+    }
 
     void tryCallLoadMore(int direction) {
         if (mOnLoadMoreListener == null || !mOnLoadMoreListener.canLoadMore()) {
@@ -54,10 +57,11 @@ class LoadMoreImpl implements ILoadMore {
         if (direction != Direction.UP) {
             return false;
         }
-
-        long now = System.currentTimeMillis();
-
-        return now - mPreviousTimeCallingLoadMore >= MIN_INTERVAL_WHEN_AUTO_MODE;
+        if (timeLimited) {
+            return System.currentTimeMillis() - mPreviousTimeCallingLoadMore >= 250;
+        } else {
+            return true;
+        }
     }
 
     View getLoadMoreView(ViewGroup parent) {

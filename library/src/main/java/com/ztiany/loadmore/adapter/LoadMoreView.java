@@ -85,4 +85,11 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
         return mFailMsg;
     }
 
+    @Override
+    public void setVisibility(int visibility) {
+        super.setVisibility(visibility);
+        mProgressBar.setVisibility(visibility);
+        mMsgTv.setVisibility(visibility);
+    }
+
 }

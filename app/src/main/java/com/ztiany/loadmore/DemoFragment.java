@@ -32,6 +32,7 @@ public class DemoFragment extends BaseLayoutFragment {
 
     private BaseAdapter<String, ViewHolder<String>> mRecyclerAdapter;
     private boolean mHasMore = true;
+    private boolean mAddNewHasMore = true;
     private boolean mIsFail;
     private int count = 20;
 
@@ -72,6 +73,7 @@ public class DemoFragment extends BaseLayoutFragment {
         Menu menu = pop.getMenu();
         menu.add(Menu.NONE, 1, 0, "next time fail");
         menu.add(Menu.NONE, 2, 1, "next time no more");
+        menu.add(Menu.NONE, 3, 2, "next time add new no more");
         menu.add(Menu.NONE, 4, 3, "next time normal");
         pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
@@ -87,9 +89,16 @@ public class DemoFragment extends BaseLayoutFragment {
                         mHasMore = false;
                         break;
                     }
+                    case 3: {
+                        mIsFail = false;
+                        mHasMore = true;
+                        mAddNewHasMore = false;
+                        break;
+                    }
                     case 4: {
                         mIsFail = false;
                         mHasMore = true;
+                        mAddNewHasMore = true;
                         mWrapperAdapter.loadCompleted(true);
                         break;
                     }
@@ -171,7 +180,7 @@ public class DemoFragment extends BaseLayoutFragment {
                         }
                         mRecyclerAdapter.notifyDataSetChanged();
                         mRefreshLayout.setRefreshing(false);
-                        mWrapperAdapter.loadCompleted(true);
+                        mWrapperAdapter.loadCompleted(mHasMore);
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
                 }, 1000);
@@ -226,7 +235,9 @@ public class DemoFragment extends BaseLayoutFragment {
                                 "新来的Item" + count++,
                                 "新来的Item" + count++,
                                 "新来的Item" + count++));
-                        mWrapperAdapter.loadCompleted(true);
+
+                        mWrapperAdapter.loadCompleted(mAddNewHasMore);
+
                     }
                 }, 100);
             }
