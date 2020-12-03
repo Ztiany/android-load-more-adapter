@@ -21,4 +21,6 @@ public interface ILoadMore {
      */
     void setVisibilityWhenNoMore(int visibility);
 
+    void setMinLoadMoreInterval(long minLoadMoreInterval);
+
 }

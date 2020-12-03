@@ -25,6 +25,9 @@ class LoadMoreImpl implements ILoadMore {
     private int mCurrentStatus = STATUS_NONE;
 
     private long mPreviousTimeCallingLoadMore;
+
+    private long mMixLoadMoreInterval = 0;
+
     private final boolean timeLimited;
 
     @LoadMode private int mLoadMode = LoadMode.AUTO_LOAD;
@@ -58,7 +61,7 @@ class LoadMoreImpl implements ILoadMore {
             return false;
         }
         if (timeLimited) {
-            return System.currentTimeMillis() - mPreviousTimeCallingLoadMore >= 250;
+            return System.currentTimeMillis() - mPreviousTimeCallingLoadMore >= mMixLoadMoreInterval;
         } else {
             return true;
         }
@@ -113,6 +116,11 @@ class LoadMoreImpl implements ILoadMore {
                 break;
             }
         }
+    }
+
+    @Override
+    public void setMinLoadMoreInterval(long mixLoadMoreInterval) {
+        mMixLoadMoreInterval = mixLoadMoreInterval;
     }
 
     private void initLoadMoreView(ViewGroup parent) {

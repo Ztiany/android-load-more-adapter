@@ -15,7 +15,6 @@ import com.ztiany.loadmore.adapter.OnLoadMoreListener;
 import com.ztiany.loadmore.adapter.WrapperAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -149,7 +148,7 @@ public class DemoFragment extends BaseLayoutFragment {
             }
         });
 
-        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter);
+        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter,true);
         mRecyclerView.setAdapter(mWrapperAdapter);
 
         Bundle arguments = getArguments();
@@ -178,6 +177,7 @@ public class DemoFragment extends BaseLayoutFragment {
                         for (int i = 0; i < 20; i++) {
                             mData.add("我是Item " + i);
                         }
+                        count = 20;
                         mRecyclerAdapter.notifyDataSetChanged();
                         mRefreshLayout.setRefreshing(false);
                         mWrapperAdapter.loadCompleted(mHasMore);
@@ -213,33 +213,15 @@ public class DemoFragment extends BaseLayoutFragment {
                             return;
                         }
 
-                        mRecyclerAdapter.addAll(Arrays.asList(
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++,
-                                "新来的Item" + count++));
-
+                        List<String> newData = new ArrayList<>();
+                        for (int i = 0; i < 20; i++) {
+                            newData.add("新来的Item" + count++);
+                        }
+                        mRecyclerAdapter.addAll(newData);
                         mWrapperAdapter.loadCompleted(mAddNewHasMore);
-
                     }
                 }, 100);
+
             }
         });
 

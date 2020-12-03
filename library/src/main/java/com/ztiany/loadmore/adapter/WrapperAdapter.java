@@ -248,4 +248,9 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         mLoadMoreManager.setVisibilityWhenNoMore(visibility);
     }
 
+    @Override
+    public void setMinLoadMoreInterval(long minLoadMoreInterval) {
+        mLoadMoreManager.setMinLoadMoreInterval(minLoadMoreInterval);
+    }
+
 }
