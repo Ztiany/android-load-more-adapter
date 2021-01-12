@@ -1,5 +1,6 @@
 package com.ztiany.loadmore.adapter;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,10 +50,14 @@ class LoadMoreImpl implements ILoadMore {
                 callLoadMore();
             }
         } else {
-            if (mCurrentStatus != STATUS_FAIL) {
-                mCurrentStatus = STATUS_PRE;
-                LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+            if (mCurrentStatus == STATUS_FAIL) {
+                return;
             }
+            if (mCurrentStatus == STATUS_COMPLETE && !mHasMore) {
+                return;
+            }
+            mCurrentStatus = STATUS_PRE;
+            LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
         }
     }
 
@@ -146,6 +151,7 @@ class LoadMoreImpl implements ILoadMore {
 
     @Override
     public void loadCompleted(final boolean hasMore) {
+        Log.d("MORE", "loadCompleted" + hasMore + "");
         mHasMore = hasMore;
         mCurrentStatus = STATUS_COMPLETE;
         LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
@@ -237,6 +243,7 @@ class LoadMoreImpl implements ILoadMore {
         }
 
         static void callCompleted(View view, boolean hasMore) {
+            Log.d("MORE", hasMore + "");
             if (view instanceof ILoadMoreView) {
                 ((ILoadMoreView) view).onCompleted(hasMore);
             }
