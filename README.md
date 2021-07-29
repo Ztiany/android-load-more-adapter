@@ -1,4 +1,4 @@
-# LoadMoreAdapter [![](https://jitpack.io/v/Ztiany/WrapperAdapter.svg)](https://jitpack.io/#Ztiany/WrapperAdapter)
+# LoadMoreAdapter [![](https://jitpack.io/v/Ztiany/LoadMoreAdapter.svg)](https://jitpack.io/#Ztiany/LoadMoreAdapter)
 
 用于包装 RecyclerView.Adapter 的 Adapter，实现加载更多功能：
 
