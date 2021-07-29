@@ -1,6 +1,9 @@
 buildscript {
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url "https://maven.aliyun.com/repository/google"}
         maven { url 'https://dl.google.com/dl/android/maven2/' }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
         maven { url 'https://jitpack.io' }
         google()
     }
@@ -12,6 +15,9 @@ buildscript {
 allprojects {
 
     repositories {
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url "https://maven.aliyun.com/repository/google"}
+        maven { url 'https://dl.google.com/dl/android/maven2/' }
         maven { url 'https://dl.google.com/dl/android/maven2/' }
         maven { url 'https://jitpack.io' }
         google()
