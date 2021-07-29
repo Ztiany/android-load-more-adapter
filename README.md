@@ -41,5 +41,5 @@ androidx
 ```
 maven { url 'https://jitpack.io' }
 
-implementation 'com.github.Ztiany:WrapperAdapter:4.1.2'
+implementation 'com.github.Ztiany:LoadMoreAdapter:4.3.1'
 ```
