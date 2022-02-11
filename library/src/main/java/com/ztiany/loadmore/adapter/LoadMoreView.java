@@ -1,7 +1,7 @@
 package com.ztiany.loadmore.adapter;
 
 
-public interface ILoadMoreView {
+public interface LoadMoreView {
 
     void onLoading();
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * @author Ztiany
  */
-public class DefaultLoadMoreView extends FrameLayout implements ILoadMoreView {
+public class DefaultLoadMoreView extends FrameLayout implements LoadMoreView {
 
     private String mNoMoreMsg = "";
     private String mFailMsg = "";
