@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * @author Ztiany
  */
-public class LoadMoreView extends FrameLayout implements ILoadMoreView {
+public class DefaultLoadMoreView extends FrameLayout implements ILoadMoreView {
 
     private String mNoMoreMsg = "";
     private String mFailMsg = "";
@@ -20,7 +20,7 @@ public class LoadMoreView extends FrameLayout implements ILoadMoreView {
     private ProgressBar mProgressBar;
     private TextView mMsgTv;
 
-    public LoadMoreView(Context context) {
+    public DefaultLoadMoreView(Context context) {
         super(context);
         init();
     }

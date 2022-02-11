@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class LoadMoreImpl implements ILoadMore {
+class LoadMoreImpl implements LoadMore {
 
     private View mLoadMoreView;
     private boolean mHasMore = false;
@@ -135,7 +135,7 @@ class LoadMoreImpl implements ILoadMore {
 
     private void initLoadMoreView(ViewGroup parent) {
         if (mLoadMoreViewFactory == null) {
-            mLoadMoreView = new LoadMoreView(parent.getContext());
+            mLoadMoreView = new DefaultLoadMoreView(parent.getContext());
             mLoadMoreView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         } else {
             mLoadMoreView = mLoadMoreViewFactory.onCreateLoadMoreView(parent);

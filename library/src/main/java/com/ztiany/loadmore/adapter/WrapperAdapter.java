@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import java.util.List;
 
 
-public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadMore {
+public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMore {
 
     private static final String TAG = "WrapperAdapter";
 

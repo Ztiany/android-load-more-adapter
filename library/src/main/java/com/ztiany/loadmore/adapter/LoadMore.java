@@ -1,6 +1,6 @@
 package com.ztiany.loadmore.adapter;
 
-public interface ILoadMore {
+public interface LoadMore {
 
     void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
 
@@ -29,7 +29,7 @@ public interface ILoadMore {
 
     /**
      * @param autoHiddenWhenNoMore ture: set load-more view invisible when no more.
-     * @see ILoadMore#setVisibilityWhenNoMore(int)
+     * @see LoadMore#setVisibilityWhenNoMore(int)
      */
     void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore);
 
@@ -37,7 +37,7 @@ public interface ILoadMore {
      * set load-more view's visibility when no more.
      *
      * @param visibility {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE} or {@link android.view.View#GONE}.
-     * @see ILoadMore#setAutoHiddenWhenNoMore(boolean)
+     * @see LoadMore#setAutoHiddenWhenNoMore(boolean)
      */
     void setVisibilityWhenNoMore(int visibility);
 
