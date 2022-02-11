@@ -183,13 +183,12 @@ public class DemoFragment extends BaseLayoutFragment {
                         mWrapperAdapter.loadCompleted(mHasMore);
                         Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
                     }
-                }, 1000);
+                }, 1500);
             }
         });
     }
 
     private void setOnLoadMoreListener() {
-
         mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public boolean canLoadMore() {

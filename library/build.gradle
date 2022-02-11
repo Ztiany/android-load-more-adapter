@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
+    compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
 }
 
 group='com.github.ztiany'

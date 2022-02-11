@@ -13,7 +13,8 @@ class LoadMoreImpl implements ILoadMore {
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
-    private LoadMoreViewFactory mLoadMoreViewFactory;
+    private LoadMoreViewFactory mLoadMoreViewFactory = LoadMoreConfig.sLoadMoreViewFactory;
+    private long mMixLoadMoreInterval = LoadMoreConfig.sMixLoadMoreInterval;
 
     private final static int STATUS_NONE = 0;
     private final static int STATUS_LOADING = 1;
@@ -27,11 +28,10 @@ class LoadMoreImpl implements ILoadMore {
 
     private long mPreviousTimeCallingLoadMore;
 
-    private long mMixLoadMoreInterval = 0;
-
     private final boolean timeLimited;
 
-    @LoadMode private int mLoadMode = LoadMode.AUTO_LOAD;
+    @LoadMode
+    private int mLoadMode = LoadMode.AUTO_LOAD;
 
     public LoadMoreImpl(boolean useScrollListener) {
         timeLimited = useScrollListener;
@@ -126,6 +126,11 @@ class LoadMoreImpl implements ILoadMore {
     @Override
     public void setMinLoadMoreInterval(long mixLoadMoreInterval) {
         mMixLoadMoreInterval = mixLoadMoreInterval;
+    }
+
+    @Override
+    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
+        //no op
     }
 
     private void initLoadMoreView(ViewGroup parent) {

@@ -1,5 +1,6 @@
 package com.ztiany.loadmore;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -53,4 +55,5 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.act_frag_container, fragment)
                 .commit();
     }
+
 }

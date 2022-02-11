@@ -4,14 +4,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import java.util.List;
 
 
 public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadMore {
@@ -20,7 +20,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     private static final int LOAD_MORE_FOOTER = Integer.MAX_VALUE;
 
-    private LoadMoreImpl mLoadMoreManager;
+    private final LoadMoreImpl mLoadMoreManager;
 
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
@@ -28,7 +28,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
 
     private RecyclerView mRecyclerView;
 
-    private KeepFullSpanUtils mKeepFullSpanUtils;
+    private final KeepFullSpanUtils mKeepFullSpanUtils;
 
     public static WrapperAdapter wrap(RecyclerView.Adapter adapter) {
         return new WrapperAdapter(adapter, false);
@@ -68,6 +68,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements ILoadM
         }
     }
 
+    @Override
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         if (mScrollListener != null) {
             mScrollListener.setLoadingTriggerThreshold(loadingTriggerThreshold);

@@ -61,8 +61,8 @@ final class KeepFullSpanUtils {
 
     private static class InnerSpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
 
-        private GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
-        private GridLayoutManager mGridLayoutManager;
+        private final GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
+        private final GridLayoutManager mGridLayoutManager;
         private final int mSpanCount;
 
         InnerSpanSizeLookup(GridLayoutManager.SpanSizeLookup originSpanSizeLookup, GridLayoutManager gridLayoutManager) {

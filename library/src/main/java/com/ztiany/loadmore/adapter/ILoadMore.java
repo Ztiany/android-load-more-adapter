@@ -12,15 +12,33 @@ public interface ILoadMore {
 
     void setLoadMode(@LoadMode int loadMore);
 
+    /**
+     * custom load-more item view.
+     */
     void setLoadMoreViewFactory(LoadMoreViewFactory factory);
 
+    /**
+     * only works when use scrolling to trigger load-more.
+     */
+    void setMinLoadMoreInterval(long minLoadMoreInterval);
+
+    /**
+     * for preview load. only works when use scrolling to trigger load-more.
+     */
+    void setLoadingTriggerThreshold(int threshold);
+
+    /**
+     * @param autoHiddenWhenNoMore ture: set load-more view invisible when no more.
+     * @see ILoadMore#setVisibilityWhenNoMore(int)
+     */
     void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore);
 
     /**
-     * @param visibility {@link android.view.View#VISIBLE},{@link android.view.View#INVISIBLE},{@link android.view.View#GONE}.
+     * set load-more view's visibility when no more.
+     *
+     * @param visibility {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE} or {@link android.view.View#GONE}.
+     * @see ILoadMore#setAutoHiddenWhenNoMore(boolean)
      */
     void setVisibilityWhenNoMore(int visibility);
-
-    void setMinLoadMoreInterval(long minLoadMoreInterval);
 
 }

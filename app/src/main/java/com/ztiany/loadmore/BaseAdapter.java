@@ -71,13 +71,11 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
         }
     }
 
-
     @UiThread
     public void setData(List<T> data) {
         this.mData = data;
         notifyDataSetChanged();
     }
-
 
     @UiThread
     public boolean removeItem(int position) {
@@ -91,7 +89,6 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
         }
         return false;
     }
-
 
     @UiThread
     public boolean clear() {
@@ -111,7 +108,6 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
         return null;
     }
 
-
     @Override
     public int getItemCount() {
         return getDataSize();
@@ -124,7 +120,6 @@ public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView
     private int getDataSize() {
         return mData == null ? 0 : mData.size();
     }
-
 
     @NonNull
     @Override
