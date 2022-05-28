@@ -4,7 +4,7 @@
 
 Wrap the adapter of RecyclerView and implement the load-more feature.
 
-- tow load-more modes: auto loading and click to load.
+- two load-more modes: auto loading and click to load.
 - customizing the loading more view is allowed.
  
 ## Usage
