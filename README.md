@@ -1,14 +1,15 @@
-# LoadMoreAdapter [![](https://jitpack.io/v/Ztiany/LoadMoreAdapter.svg)](https://jitpack.io/#Ztiany/LoadMoreAdapter)
+# LoadMoreAdapter 
 
-用于包装 RecyclerView.Adapter 的 Adapter，实现加载更多功能：
+## What is it?
 
-- 自动加载更多、点击加载更多
-- 可配置 load more View
-- 兼容自定义的 LayoutManager
+Wrap the adapter of RecyclerView and implement the load-more feature.
+
+- tow load-more modes: auto loading and click to load.
+- customizing the loading more view is allowed.
  
 ## Usage
 
-创建 WrapperAdapter 与控制器：
+see the code below.
 
 ```java
 mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
@@ -28,18 +29,8 @@ mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
 mRecyclerView.setAdapter(mWrapperAdapter);
 ```
 
-## Gradle
+## Installation
 
-```
-maven { url 'https://jitpack.io' }
-
-implementation 'com.github.Ztiany:WrapperAdapter:3.0.7'
-```
-
-androidx
-
-```
-maven { url 'https://jitpack.io' }
-
-implementation 'com.github.Ztiany:LoadMoreAdapter:4.4.1'
+```groovy
+implementation 'io.github.ztiany:loadmore-adapter:4.5.0'
 ```
