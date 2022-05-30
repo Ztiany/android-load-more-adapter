@@ -162,29 +162,23 @@ public class DemoFragment extends BaseLayoutFragment {
 
         setOnLoadMoreListener();
 
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (mWrapperAdapter.isLoadingMore()) {
-                    mRefreshLayout.setRefreshing(false);
-                    return;
-                }
-
-                mRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mData.clear();
-                        for (int i = 0; i < 20; i++) {
-                            mData.add("我是Item " + i);
-                        }
-                        count = 20;
-                        mRecyclerAdapter.notifyDataSetChanged();
-                        mRefreshLayout.setRefreshing(false);
-                        mWrapperAdapter.loadCompleted(mHasMore);
-                        Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
-                    }
-                }, 1500);
+        mRefreshLayout.setOnRefreshListener(() -> {
+            if (mWrapperAdapter.isLoadingMore()) {
+                mRefreshLayout.setRefreshing(false);
+                return;
             }
+
+            mRefreshLayout.postDelayed(() -> {
+                mData.clear();
+                for (int i = 0; i < 20; i++) {
+                    mData.add("我是Item " + i);
+                }
+                count = 20;
+                mRecyclerAdapter.notifyDataSetChanged();
+                mRefreshLayout.setRefreshing(false);
+                mWrapperAdapter.loadCompleted(mHasMore);
+                Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
+            }, 1500);
         });
     }
 
@@ -198,32 +192,27 @@ public class DemoFragment extends BaseLayoutFragment {
             @Override
             public void onLoadMore() {
 
-                mRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        if (mIsFail) {
-                            mWrapperAdapter.loadFail();
-                            return;
-                        }
-
-                        if (!mHasMore) {
-                            mWrapperAdapter.loadCompleted(false);
-                            return;
-                        }
-
-                        List<String> newData = new ArrayList<>();
-                        for (int i = 0; i < 20; i++) {
-                            newData.add("新来的Item" + count++);
-                        }
-                        mRecyclerAdapter.addAll(newData);
-                        mWrapperAdapter.loadCompleted(mAddNewHasMore);
+                mRefreshLayout.postDelayed(() -> {
+                    if (mIsFail) {
+                        mWrapperAdapter.loadFail();
+                        return;
                     }
+
+                    if (!mHasMore) {
+                        mWrapperAdapter.loadCompleted(false);
+                        return;
+                    }
+
+                    List<String> newData = new ArrayList<>();
+                    for (int i = 0; i < 20; i++) {
+                        newData.add("新来的Item" + count++);
+                    }
+                    mRecyclerAdapter.addAll(newData);
+                    mWrapperAdapter.loadCompleted(mAddNewHasMore);
                 }, 100);
 
             }
         });
-
     }
 
     private void initAdapter() {
@@ -242,12 +231,7 @@ public class DemoFragment extends BaseLayoutFragment {
 
                     @Override
                     public void bindData(final String data) {
-                        mTextView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        mTextView.setOnClickListener(v -> Toast.makeText(getContext(), data, Toast.LENGTH_SHORT).show());
                         onBindData(mTextView, data);
                     }
                 };

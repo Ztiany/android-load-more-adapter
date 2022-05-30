@@ -20,6 +20,6 @@
         android:text="我是Item"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
 </androidx.cardview.widget.CardView>

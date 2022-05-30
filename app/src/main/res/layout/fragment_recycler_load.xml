@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="showOption"
         android:textAllCaps="false"
-        tools:ignore="HardcodedText"/>
+        tools:ignore="HardcodedText" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/fragment_recycler_ptr"
@@ -22,7 +22,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_recycler_rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
