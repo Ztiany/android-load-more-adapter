@@ -1,21 +1,22 @@
-# LoadMoreAdapter 
+# Android LoadMore Aadapter 
 
 ## What is it?
 
-Wrap the adapter of RecyclerView and implement the load-more feature.
+WrapperAdapter can wrap your original adapter of RecyclerView to implement the load-more feature.
 
-- two load-more modes: auto loading and click to load.
-- customizing the loading more view is allowed.
+- There are two load-more modes: auto loading and click to load.
+- Customizing the load-more view is allowed.
  
 ## Usage
 
-see the code below.
+see the code below:
 
 ```java
 mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
 mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
 
 mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+
      @Override
      public boolean canLoadMore() {
          return true;
@@ -25,7 +26,7 @@ mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
      public void onLoadMore() {
           ...
      }
-     
+
 mRecyclerView.setAdapter(mWrapperAdapter);
 ```
 
