@@ -33,6 +33,9 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         super.onScrolled(recyclerView, dx, dy);
 
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (layoutManager == null) {
+            return;
+        }
 
         if (mLayoutManagerType == 0) {
             if (layoutManager instanceof GridLayoutManager) {

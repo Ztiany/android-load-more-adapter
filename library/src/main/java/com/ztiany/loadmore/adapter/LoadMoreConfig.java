@@ -3,10 +3,10 @@ package com.ztiany.loadmore.adapter;
 public class LoadMoreConfig {
 
     static LoadMoreViewFactory sLoadMoreViewFactory;
-    static long sMixLoadMoreInterval;
+    static long sMinLoadMoreInterval = 1000;
 
-    public static void setMixLoadMoreInterval(long mixLoadMoreInterval) {
-        sMixLoadMoreInterval = mixLoadMoreInterval;
+    public static void setMinLoadMoreInterval(long minLoadMoreInterval) {
+        sMinLoadMoreInterval = minLoadMoreInterval;
     }
 
     public static void setDefaultLoadMoreViewFactory(LoadMoreViewFactory loadMoreViewFactory) {

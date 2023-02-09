@@ -11,11 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * 作者：湛添友
- * 时间：2015-05-11 22:38
- * 描述：RecyclerView 的适配器
- */
 public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
     List<T> mData;

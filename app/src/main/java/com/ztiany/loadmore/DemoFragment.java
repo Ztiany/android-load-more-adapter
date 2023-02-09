@@ -74,6 +74,8 @@ public class DemoFragment extends BaseLayoutFragment {
         menu.add(Menu.NONE, 2, 1, "next time no more");
         menu.add(Menu.NONE, 3, 2, "next time add new no more");
         menu.add(Menu.NONE, 4, 3, "next time normal");
+        menu.add(Menu.NONE, 5, 4, "stop auto load when failed");
+        menu.add(Menu.NONE, 6, 5, "enable auto load when failed");
         pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -100,6 +102,12 @@ public class DemoFragment extends BaseLayoutFragment {
                         mAddNewHasMore = true;
                         mWrapperAdapter.loadCompleted(true);
                         break;
+                    }
+                    case 5: {
+                        mWrapperAdapter.stopAutoLoadWhenFailed(true);
+                    }
+                    case 6: {
+                        mWrapperAdapter.stopAutoLoadWhenFailed(true);
                     }
                 }
                 return true;
@@ -148,7 +156,7 @@ public class DemoFragment extends BaseLayoutFragment {
             }
         });
 
-        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter,true);
+        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter, true);
         mRecyclerView.setAdapter(mWrapperAdapter);
 
         Bundle arguments = getArguments();

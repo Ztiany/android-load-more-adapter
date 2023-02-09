@@ -10,7 +10,7 @@ public interface LoadMore {
 
     boolean isLoadingMore();
 
-    void setLoadMode(@LoadMode int loadMore);
+    void setLoadMode(@LoadMode int loadMode);
 
     /**
      * custom load-more item view.
@@ -21,6 +21,16 @@ public interface LoadMore {
      * only works when use scrolling to trigger load-more.
      */
     void setMinLoadMoreInterval(long minLoadMoreInterval);
+
+    /**
+     * only works when use auto load-more.
+     */
+    void stopAutoLoadWhenFailed(boolean stopAutoLoadWhenFailed);
+
+    /**
+     * only works when use auto load-more. the default direction is {@link Direction#UP}.
+     */
+    void setLoadMoreDirection(@Direction int direction);
 
     /**
      * for preview load. only works when use scrolling to trigger load-more.

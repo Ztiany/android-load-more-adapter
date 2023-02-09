@@ -2,16 +2,20 @@ package com.ztiany.loadmore.adapter;
 
 import androidx.annotation.IntDef;
 
-/**
- * @author Ztiany
- * Email: ztiany3@gmail.com
- * Date : 2020-11-30 15:04
- */
 @IntDef({
         Direction.UP,
         Direction.DOWN
 })
 @interface Direction {
+
+    /**
+     * scroll upwards
+     */
     int UP = 1;
+
+    /**
+     * scroll downwards
+     */
     int DOWN = 2;
+
 }

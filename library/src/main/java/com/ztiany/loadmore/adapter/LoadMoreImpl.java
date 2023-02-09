@@ -10,28 +10,28 @@ class LoadMoreImpl implements LoadMore {
 
     private View mLoadMoreView;
     private boolean mHasMore = false;
+    private boolean mStopAutoLoadWhenFailed = false;
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
     private LoadMoreViewFactory mLoadMoreViewFactory = LoadMoreConfig.sLoadMoreViewFactory;
-    private long mMixLoadMoreInterval = LoadMoreConfig.sMixLoadMoreInterval;
 
-    private final static int STATUS_NONE = 0;
     private final static int STATUS_LOADING = 1;
     private final static int STATUS_FAIL = 2;
     private final static int STATUS_COMPLETE = 3;
-    private final static int STATUS_PRE = 5;
+    private final static int STATUS_PRE = 4;
+    private int mCurrentStatus = STATUS_PRE;
 
     private int mVisibilityWhenNoMore = View.VISIBLE;
 
-    private int mCurrentStatus = STATUS_NONE;
-
     private long mPreviousTimeCallingLoadMore;
-
+    private long mMixLoadMoreInterval = LoadMoreConfig.sMinLoadMoreInterval;
     private final boolean timeLimited;
 
     @LoadMode
     private int mLoadMode = LoadMode.AUTO_LOAD;
+    @Direction
+    private int mDirection = Direction.UP;
 
     public LoadMoreImpl(boolean useScrollListener) {
         timeLimited = useScrollListener;
@@ -45,10 +45,15 @@ class LoadMoreImpl implements LoadMore {
             return;
         }
         if (isAutoLoad()) {
+
+            if (mStopAutoLoadWhenFailed && mCurrentStatus == STATUS_FAIL) {
+                return;
+            }
             mCurrentStatus = STATUS_PRE;
             if (checkIfNeedCallLoadMoreWhenAutoMode(direction)) {
                 callLoadMore();
             }
+
         } else {
             if (mCurrentStatus == STATUS_FAIL) {
                 return;
@@ -62,7 +67,7 @@ class LoadMoreImpl implements LoadMore {
     }
 
     private boolean checkIfNeedCallLoadMoreWhenAutoMode(int direction) {
-        if (direction != Direction.UP) {
+        if (direction != mDirection) {
             return false;
         }
         if (timeLimited) {
@@ -85,7 +90,6 @@ class LoadMoreImpl implements LoadMore {
     private void initAutoLoadMoreViewStatus() {
         switch (mCurrentStatus) {
             case STATUS_PRE:
-            case STATUS_NONE:
             case STATUS_LOADING: {
                 LoadMoreViewCaller.callLoading(mLoadMoreView);
                 break;
@@ -103,8 +107,7 @@ class LoadMoreImpl implements LoadMore {
 
     private void initClickLoadMoreViewStatus() {
         switch (mCurrentStatus) {
-            case STATUS_PRE:
-            case STATUS_NONE: {
+            case STATUS_PRE: {
                 LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
                 break;
             }
@@ -126,6 +129,16 @@ class LoadMoreImpl implements LoadMore {
     @Override
     public void setMinLoadMoreInterval(long mixLoadMoreInterval) {
         mMixLoadMoreInterval = mixLoadMoreInterval;
+    }
+
+    @Override
+    public void stopAutoLoadWhenFailed(boolean stopAutoLoadWhenFailed) {
+        mStopAutoLoadWhenFailed = stopAutoLoadWhenFailed;
+    }
+
+    @Override
+    public void setLoadMoreDirection(@Direction int direction) {
+        mDirection = direction;
     }
 
     @Override
@@ -186,13 +199,12 @@ class LoadMoreImpl implements LoadMore {
 
         @Override
         public void onClick(View v) {
-
             if (mLoadMode == LoadMode.AUTO_LOAD) {
-                //自动加载更多只有错误才能点击
+                //自动加载更多模式，只有错误才能点击
                 if ((mCurrentStatus == STATUS_FAIL)) {
                     callLoadMore();
                 }
-            } /*点击加载更多模式，只有暂停和准备状态才能点击*/ else if (mLoadMode == LoadMode.CLICK_LOAD) {
+            }  /*点击加载更多模式，只有错误和准备状态才能点击*/ else if (mLoadMode == LoadMode.CLICK_LOAD) {
                 if (mCurrentStatus == STATUS_PRE || mCurrentStatus == STATUS_FAIL) {
                     callLoadMore();
                 }

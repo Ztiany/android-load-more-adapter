@@ -10,13 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-/**
- * @author Ztiany
- *         email 1169654504@qq.com & ztiany3@gmail.com
- *         date 2015-12-16 12:50
- *         description
- *         vsersion
- */
+
 public abstract class BaseLayoutFragment extends Fragment {
 
     @Nullable
