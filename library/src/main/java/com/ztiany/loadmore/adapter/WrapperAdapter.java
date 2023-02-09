@@ -21,7 +21,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
     private static final int LOAD_MORE_TYPE = Integer.MAX_VALUE;
     private static final int LOAD_MORE_ID = Integer.MAX_VALUE - 999;
 
-    private final LoadMoreImpl mLoadMoreImpl;
+    private final LoadMoreControllerImpl mLoadMoreImpl;
 
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
@@ -41,7 +41,7 @@ public class WrapperAdapter extends RecyclerViewAdapterWrapper implements LoadMo
 
     WrapperAdapter(RecyclerView.Adapter wrapped, boolean useScrollListener) {
         super(wrapped);
-        mLoadMoreImpl = new LoadMoreImpl(useScrollListener);
+        mLoadMoreImpl = new LoadMoreControllerImpl(useScrollListener);
         mKeepFullSpanUtils = new KeepFullSpanUtils();
 
         if (useScrollListener) {

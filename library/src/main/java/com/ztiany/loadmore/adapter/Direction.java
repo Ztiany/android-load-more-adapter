@@ -6,7 +6,7 @@ import androidx.annotation.IntDef;
         Direction.UP,
         Direction.DOWN
 })
-@interface Direction {
+public @interface Direction {
 
     /**
      * scroll upwards

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class LoadMoreImpl implements LoadMore {
+class LoadMoreControllerImpl implements LoadMoreController {
 
     private View mLoadMoreView;
 
@@ -34,7 +34,7 @@ class LoadMoreImpl implements LoadMore {
     @Direction
     private int mDirection = Direction.UP;
 
-    public LoadMoreImpl(boolean useScrollListener) {
+    public LoadMoreControllerImpl(boolean useScrollListener) {
         timeLimited = useScrollListener;
     }
 
