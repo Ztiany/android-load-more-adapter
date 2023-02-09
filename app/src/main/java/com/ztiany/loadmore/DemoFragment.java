@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.ztiany.loadmore.adapter.LoadMode;
 import com.ztiany.loadmore.adapter.OnLoadMoreListener;
-import com.ztiany.loadmore.adapter.WrapperAdapter;
+import com.ztiany.loadmore.adapter.LoadMoreAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class DemoFragment extends BaseLayoutFragment {
     private int count = 20;
 
     private List<String> mData;
-    protected WrapperAdapter mWrapperAdapter;
+    protected LoadMoreAdapter mLoadMoreAdapter;
     protected RecyclerView mRecyclerView;
     protected SwipeRefreshLayout mRefreshLayout;
 
@@ -100,14 +100,14 @@ public class DemoFragment extends BaseLayoutFragment {
                         mIsFail = false;
                         mHasMore = true;
                         mAddNewHasMore = true;
-                        mWrapperAdapter.loadCompleted(true);
+                        mLoadMoreAdapter.loadCompleted(true);
                         break;
                     }
                     case 5: {
-                        mWrapperAdapter.stopAutoLoadWhenFailed(true);
+                        mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
                     }
                     case 6: {
-                        mWrapperAdapter.stopAutoLoadWhenFailed(true);
+                        mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
                     }
                 }
                 return true;
@@ -156,22 +156,22 @@ public class DemoFragment extends BaseLayoutFragment {
             }
         });
 
-        mWrapperAdapter = WrapperAdapter.wrap(mRecyclerAdapter, true);
-        mRecyclerView.setAdapter(mWrapperAdapter);
+        mLoadMoreAdapter = LoadMoreAdapter.wrap(mRecyclerAdapter, true);
+        mRecyclerView.setAdapter(mLoadMoreAdapter);
 
         Bundle arguments = getArguments();
         assert arguments != null;
 
         if (arguments.getBoolean(CLICK_LOAD_MORE)) {
-            mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
+            mLoadMoreAdapter.setLoadMode(LoadMode.CLICK_LOAD);
         }
 
-        mWrapperAdapter.setVisibilityWhenNoMore(getArguments().getInt(AUTO_HIDDEN_MORE, View.VISIBLE));
+        mLoadMoreAdapter.setVisibilityWhenNoMore(getArguments().getInt(AUTO_HIDDEN_MORE, View.VISIBLE));
 
         setOnLoadMoreListener();
 
         mRefreshLayout.setOnRefreshListener(() -> {
-            if (mWrapperAdapter.isLoadingMore()) {
+            if (mLoadMoreAdapter.isLoadingMore()) {
                 mRefreshLayout.setRefreshing(false);
                 return;
             }
@@ -184,14 +184,14 @@ public class DemoFragment extends BaseLayoutFragment {
                 count = 20;
                 mRecyclerAdapter.notifyDataSetChanged();
                 mRefreshLayout.setRefreshing(false);
-                mWrapperAdapter.loadCompleted(mHasMore);
+                mLoadMoreAdapter.loadCompleted(mHasMore);
                 Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
             }, 1500);
         });
     }
 
     private void setOnLoadMoreListener() {
-        mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+        mLoadMoreAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public boolean canLoadMore() {
                 return true;
@@ -202,12 +202,12 @@ public class DemoFragment extends BaseLayoutFragment {
 
                 mRefreshLayout.postDelayed(() -> {
                     if (mIsFail) {
-                        mWrapperAdapter.loadFail();
+                        mLoadMoreAdapter.loadFail();
                         return;
                     }
 
                     if (!mHasMore) {
-                        mWrapperAdapter.loadCompleted(false);
+                        mLoadMoreAdapter.loadCompleted(false);
                         return;
                     }
 
@@ -216,7 +216,7 @@ public class DemoFragment extends BaseLayoutFragment {
                         newData.add("新来的Item" + count++);
                     }
                     mRecyclerAdapter.addAll(newData);
-                    mWrapperAdapter.loadCompleted(mAddNewHasMore);
+                    mLoadMoreAdapter.loadCompleted(mAddNewHasMore);
                 }, 100);
 
             }

@@ -1,4 +1,4 @@
-# Android LoadMore Aadapter 
+# Android LoadMore Adapter 
 
 ## What is it?
 
@@ -12,10 +12,10 @@ WrapperAdapter can wrap your original adapter of RecyclerView to implement the l
 see the code below:
 
 ```java
-mWrapperAdapter = WrapperAdapter.wrap(mAdapter);
-mWrapperAdapter.setLoadMode(LoadMode.CLICK_LOAD);
+mLoadMoreAdapter = LoadMoreAdapter.wrap(mAdapter);
+mLoadMoreAdapter.setLoadMode(LoadMode.CLICK_LOAD);
 
-mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+mLoadMoreAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
 
      @Override
      public boolean canLoadMore() {
@@ -27,11 +27,11 @@ mWrapperAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
           ...
      }
 
-mRecyclerView.setAdapter(mWrapperAdapter);
+mRecyclerView.setAdapter(mLoadMoreAdapter);
 ```
 
 ## Installation
 
 ```groovy
-implementation 'io.github.ztiany:android-loadmore-adapter:1.0.1'
+implementation 'io.github.ztiany:android-loadmore-adapter:1.0.3'
 ```
