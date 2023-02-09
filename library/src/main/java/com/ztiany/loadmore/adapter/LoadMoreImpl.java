@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 class LoadMoreImpl implements LoadMore {
 
     private View mLoadMoreView;
+
     private boolean mHasMore = false;
-    private boolean mStopAutoLoadWhenFailed = false;
+    private boolean mStopAutoLoadWhenFailed = LoadMoreConfig.sStopAutoLoadWhenFailed;
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
