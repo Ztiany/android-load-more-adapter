@@ -166,8 +166,6 @@ public class DemoFragment extends BaseLayoutFragment {
             mLoadMoreAdapter.setLoadMode(LoadMode.CLICK_LOAD);
         }
 
-        mLoadMoreAdapter.setVisibilityWhenNoMore(getArguments().getInt(AUTO_HIDDEN_MORE, View.VISIBLE));
-
         setOnLoadMoreListener();
 
         mRefreshLayout.setOnRefreshListener(() -> {

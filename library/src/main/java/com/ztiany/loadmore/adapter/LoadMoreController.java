@@ -39,16 +39,7 @@ public interface LoadMoreController {
 
     /**
      * @param autoHiddenWhenNoMore ture: set load-more view invisible when no more.
-     * @see LoadMoreController#setVisibilityWhenNoMore(int)
      */
     void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore);
-
-    /**
-     * set load-more view's visibility when no more.
-     *
-     * @param visibility {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE} or {@link android.view.View#GONE}.
-     * @see LoadMoreController#setAutoHiddenWhenNoMore(boolean)
-     */
-    void setVisibilityWhenNoMore(int visibility);
 
 }

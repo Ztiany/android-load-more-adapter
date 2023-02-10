@@ -233,12 +233,6 @@ class LoadMoreControllerImpl implements LoadMoreController {
         processAutoHiddenWhenNoMore();
     }
 
-    @Override
-    public void setVisibilityWhenNoMore(int visibility) {
-        mVisibilityWhenNoMore = visibility;
-        processAutoHiddenWhenNoMore();
-    }
-
     private void processAutoHiddenWhenNoMore() {
         if (mLoadMoreView != null) {
             if (mCurrentStatus == STATUS_COMPLETE) {

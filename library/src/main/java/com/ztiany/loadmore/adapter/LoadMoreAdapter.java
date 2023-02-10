@@ -249,11 +249,6 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     }
 
     @Override
-    public void setVisibilityWhenNoMore(int visibility) {
-        mLoadMoreImpl.setVisibilityWhenNoMore(visibility);
-    }
-
-    @Override
     public void setMinLoadMoreInterval(long minLoadMoreInterval) {
         mLoadMoreImpl.setMinLoadMoreInterval(minLoadMoreInterval);
     }
