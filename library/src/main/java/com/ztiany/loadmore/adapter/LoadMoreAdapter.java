@@ -25,8 +25,6 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     private OnRecyclerViewScrollBottomListener mScrollListener;
 
-    private AdapterInterface mAdapterInterface;
-
     private RecyclerView mRecyclerView;
 
     private final KeepFullSpanUtils mKeepFullSpanUtils;
@@ -78,13 +76,6 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         }
     }
 
-    public void setAdapterInterface(AdapterInterface lastVisibleItemPosition) {
-        mAdapterInterface = lastVisibleItemPosition;
-        if (mScrollListener != null) {
-            mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPosition);
-        }
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -106,10 +97,9 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         } else if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             // no op
         } else {
-            if (mAdapterInterface != null) {
-                mAdapterInterface.setItemFullSpan(itemView, mRecyclerView);
-            } else {
-                throw new NullPointerException("you need provide  ItemFullSpanProvider when you use custom layoutManager");
+            AdapterInterface adapterInterface = LoadMoreConfig.getAdapterInterface();
+            if (adapterInterface != null) {
+                adapterInterface.setItemFullSpan(itemView, mRecyclerView);
             }
         }
     }

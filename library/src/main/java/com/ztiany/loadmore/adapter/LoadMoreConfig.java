@@ -5,6 +5,7 @@ public class LoadMoreConfig {
     private static LoadMoreViewFactory sLoadMoreViewFactory;
     private static long sMinLoadMoreInterval = 1000;
     private static boolean sStopAutoLoadWhenFailed = false;
+    private static AdapterInterface sAdapterInterface = null;
 
     public static void setMinLoadMoreInterval(long minLoadMoreInterval) {
         sMinLoadMoreInterval = minLoadMoreInterval;
@@ -28,6 +29,14 @@ public class LoadMoreConfig {
 
     public static boolean isStopAutoLoadWhenFailed() {
         return sStopAutoLoadWhenFailed;
+    }
+
+    public static void setAdapterInterface(AdapterInterface adapterInterface) {
+        sAdapterInterface = adapterInterface;
+    }
+
+    public static AdapterInterface getAdapterInterface() {
+        return sAdapterInterface;
     }
 
 }

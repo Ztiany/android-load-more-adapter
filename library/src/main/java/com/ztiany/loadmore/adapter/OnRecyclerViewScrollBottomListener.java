@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
+public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollListener {
 
     private int mLayoutManagerType;
 
@@ -15,7 +15,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
     private static final int GRID = 2;
     private static final int STAGGERED_GRID = 3;
 
-    private AdapterInterface mLastVisibleItemPositionGetter;
+    private final AdapterInterface mLastVisibleItemPositionGetter = LoadMoreConfig.getAdapterInterface();
 
     private int mLoadingTriggerThreshold;
     private RecyclerView mRecyclerView;
@@ -81,10 +81,6 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         }
     }
 
-    void setLastVisibleItemPositionGetter(AdapterInterface adapterInterface) {
-        mLastVisibleItemPositionGetter = adapterInterface;
-    }
-
     @Override
     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
         if (mRecyclerView != recyclerView) {
@@ -109,7 +105,7 @@ abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.OnScrollL
         return mLoadingTriggerThreshold;
     }
 
-    void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
+    public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {
         mLoadingTriggerThreshold = loadingTriggerThreshold;
     }
 
