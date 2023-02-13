@@ -2,6 +2,7 @@ package com.ztiany.loadmore.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,8 +18,9 @@ public class DefaultLoadMoreView extends FrameLayout implements LoadMoreView {
     private String mClickLoadMsg = "";
     private String mLoadCompleted = "";
 
-    private ProgressBar mProgressBar;
+    private View mProgressBar;
     private TextView mMsgTv;
+
 
     public DefaultLoadMoreView(Context context) {
         super(context);
@@ -26,7 +28,11 @@ public class DefaultLoadMoreView extends FrameLayout implements LoadMoreView {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.wrapper_adapter_list_footer, this, true);
+        if (LoadMoreConfig.isHasMaterialLib()) {
+            LayoutInflater.from(getContext()).inflate(R.layout.wrapper_adapter_list_material_footer, this, true);
+        } else {
+            LayoutInflater.from(getContext()).inflate(R.layout.wrapper_adapter_list_footer, this, true);
+        }
         mMsgTv = findViewById(R.id.wrapper_adapter_id_item_msg_tv);
         mProgressBar = findViewById(R.id.wrapper_adapter_id_item_pb);
 
@@ -43,7 +49,7 @@ public class DefaultLoadMoreView extends FrameLayout implements LoadMoreView {
     }
 
     @Override
-    public void onFail() {
+    public void onFailed() {
         mProgressBar.setVisibility(GONE);
         mMsgTv.setVisibility(VISIBLE);
         mMsgTv.setText(getFailMsg());
@@ -63,7 +69,7 @@ public class DefaultLoadMoreView extends FrameLayout implements LoadMoreView {
     }
 
     @Override
-    public void onClickLoad() {
+    public void showClickToLoadMore() {
         mProgressBar.setVisibility(GONE);
         mMsgTv.setVisibility(VISIBLE);
         mMsgTv.setText(getClickLoadMsg());

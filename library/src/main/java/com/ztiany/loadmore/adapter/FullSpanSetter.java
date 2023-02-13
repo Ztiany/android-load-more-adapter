@@ -4,9 +4,7 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public interface AdapterInterface {
-
-    int getLastVisibleItemPosition(RecyclerView recyclerView);
+public interface FullSpanSetter {
 
     /**
      * @param itemView     load more  itemView

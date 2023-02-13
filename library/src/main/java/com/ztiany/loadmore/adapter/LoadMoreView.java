@@ -5,10 +5,10 @@ public interface LoadMoreView {
 
     void onLoading();
 
-    void onFail();
+    void onFailed();
 
     void onCompleted(boolean hasMore);
 
-    void onClickLoad();
+    void showClickToLoadMore();
 
 }

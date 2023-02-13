@@ -15,7 +15,7 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
     private static final int GRID = 2;
     private static final int STAGGERED_GRID = 3;
 
-    private final AdapterInterface mLastVisibleItemPositionGetter = LoadMoreConfig.getAdapterInterface();
+    private LastVisibleItemPositionFinder mLastVisibleItemPositionGetter = LoadMoreConfig.getLastVisibleItemPositionFinder();
 
     private int mLoadingTriggerThreshold;
     private RecyclerView mRecyclerView;
@@ -101,8 +101,8 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
         return max;
     }
 
-    private int getLoadingTriggerThreshold() {
-        return mLoadingTriggerThreshold;
+    public void setLastVisibleItemPositionGetter(LastVisibleItemPositionFinder lastVisibleItemPositionGetter) {
+        mLastVisibleItemPositionGetter = lastVisibleItemPositionGetter;
     }
 
     public void setLoadingTriggerThreshold(int loadingTriggerThreshold) {

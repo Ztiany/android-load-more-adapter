@@ -21,6 +21,8 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     private static final int LOAD_MORE_TYPE = Integer.MAX_VALUE;
     private static final int LOAD_MORE_ID = Integer.MAX_VALUE - 999;
 
+    private FullSpanSetter mFullSpanSetter;
+
     private final LoadMoreControllerImpl mLoadMoreImpl;
 
     private OnRecyclerViewScrollBottomListener mScrollListener;
@@ -97,9 +99,11 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         } else if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             // no op
         } else {
-            AdapterInterface adapterInterface = LoadMoreConfig.getAdapterInterface();
-            if (adapterInterface != null) {
-                adapterInterface.setItemFullSpan(itemView, mRecyclerView);
+            if (mFullSpanSetter == null) {
+                mFullSpanSetter = LoadMoreConfig.getFullSpanSetter();
+            }
+            if (mFullSpanSetter != null) {
+                mFullSpanSetter.setItemFullSpan(itemView, mRecyclerView);
             }
         }
     }
@@ -166,7 +170,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         if (isLoadMoreOrStateViewHolder(holder)) {
             if (mScrollListener == null) {
                 Log.d(TAG, "onLoadMoreViewAttachedToWindow call LoadMore.");
-                mLoadMoreImpl.tryCallLoadMore(Direction.UP);
+                mLoadMoreImpl.tryCallLoadMore(0/*doesn't matter.*/);
             }
             return;
         }
@@ -198,6 +202,16 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     private boolean isLoadMoreOrStateViewHolder(ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
         return itemViewType == LOAD_MORE_TYPE;
+    }
+
+    public void setLastVisibleItemPositionFinder(LastVisibleItemPositionFinder lastVisibleItemPositionFinder) {
+        if (mScrollListener != null) {
+            mScrollListener.setLastVisibleItemPositionGetter(lastVisibleItemPositionFinder);
+        }
+    }
+
+    public void setFullSpanSetter(FullSpanSetter fullSpanSetter) {
+        mFullSpanSetter = fullSpanSetter;
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,8 @@ class LoadMoreControllerImpl implements LoadMoreController {
     private final boolean timeLimited;
 
     @LoadMode
-    private int mLoadMode = LoadMode.AUTO_LOAD;
+    private int mLoadMode = LoadMoreConfig.getLoadMode();
+
     @Direction
     private int mDirection = Direction.UP;
 
@@ -263,13 +264,13 @@ class LoadMoreControllerImpl implements LoadMoreController {
 
         static void callShowClickLoad(View view) {
             if (view instanceof LoadMoreView) {
-                ((LoadMoreView) view).onClickLoad();
+                ((LoadMoreView) view).showClickToLoadMore();
             }
         }
 
         static void callFail(View view) {
             if (view instanceof LoadMoreView) {
-                ((LoadMoreView) view).onFail();
+                ((LoadMoreView) view).onFailed();
             }
         }
     }

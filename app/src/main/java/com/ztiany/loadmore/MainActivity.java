@@ -9,11 +9,16 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.ztiany.loadmore.adapter.LoadMoreConfig;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LoadMoreConfig.setHasMaterialLib(true);
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             setupFragment(DemoFragment.newInstance(1, false, View.VISIBLE));
@@ -50,10 +55,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.act_frag_container, fragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.act_frag_container, fragment).commit();
     }
 
 }
