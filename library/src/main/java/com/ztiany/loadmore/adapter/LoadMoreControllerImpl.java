@@ -11,11 +11,11 @@ class LoadMoreControllerImpl implements LoadMoreController {
     private View mLoadMoreView;
 
     private boolean mHasMore = false;
-    private boolean mStopAutoLoadWhenFailed = LoadMoreConfig.sStopAutoLoadWhenFailed;
+    private boolean mStopAutoLoadWhenFailed = LoadMoreConfig.isStopAutoLoadWhenFailed();
 
     private OnLoadMoreListener mOnLoadMoreListener;
 
-    private LoadMoreViewFactory mLoadMoreViewFactory = LoadMoreConfig.sLoadMoreViewFactory;
+    private LoadMoreViewFactory mLoadMoreViewFactory = LoadMoreConfig.getLoadMoreViewFactory();
 
     private final static int STATUS_LOADING = 1;
     private final static int STATUS_FAIL = 2;
@@ -26,7 +26,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
     private int mVisibilityWhenNoMore = View.VISIBLE;
 
     private long mPreviousTimeCallingLoadMore;
-    private long mMixLoadMoreInterval = LoadMoreConfig.sMinLoadMoreInterval;
+    private long mMixLoadMoreInterval = LoadMoreConfig.getMinLoadMoreInterval();
     private final boolean timeLimited;
 
     @LoadMode

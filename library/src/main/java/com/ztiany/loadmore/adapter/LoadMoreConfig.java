@@ -2,9 +2,9 @@ package com.ztiany.loadmore.adapter;
 
 public class LoadMoreConfig {
 
-    static LoadMoreViewFactory sLoadMoreViewFactory;
-    static long sMinLoadMoreInterval = 1000;
-    static boolean sStopAutoLoadWhenFailed = false;
+    private static LoadMoreViewFactory sLoadMoreViewFactory;
+    private static long sMinLoadMoreInterval = 1000;
+    private static boolean sStopAutoLoadWhenFailed = false;
 
     public static void setMinLoadMoreInterval(long minLoadMoreInterval) {
         sMinLoadMoreInterval = minLoadMoreInterval;
@@ -16,6 +16,18 @@ public class LoadMoreConfig {
 
     public static void setStopAutoLoadWhenFailed(boolean stopAutoLoadWhenFailed) {
         sStopAutoLoadWhenFailed = stopAutoLoadWhenFailed;
+    }
+
+    public static LoadMoreViewFactory getLoadMoreViewFactory() {
+        return sLoadMoreViewFactory;
+    }
+
+    public static long getMinLoadMoreInterval() {
+        return sMinLoadMoreInterval;
+    }
+
+    public static boolean isStopAutoLoadWhenFailed() {
+        return sStopAutoLoadWhenFailed;
     }
 
 }

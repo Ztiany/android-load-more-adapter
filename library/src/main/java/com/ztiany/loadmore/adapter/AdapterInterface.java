@@ -9,9 +9,9 @@ public interface AdapterInterface {
     int getLastVisibleItemPosition(RecyclerView recyclerView);
 
     /**
-     * @param itemView load more  itemView
-     * @param rv       RecyclerView
+     * @param itemView     load more  itemView
+     * @param recyclerView RecyclerView
      */
-    void setItemFullSpan(View itemView, RecyclerView rv);
+    void setItemFullSpan(View itemView, RecyclerView recyclerView);
 
 }
