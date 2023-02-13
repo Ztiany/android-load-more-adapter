@@ -69,7 +69,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
     }
 
     private boolean checkIfNeedCallLoadMoreWhenAutoMode(int direction) {
-        if (direction != mDirection) {
+        if (direction != 0 && direction != mDirection) {
             return false;
         }
         if (timeLimited) {

@@ -156,7 +156,7 @@ public class DemoFragment extends BaseLayoutFragment {
             }
         });
 
-        mLoadMoreAdapter = LoadMoreAdapter.wrap(mRecyclerAdapter, true);
+        mLoadMoreAdapter = LoadMoreAdapter.wrap(mRecyclerAdapter, false);
         mRecyclerView.setAdapter(mLoadMoreAdapter);
 
         Bundle arguments = getArguments();
