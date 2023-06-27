@@ -196,6 +196,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
     @Override
     public void setLoadingMore() {
         mCurrentStatus = STATUS_LOADING;
+        processAutoHiddenWhenNoMore();
         LoadMoreViewCaller.callLoading(mLoadMoreView);
     }
 
