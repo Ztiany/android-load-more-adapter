@@ -70,49 +70,48 @@ public class DemoFragment extends BaseLayoutFragment {
     public void onButtonClick(View v) {
         PopupMenu pop = new PopupMenu(requireContext(), v);
         Menu menu = pop.getMenu();
-        menu.add(Menu.NONE, 1, 0, "next time fail");
-        menu.add(Menu.NONE, 2, 1, "next time no more");
-        menu.add(Menu.NONE, 3, 2, "next time add new no more");
-        menu.add(Menu.NONE, 4, 3, "next time normal");
-        menu.add(Menu.NONE, 5, 4, "stop auto load when failed");
-        menu.add(Menu.NONE, 6, 5, "enable auto load when failed");
-        pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int itemId = item.getItemId();
-                switch (itemId) {
-                    case 1: {
-                        mIsFail = true;
-                        break;
-                    }
-                    case 2: {
-                        mIsFail = false;
-                        mHasMore = false;
-                        break;
-                    }
-                    case 3: {
-                        mIsFail = false;
-                        mHasMore = true;
-                        mAddNewHasMore = false;
-                        break;
-                    }
-                    case 4: {
-                        mIsFail = false;
-                        mHasMore = true;
-                        mAddNewHasMore = true;
-                        mLoadMoreAdapter.loadCompleted(true);
-                        break;
-                    }
-                    case 5: {
-                        mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
-                    }
-                    case 6: {
-                        mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
-                    }
-                }
-                return true;
-            }
+
+        menu.add(Menu.NONE, 1, 0, "next time fail").setOnMenuItemClickListener(item -> {
+            mIsFail = true;
+            return true;
         });
+
+        menu.add(Menu.NONE, 2, 1, "next time no more").setOnMenuItemClickListener(item -> {
+            mIsFail = false;
+            mHasMore = false;
+            return true;
+        });
+
+        menu.add(Menu.NONE, 3, 2, "next time add new no more").setOnMenuItemClickListener(item -> {
+            mIsFail = false;
+            mHasMore = true;
+            mAddNewHasMore = false;
+            return true;
+        });
+
+        menu.add(Menu.NONE, 4, 3, "next time normal").setOnMenuItemClickListener(item -> {
+            mIsFail = false;
+            mHasMore = true;
+            mAddNewHasMore = true;
+            mLoadMoreAdapter.loadCompleted(true);
+            return true;
+        });
+
+        menu.add(Menu.NONE, 5, 4, "stop auto load when failed").setOnMenuItemClickListener(item -> {
+            mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
+            return true;
+        });
+
+        menu.add(Menu.NONE, 6, 5, "enable auto load when failed").setOnMenuItemClickListener(item -> {
+            mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
+            return true;
+        });
+
+        menu.add(Menu.NONE, 7, 6, "set loading more").setOnMenuItemClickListener(item -> {
+            mLoadMoreAdapter.setLoadingMore();
+            return true;
+        });
+
         pop.setGravity(Gravity.CENTER);
         pop.show();
     }
@@ -147,7 +146,7 @@ public class DemoFragment extends BaseLayoutFragment {
             @Override
             public void getItemOffsets(
                     @NonNull Rect outRect, @NonNull
-                    View view,
+            View view,
                     @NonNull RecyclerView parent,
                     @NonNull RecyclerView.State state
             ) {

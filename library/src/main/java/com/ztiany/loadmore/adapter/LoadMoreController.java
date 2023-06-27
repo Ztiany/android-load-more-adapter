@@ -40,6 +40,12 @@ public interface LoadMoreController {
     /**
      * @param autoHiddenWhenNoMore ture: set load-more view invisible when no more.
      */
+
     void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore);
+
+    /**
+     * set the state to loading.
+     */
+    void setLoadingMore();
 
 }

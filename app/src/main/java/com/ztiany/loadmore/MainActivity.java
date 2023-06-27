@@ -16,9 +16,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LoadMoreConfig.setHasMaterialLib(true);
-
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             setupFragment(DemoFragment.newInstance(1, false, View.VISIBLE));

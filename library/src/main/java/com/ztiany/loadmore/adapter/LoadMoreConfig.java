@@ -3,12 +3,18 @@ package com.ztiany.loadmore.adapter;
 public class LoadMoreConfig {
 
     private static LoadMoreViewFactory sLoadMoreViewFactory;
+
     private static long sMinLoadMoreInterval = 1000;
+
     private static boolean sStopAutoLoadWhenFailed = false;
+
     private static LastVisibleItemPositionFinder sLastVisibleItemPositionFinder = null;
+
     private static FullSpanSetter sFullSpanSetter = null;
+
     private static int sLoadMode = LoadMode.AUTO_LOAD;
-    private static boolean sHasMaterialLib = false;
+
+    private static Boolean sHasMaterialLib = null;
 
     public static void setMinLoadMoreInterval(long minLoadMoreInterval) {
         sMinLoadMoreInterval = minLoadMoreInterval;
@@ -59,11 +65,18 @@ public class LoadMoreConfig {
         sFullSpanSetter = fullSpanSetter;
     }
 
-    public static void setHasMaterialLib(boolean hasMaterialLib) {
-        sHasMaterialLib = hasMaterialLib;
-    }
-
     public static boolean isHasMaterialLib() {
+        if (sHasMaterialLib != null) {
+            return sHasMaterialLib;
+        }
+
+        try {
+            Class.forName("com.google.android.material.progressindicator.CircularProgressIndicator");
+            sHasMaterialLib = true;
+        } catch (ClassNotFoundException e) {
+            sHasMaterialLib = false;
+        }
+
         return sHasMaterialLib;
     }
 

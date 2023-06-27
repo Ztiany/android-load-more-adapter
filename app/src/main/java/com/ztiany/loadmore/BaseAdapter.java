@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public abstract class BaseAdapter<T, VH extends ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    List<T> mData;
-    LayoutInflater mLayoutInflater;
+    private List<T> mData;
+
+    protected final LayoutInflater mLayoutInflater;
 
     BaseAdapter(Context context, List<T> data) {
         this.mData = data;

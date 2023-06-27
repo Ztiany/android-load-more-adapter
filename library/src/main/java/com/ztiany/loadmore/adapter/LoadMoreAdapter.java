@@ -137,13 +137,9 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         }
     }
 
-    private boolean isWrapperType(int position) {
-        return getItemViewType(position) == LOAD_MORE_TYPE;
-    }
-
     @Override
     public long getItemId(int position) {
-        if (!isWrapperType(position)) {
+        if (!isLoadMoreType(position)) {
             return super.getItemId(position);
         }
         return LOAD_MORE_ID;
@@ -151,7 +147,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     @Override
     public void onViewRecycled(@NonNull ViewHolder holder) {
-        if (isLoadMoreOrStateViewHolder(holder)) {
+        if (isLoadMoreViewHolder(holder)) {
             return;
         }
         super.onViewRecycled(holder);
@@ -159,7 +155,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     @Override
     public boolean onFailedToRecycleView(@NonNull ViewHolder holder) {
-        if (isLoadMoreOrStateViewHolder(holder)) {
+        if (isLoadMoreViewHolder(holder)) {
             return false;
         }
         return super.onFailedToRecycleView(holder);
@@ -167,7 +163,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
-        if (isLoadMoreOrStateViewHolder(holder)) {
+        if (isLoadMoreViewHolder(holder)) {
             if (mScrollListener == null) {
                 Log.d(TAG, "onLoadMoreViewAttachedToWindow call LoadMore.");
                 mLoadMoreImpl.tryCallLoadMore(0/*doesn't matter.*/);
@@ -179,7 +175,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
-        if (isLoadMoreOrStateViewHolder(holder)) {
+        if (isLoadMoreViewHolder(holder)) {
             return;
         }
         super.onViewDetachedFromWindow(holder);
@@ -199,7 +195,11 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         mKeepFullSpanUtils.cleanFullSpanIfNeed(recyclerView);
     }
 
-    private boolean isLoadMoreOrStateViewHolder(ViewHolder viewHolder) {
+    private boolean isLoadMoreType(int position) {
+        return getItemViewType(position) == LOAD_MORE_TYPE;
+    }
+
+    private boolean isLoadMoreViewHolder(ViewHolder viewHolder) {
         int itemViewType = viewHolder.getItemViewType();
         return itemViewType == LOAD_MORE_TYPE;
     }
@@ -217,6 +217,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     ///////////////////////////////////////////////////////////////////////////
     // LoadMoreController
     ///////////////////////////////////////////////////////////////////////////
+
     @Override
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         mLoadMoreImpl.setOnLoadMoreListener(onLoadMoreListener);
@@ -250,6 +251,11 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     @Override
     public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
         mLoadMoreImpl.setAutoHiddenWhenNoMore(autoHiddenWhenNoMore);
+    }
+
+    @Override
+    public void setLoadingMore() {
+        mLoadMoreImpl.setLoadingMore();
     }
 
     @Override

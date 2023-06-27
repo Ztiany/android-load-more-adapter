@@ -193,6 +193,12 @@ class LoadMoreControllerImpl implements LoadMoreController {
         mLoadMoreViewFactory = factory;
     }
 
+    @Override
+    public void setLoadingMore() {
+        mCurrentStatus = STATUS_LOADING;
+        LoadMoreViewCaller.callLoading(mLoadMoreView);
+    }
+
     private boolean isAutoLoad() {
         return mLoadMode == LoadMode.AUTO_LOAD;
     }
