@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -199,7 +198,7 @@ public class DemoFragment extends BaseLayoutFragment {
 
                 mRefreshLayout.postDelayed(() -> {
                     if (mIsFail) {
-                        mLoadMoreAdapter.loadFail();
+                        mLoadMoreAdapter.loadFailed();
                         return;
                     }
 

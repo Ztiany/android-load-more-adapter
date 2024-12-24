@@ -163,7 +163,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
     }
 
     @Override
-    public void loadFail() {
+    public void loadFailed() {
         mCurrentStatus = STATUS_FAIL;
         LoadMoreViewCaller.callFail(mLoadMoreView);
         processAutoHiddenWhenNoMore();

@@ -4,7 +4,7 @@ public interface LoadMoreController {
 
     void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener);
 
-    void loadFail();
+    void loadFailed();
 
     void loadCompleted(boolean hasMore);
 

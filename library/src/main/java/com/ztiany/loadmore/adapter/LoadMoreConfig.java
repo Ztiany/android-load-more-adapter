@@ -10,7 +10,7 @@ public class LoadMoreConfig {
 
     private static LastVisibleItemPositionFinder sLastVisibleItemPositionFinder = null;
 
-    private static FullSpanSetter sFullSpanSetter = null;
+    private static FullSpanKeeper sFullSpanKeeper = null;
 
     private static int sLoadMode = LoadMode.AUTO_LOAD;
 
@@ -40,7 +40,6 @@ public class LoadMoreConfig {
         return sStopAutoLoadWhenFailed;
     }
 
-
     public static int getLoadMode() {
         return sLoadMode;
     }
@@ -57,12 +56,12 @@ public class LoadMoreConfig {
         sLastVisibleItemPositionFinder = lastVisibleItemPositionFinder;
     }
 
-    public static FullSpanSetter getFullSpanSetter() {
-        return sFullSpanSetter;
+    public static FullSpanKeeper getFullSpanKeeper() {
+        return sFullSpanKeeper;
     }
 
-    public static void setFullSpanSetter(FullSpanSetter fullSpanSetter) {
-        sFullSpanSetter = fullSpanSetter;
+    public static void setFullSpanKeeper(FullSpanKeeper fullSpanKeeper) {
+        sFullSpanKeeper = fullSpanKeeper;
     }
 
     public static boolean isHasMaterialLib() {

@@ -21,7 +21,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     private static final int LOAD_MORE_TYPE = Integer.MAX_VALUE;
     private static final int LOAD_MORE_ID = Integer.MAX_VALUE - 999;
 
-    private FullSpanSetter mFullSpanSetter;
+    private FullSpanKeeper mFullSpanKeeper;
 
     private final LoadMoreControllerImpl mLoadMoreImpl;
 
@@ -29,7 +29,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     private RecyclerView mRecyclerView;
 
-    private final KeepFullSpanUtils mKeepFullSpanUtils;
+    private final InternalFullSpanKeeper mInternalFullSpanKeeper;
 
     public static LoadMoreAdapter wrap(RecyclerView.Adapter adapter) {
         return new LoadMoreAdapter(adapter, false);
@@ -42,7 +42,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     LoadMoreAdapter(RecyclerView.Adapter wrapped, boolean useScrollListener) {
         super(wrapped);
         mLoadMoreImpl = new LoadMoreControllerImpl(useScrollListener);
-        mKeepFullSpanUtils = new KeepFullSpanUtils();
+        mInternalFullSpanKeeper = new InternalFullSpanKeeper();
 
         if (useScrollListener) {
             mScrollListener = new OnRecyclerViewScrollBottomListener() {
@@ -64,8 +64,15 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
         if (layoutManager instanceof GridLayoutManager) {
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            mKeepFullSpanUtils.mOriginSpanSizeLookup = gridLayoutManager.getSpanSizeLookup();
-            mKeepFullSpanUtils.setFullSpanForGird(gridLayoutManager);
+            mInternalFullSpanKeeper.mOriginSpanSizeLookup = gridLayoutManager.getSpanSizeLookup();
+            mInternalFullSpanKeeper.setFullSpanForGirdLayout(gridLayoutManager);
+        }else if(!(layoutManager instanceof LinearLayoutManager) && !(layoutManager instanceof StaggeredGridLayoutManager)){
+            if (mFullSpanKeeper == null) {
+                mFullSpanKeeper = LoadMoreConfig.getFullSpanKeeper();
+            }
+            if (mFullSpanKeeper != null) {
+                mFullSpanKeeper.onAttachedToRecyclerView(mRecyclerView);
+            }
         }
     }
 
@@ -83,27 +90,28 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == LOAD_MORE_TYPE) {
             View loadMoreView = mLoadMoreImpl.getLoadMoreView(parent);
-            keepFullSpan(loadMoreView);
-            return new ViewHolder(loadMoreView) {
+            ViewHolder viewHolder = new ViewHolder(loadMoreView) {
             };
+            keepFullSpan(viewHolder);
+            return viewHolder;
         } else {
             return super.onCreateViewHolder(parent, viewType);
         }
     }
 
-    private void keepFullSpan(View itemView) {
+    private void keepFullSpan(ViewHolder viewHolder) {
         if (mRecyclerView.getLayoutManager() instanceof StaggeredGridLayoutManager) {
-            mKeepFullSpanUtils.setFullSpanForStaggered(itemView);
+            mInternalFullSpanKeeper.setFullSpanForStaggeredLayout(viewHolder.itemView);
         } else if (mRecyclerView.getLayoutManager() instanceof GridLayoutManager) {
             // no op
         } else if (mRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             // no op
         } else {
-            if (mFullSpanSetter == null) {
-                mFullSpanSetter = LoadMoreConfig.getFullSpanSetter();
+            if (mFullSpanKeeper == null) {
+                mFullSpanKeeper = LoadMoreConfig.getFullSpanKeeper();
             }
-            if (mFullSpanSetter != null) {
-                mFullSpanSetter.setItemFullSpan(itemView, mRecyclerView);
+            if (mFullSpanKeeper != null) {
+                mFullSpanKeeper.onViewHolderCreated(viewHolder, mRecyclerView);
             }
         }
     }
@@ -192,7 +200,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         recyclerView.removeOnScrollListener(mScrollListener);
-        mKeepFullSpanUtils.cleanFullSpanIfNeed(recyclerView);
+        mInternalFullSpanKeeper.cleanFullSpanIfNeed(recyclerView);
     }
 
     private boolean isLoadMoreType(int position) {
@@ -210,8 +218,8 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
         }
     }
 
-    public void setFullSpanSetter(FullSpanSetter fullSpanSetter) {
-        mFullSpanSetter = fullSpanSetter;
+    public void setFullSpanSetter(FullSpanKeeper fullSpanKeeper) {
+        mFullSpanKeeper = fullSpanKeeper;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -224,8 +232,8 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     }
 
     @Override
-    public void loadFail() {
-        mLoadMoreImpl.loadFail();
+    public void loadFailed() {
+        mLoadMoreImpl.loadFailed();
     }
 
     @Override

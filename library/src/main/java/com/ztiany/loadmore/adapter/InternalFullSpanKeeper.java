@@ -7,13 +7,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-final class KeepFullSpanUtils {
+final class InternalFullSpanKeeper {
 
     private InnerSpanSizeLookup mInnerSpanSizeLookup;
 
     GridLayoutManager.SpanSizeLookup mOriginSpanSizeLookup;
 
-    KeepFullSpanUtils() {
+    InternalFullSpanKeeper() {
     }
 
     void cleanFullSpanIfNeed(RecyclerView recyclerView) {
@@ -26,7 +26,7 @@ final class KeepFullSpanUtils {
         }
     }
 
-    void setFullSpanForStaggered(View loadMoreView) {
+    void setFullSpanForStaggeredLayout(View loadMoreView) {
         ViewGroup.LayoutParams layoutParams = loadMoreView.getLayoutParams();
         if (!(layoutParams instanceof StaggeredGridLayoutManager.LayoutParams)) {
             layoutParams = new StaggeredGridLayoutManager.LayoutParams(
@@ -43,7 +43,7 @@ final class KeepFullSpanUtils {
         }
     }
 
-    void setFullSpanForGird(GridLayoutManager gridLayoutManager) {
+    void setFullSpanForGirdLayout(GridLayoutManager gridLayoutManager) {
         GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
         if (mOriginSpanSizeLookup == spanSizeLookup) {//first in
             if (mInnerSpanSizeLookup == null) {

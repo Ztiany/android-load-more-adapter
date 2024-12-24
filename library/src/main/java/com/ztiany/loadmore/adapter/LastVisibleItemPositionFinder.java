@@ -4,6 +4,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public interface LastVisibleItemPositionFinder {
 
-    int getLastVisibleItemPosition(RecyclerView recyclerView);
+    /**
+     * You should return the last visible item position in the RecyclerView.
+     *
+     * @return the last visible item position.
+     */
+    int find(RecyclerView recyclerView);
 
 }

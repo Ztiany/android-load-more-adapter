@@ -2,10 +2,11 @@ package com.ztiany.loadmore.adapter;
 
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
 
@@ -21,6 +22,11 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
 
             public void onItemRangeChanged(int positionStart, int itemCount) {
                 notifyItemRangeChanged(positionStart, itemCount);
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, @Nullable Object payload) {
+                notifyItemRangeChanged(positionStart, itemCount, payload);
             }
 
             public void onItemRangeInserted(int positionStart, int itemCount) {

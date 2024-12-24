@@ -1,9 +1,10 @@
 buildscript {
     repositories {
+        maven{url "https://maven.aliyun.com/repository/gradle-plugin"}
+        maven{url "https://maven.aliyun.com/repository/public"}
+        maven{url "https://maven.aliyun.com/repository/central"}
         mavenCentral()
         google()
-        maven { url 'https://jitpack.io' }
-        maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 
     dependencies {
@@ -15,9 +16,10 @@ buildscript {
 allprojects {
 
     repositories {
+        maven{url "https://maven.aliyun.com/repository/public"}
+        maven{url "https://maven.aliyun.com/repository/central"}
         mavenCentral()
         google()
-        maven { url "https://kotlin.bintray.com/kotlinx" }
     }
 
     tasks.withType(Javadoc) {

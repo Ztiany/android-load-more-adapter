@@ -20,9 +20,6 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
     private int mLoadingTriggerThreshold;
     private RecyclerView mRecyclerView;
 
-    /**
-     * 最后一个的位置
-     */
     private int[] mLastPositions;
 
     @Override
@@ -47,7 +44,6 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
             }
         }
 
-        /* 最后一个可见的item的位置*/
         int lastVisibleItemPosition;
         switch (mLayoutManagerType) {
             case LINEAR:
@@ -68,7 +64,7 @@ public abstract class OnRecyclerViewScrollBottomListener extends RecyclerView.On
                 if (mLastVisibleItemPositionGetter == null) {
                     throw new IllegalStateException("you need provide AdapterInterface when you use custom layoutManager");
                 }
-                lastVisibleItemPosition = mLastVisibleItemPositionGetter.getLastVisibleItemPosition(mRecyclerView);
+                lastVisibleItemPosition = mLastVisibleItemPositionGetter.find(mRecyclerView);
                 break;
             }
         }
