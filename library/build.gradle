@@ -34,3 +34,20 @@ dependencies {
     compileOnly 'androidx.recyclerview:recyclerview:1.2.1'
     compileOnly 'com.google.android.material:material:1.4.0'
 }
+
+group = 'io.github.ztiany'
+version = '1.0'
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'io.github.ztiany'
+                artifactId = 'android-loadmore-adapter'
+                version = "1.1.0"
+            }
+        }
+    }
+}

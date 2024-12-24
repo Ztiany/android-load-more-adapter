@@ -33,5 +33,5 @@ mRecyclerView.setAdapter(mLoadMoreAdapter);
 ## Installation
 
 ```groovy
-implementation 'io.github.ztiany:android-loadmore-adapter:1.0.10'
+implementation 'io.github.ztiany:android-loadmore-adapter:4.0.0'
 ```
