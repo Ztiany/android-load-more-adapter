@@ -35,17 +35,14 @@ dependencies {
     compileOnly 'com.google.android.material:material:1.4.0'
 }
 
-group = 'io.github.ztiany'
-version = '1.0'
-
 afterEvaluate {
     publishing {
         publications {
             // Creates a Maven publication called "release".
             release(MavenPublication) {
                 from components.release
-                groupId = 'io.github.ztiany'
-                artifactId = 'android-loadmore-adapter'
+                groupId = 'com.github.Ztiany'
+                artifactId = 'android-load-more-adapter'
                 version = "4.5.0"
             }
         }
