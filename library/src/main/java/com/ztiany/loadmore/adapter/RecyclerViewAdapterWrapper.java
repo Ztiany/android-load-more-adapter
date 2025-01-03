@@ -40,6 +40,11 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
             public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
                 notifyItemMoved(fromPosition, toPosition);
             }
+
+            @Override
+            public void onStateRestorationPolicyChanged() {
+                super.onStateRestorationPolicyChanged();
+            }
         });
     }
 
@@ -129,4 +134,4 @@ class RecyclerViewAdapterWrapper extends RecyclerView.Adapter {
         return wrapped;
     }
 
-} 
+}

@@ -14,8 +14,6 @@ public class LoadMoreConfig {
 
     private static int sLoadMode = LoadMode.AUTO_LOAD;
 
-    private static Boolean sHasMaterialLib = null;
-
     public static void setMinLoadMoreInterval(long minLoadMoreInterval) {
         sMinLoadMoreInterval = minLoadMoreInterval;
     }
@@ -62,21 +60,6 @@ public class LoadMoreConfig {
 
     public static void setFullSpanKeeper(FullSpanKeeper fullSpanKeeper) {
         sFullSpanKeeper = fullSpanKeeper;
-    }
-
-    public static boolean isHasMaterialLib() {
-        if (sHasMaterialLib != null) {
-            return sHasMaterialLib;
-        }
-
-        try {
-            Class.forName("com.google.android.material.progressindicator.CircularProgressIndicator");
-            sHasMaterialLib = true;
-        } catch (ClassNotFoundException e) {
-            sHasMaterialLib = false;
-        }
-
-        return sHasMaterialLib;
     }
 
 }

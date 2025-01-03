@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class LoadMoreControllerImpl implements LoadMoreController {
+final class LoadMoreControllerImpl implements LoadMoreController {
 
     private View mLoadMoreView;
 
@@ -27,7 +27,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
 
     private long mPreviousTimeCallingLoadMore;
     private long mMixLoadMoreInterval = LoadMoreConfig.getMinLoadMoreInterval();
-    private final boolean timeLimited;
+    private final boolean mTimeLimited;
 
     @LoadMode
     private int mLoadMode = LoadMoreConfig.getLoadMode();
@@ -35,44 +35,51 @@ class LoadMoreControllerImpl implements LoadMoreController {
     @Direction
     private int mDirection = Direction.UP;
 
-    public LoadMoreControllerImpl(boolean useScrollListener) {
-        timeLimited = useScrollListener;
+    public LoadMoreControllerImpl(boolean useScrollListener, RecyclerView.Adapter adapter) {
+        mTimeLimited = useScrollListener;
     }
 
     void tryCallLoadMore(int direction) {
         if (mOnLoadMoreListener == null || !mOnLoadMoreListener.canLoadMore()) {
             return;
         }
+
         if (mCurrentStatus == STATUS_LOADING) {
+            changeAppearanceByStatus();
             return;
         }
-        if (isAutoLoad()) {
 
-            if (mStopAutoLoadWhenFailed && mCurrentStatus == STATUS_FAIL) {
+        if (isAutoLoad()) {
+            if ((mStopAutoLoadWhenFailed && mCurrentStatus == STATUS_FAIL) ||
+                    (mCurrentStatus == STATUS_COMPLETE && !mHasMore)) {
+                changeAppearanceByStatus();
                 return;
             }
             mCurrentStatus = STATUS_PRE;
             if (checkIfNeedCallLoadMoreWhenAutoMode(direction)) {
                 callLoadMore();
             }
-
-        } else {
-            if (mCurrentStatus == STATUS_FAIL) {
-                return;
-            }
-            if (mCurrentStatus == STATUS_COMPLETE && !mHasMore) {
-                return;
-            }
-            mCurrentStatus = STATUS_PRE;
-            LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+            return;
         }
+
+        // Click load more mode
+        if (mCurrentStatus == STATUS_FAIL) {
+            changeAppearanceByStatus();
+            return;
+        }
+        if (mCurrentStatus == STATUS_COMPLETE && !mHasMore) {
+            changeAppearanceByStatus();
+            return;
+        }
+        mCurrentStatus = STATUS_PRE;
+        LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
     }
 
     private boolean checkIfNeedCallLoadMoreWhenAutoMode(int direction) {
         if (direction != 0 && direction != mDirection) {
             return false;
         }
-        if (timeLimited) {
+        if (mTimeLimited) {
             return System.currentTimeMillis() - mPreviousTimeCallingLoadMore >= mMixLoadMoreInterval;
         } else {
             return true;
@@ -80,53 +87,94 @@ class LoadMoreControllerImpl implements LoadMoreController {
     }
 
     View getLoadMoreView(ViewGroup parent) {
-        initLoadMoreView(parent);
-        if (mLoadMode == LoadMode.CLICK_LOAD) {
-            initClickLoadMoreViewStatus();
-        } else {
-            initAutoLoadMoreViewStatus();
-        }
+        createLoadMoreView(parent);
+        changeAppearanceByStatus();
         return mLoadMoreView;
     }
 
-    private void initAutoLoadMoreViewStatus() {
+    private void changeAppearanceByStatus() {
+        autoHideWhenNoMore();
+
+        if (mLoadMode == LoadMode.CLICK_LOAD) {
+            switch (mCurrentStatus) {
+                case STATUS_PRE: {
+                    LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
+                    break;
+                }
+                case STATUS_LOADING: {
+                    LoadMoreViewCaller.callWhenLoading(mLoadMoreView);
+                    break;
+                }
+                case STATUS_FAIL: {
+                    LoadMoreViewCaller.callWhenFailed(mLoadMoreView);
+                    break;
+                }
+                case STATUS_COMPLETE: {
+                    LoadMoreViewCaller.callWhenCompleted(mLoadMoreView, mHasMore);
+                    break;
+                }
+            }
+            return;
+        }
+
+        // Auto load more mode
         switch (mCurrentStatus) {
             case STATUS_PRE:
             case STATUS_LOADING: {
-                LoadMoreViewCaller.callLoading(mLoadMoreView);
+                LoadMoreViewCaller.callWhenLoading(mLoadMoreView);
                 break;
             }
             case STATUS_FAIL: {
-                LoadMoreViewCaller.callFail(mLoadMoreView);
+                LoadMoreViewCaller.callWhenFailed(mLoadMoreView);
                 break;
             }
             case STATUS_COMPLETE: {
-                LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
+                LoadMoreViewCaller.callWhenCompleted(mLoadMoreView, mHasMore);
                 break;
             }
         }
     }
 
-    private void initClickLoadMoreViewStatus() {
-        switch (mCurrentStatus) {
-            case STATUS_PRE: {
-                LoadMoreViewCaller.callShowClickLoad(mLoadMoreView);
-                break;
+    private void createLoadMoreView(ViewGroup parent) {
+        if (mLoadMoreViewFactory == null) {
+            mLoadMoreView = new DefaultLoadMoreView(parent.getContext());
+            mLoadMoreView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        } else {
+            mLoadMoreView = mLoadMoreViewFactory.onCreateLoadMoreView(parent);
+            if (mLoadMoreView == null) {
+                throw new NullPointerException("LoadMoreViewFactory :" + mLoadMoreViewFactory + " call onCreateLoadMoreView return null");
             }
-            case STATUS_LOADING: {
-                LoadMoreViewCaller.callLoading(mLoadMoreView);
-                break;
+        }
+        mLoadMoreView.setOnClickListener(new ClickListener());
+        autoHideWhenNoMore();
+    }
+
+    private void callLoadMore() {
+        if (mCurrentStatus != STATUS_LOADING && mHasMore) {
+            LoadMoreViewCaller.callWhenLoading(mLoadMoreView);
+            mCurrentStatus = STATUS_LOADING;
+            if (mOnLoadMoreListener != null) {
+                mOnLoadMoreListener.onLoadMore();
             }
-            case STATUS_FAIL: {
-                LoadMoreViewCaller.callFail(mLoadMoreView);
-                break;
-            }
-            case STATUS_COMPLETE: {
-                LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
-                break;
+            mPreviousTimeCallingLoadMore = System.currentTimeMillis();
+        } else {
+            changeAppearanceByStatus();
+        }
+    }
+
+    private void autoHideWhenNoMore() {
+        if (mLoadMoreView != null) {
+            if (mCurrentStatus == STATUS_COMPLETE) {
+                mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : mVisibilityWhenNoMore);
+            } else {
+                mLoadMoreView.setVisibility(View.VISIBLE);
             }
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // public api
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
     public void setMinLoadMoreInterval(long mixLoadMoreInterval) {
@@ -148,34 +196,10 @@ class LoadMoreControllerImpl implements LoadMoreController {
         //no op
     }
 
-    private void initLoadMoreView(ViewGroup parent) {
-        if (mLoadMoreViewFactory == null) {
-            mLoadMoreView = new DefaultLoadMoreView(parent.getContext());
-            mLoadMoreView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        } else {
-            mLoadMoreView = mLoadMoreViewFactory.onCreateLoadMoreView(parent);
-            if (mLoadMoreView == null) {
-                throw new NullPointerException("LoadMoreViewFactory :" + mLoadMoreViewFactory + " call onCreateLoadMoreView return null");
-            }
-        }
-        mLoadMoreView.setOnClickListener(new ClickListener());
-        processAutoHiddenWhenNoMore();
-    }
-
     @Override
-    public void loadFailed() {
-        mCurrentStatus = STATUS_FAIL;
-        LoadMoreViewCaller.callFail(mLoadMoreView);
-        processAutoHiddenWhenNoMore();
-    }
-
-    @Override
-    public void loadCompleted(final boolean hasMore) {
-        Log.d("MORE", "loadCompleted" + hasMore + "");
-        mHasMore = hasMore;
-        mCurrentStatus = STATUS_COMPLETE;
-        LoadMoreViewCaller.callCompleted(mLoadMoreView, mHasMore);
-        processAutoHiddenWhenNoMore();
+    public void setAutoHideWhenNoMore(boolean hideWhenNoMore) {
+        mVisibilityWhenNoMore = hideWhenNoMore ? View.INVISIBLE : View.VISIBLE;
+        autoHideWhenNoMore();
     }
 
     @Override
@@ -193,31 +217,35 @@ class LoadMoreControllerImpl implements LoadMoreController {
         mLoadMoreViewFactory = factory;
     }
 
-    @Override
-    public void setLoadingMore() {
-        mCurrentStatus = STATUS_LOADING;
-        processAutoHiddenWhenNoMore();
-        LoadMoreViewCaller.callLoading(mLoadMoreView);
-    }
-
     private boolean isAutoLoad() {
         return mLoadMode == LoadMode.AUTO_LOAD;
     }
 
-    private class ClickListener implements View.OnClickListener {
+    @Override
+    public void setLoadingMore() {
+        mCurrentStatus = STATUS_LOADING;
+        changeAppearanceByStatus();
+    }
 
-        @Override
-        public void onClick(View v) {
-            if (mLoadMode == LoadMode.AUTO_LOAD) {
-                //自动加载更多模式，只有错误才能点击
-                if ((mCurrentStatus == STATUS_FAIL)) {
-                    callLoadMore();
-                }
-            }  /*点击加载更多模式，只有错误和准备状态才能点击*/ else if (mLoadMode == LoadMode.CLICK_LOAD) {
-                if (mCurrentStatus == STATUS_PRE || mCurrentStatus == STATUS_FAIL) {
-                    callLoadMore();
-                }
-            }
+    @Override
+    public void loadFailed() {
+        mCurrentStatus = STATUS_FAIL;
+        changeAppearanceByStatus();
+    }
+
+    @Override
+    public void loadCompleted(final boolean hasMore) {
+        this.loadCompleted(hasMore, false);
+    }
+
+    @Override
+    public void loadCompleted(boolean hasMore, boolean appended) {
+        mHasMore = hasMore;
+        mCurrentStatus = STATUS_COMPLETE;
+        // If there are new items appended, we don't need to change the appearance.
+        // Because the new items will be shown in the list.
+        if (!appended) {
+            changeAppearanceByStatus();
         }
     }
 
@@ -226,27 +254,26 @@ class LoadMoreControllerImpl implements LoadMoreController {
         mOnLoadMoreListener = onLoadMoreListener;
     }
 
-    private void callLoadMore() {
-        if (mCurrentStatus != STATUS_LOADING && mOnLoadMoreListener != null && mHasMore) {
-            LoadMoreViewCaller.callLoading(mLoadMoreView);
-            mCurrentStatus = STATUS_LOADING;
-            mOnLoadMoreListener.onLoadMore();
-            mPreviousTimeCallingLoadMore = System.currentTimeMillis();
-        }
+    void onBindViewHolder(RecyclerView.ViewHolder holder) {
+        changeAppearanceByStatus();
     }
 
-    @Override
-    public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
-        mVisibilityWhenNoMore = autoHiddenWhenNoMore ? View.INVISIBLE : View.VISIBLE;
-        processAutoHiddenWhenNoMore();
-    }
+    ///////////////////////////////////////////////////////////////////////////
+    // inner class
+    ///////////////////////////////////////////////////////////////////////////
 
-    private void processAutoHiddenWhenNoMore() {
-        if (mLoadMoreView != null) {
-            if (mCurrentStatus == STATUS_COMPLETE) {
-                mLoadMoreView.setVisibility(mHasMore ? View.VISIBLE : mVisibilityWhenNoMore);
-            } else {
-                mLoadMoreView.setVisibility(View.VISIBLE);
+    private final class ClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            if (mLoadMode == LoadMode.AUTO_LOAD) {
+                if ((mCurrentStatus == STATUS_FAIL)) {
+                    callLoadMore();
+                }
+            } else if (mLoadMode == LoadMode.CLICK_LOAD) {
+                if (mCurrentStatus == STATUS_PRE || mCurrentStatus == STATUS_FAIL) {
+                    callLoadMore();
+                }
             }
         }
     }
@@ -256,13 +283,13 @@ class LoadMoreControllerImpl implements LoadMoreController {
      */
     private static class LoadMoreViewCaller {
 
-        static void callLoading(View view) {
+        static void callWhenLoading(View view) {
             if (view instanceof LoadMoreView) {
                 ((LoadMoreView) view).onLoading();
             }
         }
 
-        static void callCompleted(View view, boolean hasMore) {
+        static void callWhenCompleted(View view, boolean hasMore) {
             Log.d("MORE", hasMore + "");
             if (view instanceof LoadMoreView) {
                 ((LoadMoreView) view).onCompleted(hasMore);
@@ -275,7 +302,7 @@ class LoadMoreControllerImpl implements LoadMoreController {
             }
         }
 
-        static void callFail(View view) {
+        static void callWhenFailed(View view) {
             if (view instanceof LoadMoreView) {
                 ((LoadMoreView) view).onFailed();
             }

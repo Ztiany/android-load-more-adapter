@@ -41,7 +41,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
 
     LoadMoreAdapter(RecyclerView.Adapter wrapped, boolean useScrollListener) {
         super(wrapped);
-        mLoadMoreImpl = new LoadMoreControllerImpl(useScrollListener);
+        mLoadMoreImpl = new LoadMoreControllerImpl(useScrollListener, this);
         mInternalFullSpanKeeper = new InternalFullSpanKeeper();
 
         if (useScrollListener) {
@@ -66,7 +66,7 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
             GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             mInternalFullSpanKeeper.mOriginSpanSizeLookup = gridLayoutManager.getSpanSizeLookup();
             mInternalFullSpanKeeper.setFullSpanForGirdLayout(gridLayoutManager);
-        }else if(!(layoutManager instanceof LinearLayoutManager) && !(layoutManager instanceof StaggeredGridLayoutManager)){
+        } else if (!(layoutManager instanceof LinearLayoutManager) && !(layoutManager instanceof StaggeredGridLayoutManager)) {
             if (mFullSpanKeeper == null) {
                 mFullSpanKeeper = LoadMoreConfig.getFullSpanKeeper();
             }
@@ -120,6 +120,8 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (getItemViewType(position) != LOAD_MORE_TYPE) {
             super.onBindViewHolder(holder, position);
+        } else {
+            mLoadMoreImpl.onBindViewHolder(holder);
         }
     }
 
@@ -242,6 +244,11 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     }
 
     @Override
+    public void loadCompleted(boolean hasMore, boolean appended) {
+        mLoadMoreImpl.loadCompleted(hasMore, appended);
+    }
+
+    @Override
     public boolean isLoadingMore() {
         return mLoadMoreImpl.isLoadingMore();
     }
@@ -257,8 +264,8 @@ public class LoadMoreAdapter extends RecyclerViewAdapterWrapper implements LoadM
     }
 
     @Override
-    public void setAutoHiddenWhenNoMore(boolean autoHiddenWhenNoMore) {
-        mLoadMoreImpl.setAutoHiddenWhenNoMore(autoHiddenWhenNoMore);
+    public void setAutoHideWhenNoMore(boolean hideWhenNoMore) {
+        mLoadMoreImpl.setAutoHideWhenNoMore(hideWhenNoMore);
     }
 
     @Override

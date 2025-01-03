@@ -9,13 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ztiany.loadmore.adapter.LoadMode;
-import com.ztiany.loadmore.adapter.OnLoadMoreListener;
-import com.ztiany.loadmore.adapter.LoadMoreAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
@@ -24,6 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.ztiany.loadmore.adapter.LoadMode;
+import com.ztiany.loadmore.adapter.LoadMoreAdapter;
+import com.ztiany.loadmore.adapter.OnLoadMoreListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DemoFragment extends BaseLayoutFragment {
@@ -41,13 +41,11 @@ public class DemoFragment extends BaseLayoutFragment {
 
     private static final String LAYOUT_TYPE = "layout_type";
     private static final String CLICK_LOAD_MORE = "isClickLoadMore";
-    private static final String AUTO_HIDDEN_MORE = "auto_hidden_more";
 
-    public static DemoFragment newInstance(int layoutType, boolean isClickLoadMore, int visibilityWhenNoMore) {
+    public static DemoFragment newInstance(int layoutType, boolean isClickLoadMore) {
         Bundle args = new Bundle();
         args.putInt(LAYOUT_TYPE, layoutType);
         args.putBoolean(CLICK_LOAD_MORE, isClickLoadMore);
-        args.putInt(AUTO_HIDDEN_MORE, visibilityWhenNoMore);
         DemoFragment fragment = new DemoFragment();
         fragment.setArguments(args);
         return fragment;
@@ -75,20 +73,20 @@ public class DemoFragment extends BaseLayoutFragment {
             return true;
         });
 
-        menu.add(Menu.NONE, 2, 1, "next time no more").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 2, 0, "next time no more").setOnMenuItemClickListener(item -> {
             mIsFail = false;
             mHasMore = false;
             return true;
         });
 
-        menu.add(Menu.NONE, 3, 2, "next time add new no more").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 3, 0, "next time add new no more").setOnMenuItemClickListener(item -> {
             mIsFail = false;
             mHasMore = true;
             mAddNewHasMore = false;
             return true;
         });
 
-        menu.add(Menu.NONE, 4, 3, "next time normal").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 4, 0, "next time normal").setOnMenuItemClickListener(item -> {
             mIsFail = false;
             mHasMore = true;
             mAddNewHasMore = true;
@@ -96,17 +94,22 @@ public class DemoFragment extends BaseLayoutFragment {
             return true;
         });
 
-        menu.add(Menu.NONE, 5, 4, "stop auto load when failed").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 5, 0, "stop auto load when failed").setOnMenuItemClickListener(item -> {
             mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
             return true;
         });
 
-        menu.add(Menu.NONE, 6, 5, "enable auto load when failed").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 6, 0, "enable auto load when failed").setOnMenuItemClickListener(item -> {
             mLoadMoreAdapter.stopAutoLoadWhenFailed(true);
             return true;
         });
 
-        menu.add(Menu.NONE, 7, 6, "set loading more").setOnMenuItemClickListener(item -> {
+        menu.add(Menu.NONE, 7, 0, "auto hide when no-more").setOnMenuItemClickListener(item -> {
+            mLoadMoreAdapter.setAutoHideWhenNoMore(true);
+            return true;
+        });
+
+        menu.add(Menu.NONE, 8, 0, "set loading more").setOnMenuItemClickListener(item -> {
             mLoadMoreAdapter.setLoadingMore();
             return true;
         });
@@ -182,7 +185,7 @@ public class DemoFragment extends BaseLayoutFragment {
                 mRefreshLayout.setRefreshing(false);
                 mLoadMoreAdapter.loadCompleted(mHasMore);
                 Toast.makeText(getContext(), "刷新完毕", Toast.LENGTH_SHORT).show();
-            }, 1500);
+            }, 1000);
         });
     }
 
@@ -195,7 +198,6 @@ public class DemoFragment extends BaseLayoutFragment {
 
             @Override
             public void onLoadMore() {
-
                 mRefreshLayout.postDelayed(() -> {
                     if (mIsFail) {
                         mLoadMoreAdapter.loadFailed();
@@ -211,10 +213,9 @@ public class DemoFragment extends BaseLayoutFragment {
                     for (int i = 0; i < 20; i++) {
                         newData.add("新来的Item" + count++);
                     }
+                    mLoadMoreAdapter.loadCompleted(mAddNewHasMore, true);
                     mRecyclerAdapter.addAll(newData);
-                    mLoadMoreAdapter.loadCompleted(mAddNewHasMore);
-                }, 100);
-
+                }, 3000);
             }
         });
     }

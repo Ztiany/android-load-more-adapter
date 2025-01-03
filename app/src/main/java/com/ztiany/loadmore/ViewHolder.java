@@ -22,7 +22,6 @@ public abstract class ViewHolder<T> extends RecyclerView.ViewHolder {
     }
 
     <V extends View> V findView(@IdRes int viewId) {
-        //需要什么类型，就返回什么类型
         return itemView.findViewById(viewId);
     }
 
